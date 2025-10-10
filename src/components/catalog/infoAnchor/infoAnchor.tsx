@@ -17,7 +17,7 @@ export default function InfoAnchor() {
           />
         </div>
 
-        <div className="mx-6 lg:flex-1 lg:pr-8">
+        <div className=" lg:flex-1 lg:pr-8">
           <h3 className="text-[20px] mb-6">
             Soluções flexíveis: trabalhe de qualquer lugar
           </h3>
@@ -163,7 +163,7 @@ export default function InfoAnchor() {
           />
         </div>
 
-        <div className="mx-6 lg:flex-1 lg:pr-8">
+        <div className=" lg:flex-1 lg:pr-8">
           <h3 className="text-[20px] mb-6">
             Ferramentas úteis: melhorar a colaboração
           </h3>
@@ -240,7 +240,7 @@ export default function InfoAnchor() {
           <img src="/vivo-google-gemini.png" className="w-full" />
         </div>
 
-        <div className="mx-6 md:flex-1">
+        <div className="mr-6 md:flex-1">
           <h3 className="text-[20px] mb-6">
             Google Gemini: IA Generativa integrada ao Google Workspace
           </h3>

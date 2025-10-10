@@ -1,6 +1,7 @@
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function Cards() {
   const navigate = useNavigate();
@@ -104,7 +105,7 @@ export default function Cards() {
     <div className="flex flex-col w-full items-center relative">
       {cardData.badge && (
         <div
-          className={`${cardData.badgeStyle} absolute self-start -top-2 z-10`}
+          className={`${cardData.badgeStyle} absolute self-start rounded-r-sm rounded-tl-sm -top-2 z-10`}
         >
           {cardData.badge}
         </div>
@@ -171,12 +172,19 @@ export default function Cards() {
 
           <Button
             type="text"
-            className="text-sm text-gray-600  cursor-pointer hover:text-gray-800"
+            size="small"
+            className=" cursor-pointer "
             onClick={() => toggleDetails(cardData.id)}
           >
-            {expandedCard === cardData.id
-              ? "Menos detalhes ▲"
-              : "Mais detalhes ▼"}
+            {expandedCard === cardData.id ? (
+              <>
+                Menos Detalhes <ChevronUp className="inline w-3 h-3" />
+              </>
+            ) : (
+              <>
+                Mais Detalhes <ChevronDown className="inline w-3 h-3" />
+              </>
+            )}
           </Button>
 
           {expandedCard === cardData.id && (

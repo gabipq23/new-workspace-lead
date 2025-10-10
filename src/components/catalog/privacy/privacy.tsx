@@ -4,14 +4,14 @@ export default function Privacy() {
       id="beneficios"
       className="flex flex-col gap-4 text-gray-600 bg-[#f7f7f7] items-start justify-center w-full  px-6 md:px-24 lg:px-32  "
     >
-      <div className=" mx-8 ">
+      <div className=" ">
         <h2 className="text-[24px] md:text-[32px] text-[#5f6368] text-start  ">
           Principais benefícios do Google Workspace para sua empresa:{" "}
         </h2>
       </div>
 
-      <div className="mx-8 w-full">
-        {/* Layout Mobile - Vertical */}
+      <div className=" w-full">
+        {/*  Mobile  */}
         <div className="flex flex-col gap-8 md:hidden">
           <div className="flex items-start gap-4 mr-10  ">
             <div className="flex-shrink-0">

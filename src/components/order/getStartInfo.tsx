@@ -61,6 +61,36 @@ export default function GetStartInfo() {
     return names[selectedPlan as keyof typeof names] || "Business Starter";
   };
 
+  const getPlanDetails = () => {
+    const details = {
+      "Business Starter": [
+        "E-mail comercial personalizado e seguro",
+        "Videochamadas com 100 participantes",
+        "30 GB de armazenamento em pool por usuário",
+        "Controles de segurança e gerenciamento",
+        "Suporte Padrão",
+      ],
+      "Business Standard": [
+        "E-mail comercial personalizado e seguro",
+        "Videochamadas com 150 participantes + gravação",
+        "2 TB de armazenamento em pool por usuário",
+        "Controles de segurança e gerenciamento",
+        "Suporte Padrão (upgrade pago para o Suporte Avançado)",
+      ],
+      "Business Plus": [
+        "E-mail corporativo personalizado e protegido, e-discovery e retenção",
+        "Videochamadas com 500 participantes, gravação de reuniões e controle de presença",
+        "5 TB de armazenamento em pool por usuário",
+        "Segurança reforçada e controles de gerenciamento, incluindo o Vault e o Gerenciamento avançado de endpoints",
+        "Suporte Padrão (upgrade pago para o Suporte Avançado)",
+      ],
+    };
+    return (
+      details[selectedPlan as keyof typeof details] ||
+      details["Business Starter"]
+    );
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-[100vh] ">
       <div className="md:hidden flex flex-col bg-[#660099] text-white  pt-2">
@@ -161,38 +191,14 @@ export default function GetStartInfo() {
             </div>
             <hr className="my-3 border-t border-gray-200" />
             <div className=" flex flex-col gap-1 text-[#660099] text-[10px]">
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>E-mail comercial personalizado e seguro</span>
-              </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>Videochamadas com 150 participantes + gravação</span>
-              </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>2 TB de armazenamento em pool por usuário</span>
-              </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>Controles de segurança e gerenciamento</span>
-              </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>
-                  Suporte Padrão (upgrade pago para o Suporte Avançado)
-                </span>
-              </div>
+              {getPlanDetails().map((detail, index) => (
+                <div key={index} className="flex gap-1 items-center ">
+                  <span className="text-[#4f0077] ">
+                    <CircleCheck size={11} />
+                  </span>
+                  <span>{detail}</span>
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -532,38 +538,14 @@ export default function GetStartInfo() {
                 </div>
                 <hr className="my-3 border-t border-gray-200" />
                 <div className=" flex flex-col gap-1 text-[#660099] text-[10px]">
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>E-mail comercial personalizado e seguro</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>Videochamadas com 150 participantes + gravação</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>2 TB de armazenamento em pool por usuário</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>Controles de segurança e gerenciamento</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>
-                      Suporte Padrão (upgrade pago para o Suporte Avançado)
-                    </span>
-                  </div>
+                  {getPlanDetails().map((detail, index) => (
+                    <div key={index} className="flex gap-1 items-center ">
+                      <span className="text-[#4f0077] ">
+                        <CircleCheck size={11} />
+                      </span>
+                      <span>{detail}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

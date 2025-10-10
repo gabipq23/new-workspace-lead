@@ -10,76 +10,57 @@ function Banner() {
   return (
     <div className="bg-[#f7f7f7] relative w-full">
       <div className="relative">
-        <img src={bannerMobile} className="w-full block md:hidden" />
+        <img
+          src={bannerMobile}
+          className="w-full h-[440px] md:h-[440px] object-cover block md:hidden"
+        />
 
-        <img src={bannerWeb} className="w-full hidden md:block" />
+        <img
+          src={bannerWeb}
+          className="w-full h-[400px] md:h-[400px] lg:h-[440px] object-cover hidden md:block"
+        />
       </div>
 
       <div
         style={{ margin: 0, padding: 0 }}
-        className="absolute inset-0 flex flex-col items-start justify-center gap-4 md:justify-evenly lg:justify-evenly lg:gap-4 px-6  md:px-24 lg:px-32   "
+        className="absolute inset-0 flex flex-col justify-evenly  px-6  md:px-24 lg:px-32   "
       >
-        <div className="text-start flex flex-col gap-1 px-6  md:px-24 lg:px-32  ">
+        <div className="text-start flex gap-2 flex-col px-6 md:py-4 lg:py-6  md:px-24 lg:px-32  ">
           <p
-            style={{ lineHeight: "1.3", margin: 0 }}
+            style={{ lineHeight: "1.", margin: 0 }}
             className="text-[12px] md:text-[12px] lg:text-[16px] text-[#f7f7f7] "
           >
             SOLUÇÕES COLABORATIVAS
           </p>
           <p
-            style={{ lineHeight: "1.3", margin: 0 }}
+            style={{ lineHeight: "1.0", margin: 0 }}
             className="text-[23px] md:text-[28px] lg:text-[38px] text-[#f7f7f7] "
           >
             Google Workspace:
           </p>
           <p
-            style={{ lineHeight: "1.3", margin: 0 }}
+            style={{ lineHeight: "1.0", margin: 0 }}
             className="text-[23px] mdtext-[28px] lg:text-[38px] text-[#f7f7f7] "
           >
             Gmail, Meet e mais
           </p>
-        </div>
-
-        <div className="bg-[#660099] shadow-white shadow-sm p-3 pt-2 pb-2 rounded-lg text-[#f7f7f7] mx-6 md:mx-24 lg:mx-32">
           <p
-            style={{ margin: 0 }}
-            className="text-[10px] md:text-[12px] lg:text-[16px] mb-1"
+            style={{ lineHeight: "1.0", margin: 0 }}
+            className="text-[10px] md:text-[12px] lg:text-[14px] text-[#f7f7f7] "
           >
-            A partir de
+            PAGUE DIRETO NA SUA FATURA VIVO EMPRESAS
           </p>
-          <div style={{ margin: 0 }} className="flex items-end gap-1">
-            <p
-              style={{ margin: 0 }}
-              className="text-[16px] md:text-[18px] lg:text-[22px] font-medium"
-            >
-              R$
-            </p>
-
-            <p
-              style={{ margin: 0 }}
-              className="text-[28px] md:text-[36px] lg:text-[54px] font-bold leading-none"
-            >
-              49
-            </p>
-
-            <div className="flex flex-col leading-tight ml-1">
-              <p
-                style={{ margin: 0 }}
-                className=" text-[10px] md:text-[12px] lg:text-[16px]"
-              >
-                /mês
-              </p>
-              <p
-                style={{ margin: 0 }}
-                className="text-[10px] md:text-[12px] lg:text-[16px]"
-              >
-                por usuário
-              </p>
-            </div>
-          </div>
         </div>
 
-        <div className="px-6  md:px-24 lg:px-32  ">
+        <div className="mx-6 md:mx-24 lg:mx-30  ">
+          <img
+            src="/imagem_oferta_workspace.png"
+            className="w-48 sm:w-48 md:w-48 lg:w-56 xl:w-64 h-auto object-contain"
+            alt="Microsoft 365"
+          />
+        </div>
+
+        <div className="px-6 py-0 lg:py-2 md:px-24 lg:px-32  ">
           <ConfigProvider
             theme={{
               token: {

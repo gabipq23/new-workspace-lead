@@ -2,7 +2,7 @@ export default function Privacy() {
   return (
     <div
       id="beneficios"
-      className="flex flex-col gap-4 text-gray-600 bg-[#f7f7f7] items-start justify-center w-full  px-6 md:px-24 lg:px-32  "
+      className="flex flex-col gap-4 text-gray-600 bg-[#f7f7f7] items-start justify-center w-full pb-8 px-6 md:px-24 lg:px-32  "
     >
       <div className=" ">
         <h2 className="text-[24px] md:text-[32px] text-[#5f6368] text-start  ">

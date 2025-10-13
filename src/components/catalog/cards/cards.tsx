@@ -2,12 +2,26 @@ import { Button, ConfigProvider } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useOrderStore } from "../../../context/context";
 
 export default function Cards() {
   const navigate = useNavigate();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const setSelectedPlan = useOrderStore((state) => state.setSelectedPlan);
+
+  const handlePlanSelection = (cardData: (typeof cardsData)[0]) => {
+    setSelectedPlan({
+      planName: cardData.title,
+      price: cardData.price,
+      servicesIncluded: [],
+    });
+
+    navigate("/choose-plan");
+    window.scrollTo(0, 0);
+  };
 
   const toggleDetails = (cardType: string) => {
     setExpandedCard(expandedCard === cardType ? null : cardType);
@@ -163,7 +177,7 @@ export default function Cards() {
             variant="solid"
             size="large"
             color="magenta"
-            onClick={() => (navigate("/choose-plan"), window.scrollTo(0, 0))}
+            onClick={() => handlePlanSelection(cardData)}
           >
             Contratar
           </Button>

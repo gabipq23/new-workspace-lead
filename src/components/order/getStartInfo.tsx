@@ -15,22 +15,47 @@ import {
   CircleCheck,
   CircleQuestionMark,
 } from "lucide-react";
+import { useOrderStore } from "../../context/context";
+
+import { PatternFormat } from "react-number-format";
+import type { PatternFormatProps } from "react-number-format";
+
+const PhoneInput = (props: PatternFormatProps) => (
+  <PatternFormat
+    {...props}
+    format="(##) #####-####"
+    customInput={Input}
+    placeholder="(XX) XXXXX-XXXX"
+    size="middle"
+  />
+);
 
 const { Option } = Select;
 
 export default function GetStartInfo() {
   const [isVivoClient, setIsVivoClient] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState("Business Standard");
   const [users, setUsers] = useState(1);
   const [phone, setPhone] = useState("");
   const [acceptContact, setAcceptContact] = useState(true);
   const [showServicesWeb, setShowServicesWeb] = useState(true);
+  const { selectedPlan, updateBasicInfo, setSelectedPlan } = useOrderStore();
 
   const [showServices, setShowServices] = useState(false);
   const [isClient, setIsClient] = useState(true);
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = () => {
+    setHasTriedSubmit(true);
+    if (!isFormValid()) {
+      return;
+    }
+    updateBasicInfo({
+      isVivoClient: isVivoClient,
+      users: users,
+      managerPhone: phone,
+      acceptContact: acceptContact,
+    });
     navigate("/client-information");
     window.scrollTo(0, 0);
   };
@@ -46,40 +71,38 @@ export default function GetStartInfo() {
   };
 
   const getPlanPrice = () => {
-    const prices = {
-      "Business Starter": 49,
-      "Business Standard": 98,
-      "Business Plus": 154,
-    };
-    return prices[selectedPlan as keyof typeof prices] || 49;
+    if (selectedPlan?.price) {
+      return parseInt(selectedPlan.price);
+    }
+
+    return 49;
   };
 
   const getPlanName = () => {
-    const names = {
-      "Business Starter": "Business Starter",
-      "Business Standard": "Business Standard",
-      "Business Plus": "Business Plus",
-    };
-    return names[selectedPlan as keyof typeof names] || "Business Starter";
+    if (selectedPlan?.planName) {
+      return `Business ${selectedPlan.planName}`;
+    }
+
+    return "Business Starter";
   };
 
   const getPlanDetails = () => {
     const details = {
-      "Business Starter": [
+      Starter: [
         "E-mail comercial personalizado e seguro",
         "Videochamadas com 100 participantes",
         "30 GB de armazenamento em pool por usuário",
         "Controles de segurança e gerenciamento",
         "Suporte Padrão",
       ],
-      "Business Standard": [
+      Standard: [
         "E-mail comercial personalizado e seguro",
         "Videochamadas com 150 participantes + gravação",
         "2 TB de armazenamento em pool por usuário",
         "Controles de segurança e gerenciamento",
         "Suporte Padrão (upgrade pago para o Suporte Avançado)",
       ],
-      "Business Plus": [
+      Plus: [
         "E-mail corporativo personalizado e protegido, e-discovery e retenção",
         "Videochamadas com 500 participantes, gravação de reuniões e controle de presença",
         "5 TB de armazenamento em pool por usuário",
@@ -87,10 +110,17 @@ export default function GetStartInfo() {
         "Suporte Padrão (upgrade pago para o Suporte Avançado)",
       ],
     };
-    return (
-      details[selectedPlan as keyof typeof details] ||
-      details["Business Starter"]
-    );
+
+    const planKey = selectedPlan?.planName || "Starter";
+    return details[planKey as keyof typeof details] || details["Starter"];
+  };
+
+  const isFormValid = () => {
+    const hasValidPlan = selectedPlan !== null;
+    const phoneDigits = phone.replace(/\D/g, "");
+    const hasValidPhone = phoneDigits.length === 11;
+    const hasValidUsers = users >= 1;
+    return hasValidPlan && hasValidPhone && hasValidUsers;
   };
 
   return (
@@ -293,23 +323,40 @@ export default function GetStartInfo() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
               <div>
                 <label className="block text-[12px] text-gray-600 mb-2">
-                  Plano
+                  Plano <span className="text-red-500">*</span>
                 </label>
                 <Select
                   size="middle"
-                  value={selectedPlan}
-                  onChange={setSelectedPlan}
+                  value={selectedPlan?.planName || "Starter"}
+                  onChange={(value) => {
+                    // Mapear os preços baseado na seleção
+                    const priceMap = {
+                      Starter: "49",
+                      Standard: "98",
+                      Plus: "154",
+                    };
+
+                    setSelectedPlan({
+                      planName: value,
+                      price: priceMap[value as keyof typeof priceMap],
+                      servicesIncluded: [],
+                    });
+                  }}
                   className="w-full"
                 >
-                  <Option value="Business Starter">Business Starter</Option>
-                  <Option value="Business Standard">Business Standard</Option>
-                  <Option value="Business Plus">Business Plus</Option>
+                  <Option value="Starter">Business Starter</Option>
+                  <Option value="Standard">Business Standard</Option>
+                  <Option value="Plus">Business Plus</Option>
                 </Select>
+                {hasTriedSubmit && !selectedPlan && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
               </div>
 
               <div>
                 <label className="flex items-center gap-1  text-[12px] text-gray-600 mb-2">
-                  Celular do {isClient ? "gestor" : "contratante"}
+                  Celular do {isClient ? "gestor" : "contratante"}{" "}
+                  <span className="text-red-500">*</span>
                   <Tooltip
                     placement="top"
                     title={
@@ -319,17 +366,19 @@ export default function GetStartInfo() {
                     <CircleQuestionMark className="w-4 h-4 cursor-pointer inline" />
                   </Tooltip>
                 </label>
-                <Input
-                  size="middle"
-                  placeholder="(00) 00000-0000"
+                <PhoneInput
+                  format="(##) #####-####"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onValueChange={(values) => setPhone(values.value)}
                 />
+                {hasTriedSubmit && phone.replace(/\D/g, "").length !== 11 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-[12px] text-gray-600 mb-2">
-                  Usuários
+                  Usuários <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center">
                   <Button
@@ -374,6 +423,11 @@ export default function GetStartInfo() {
                     +
                   </Button>
                 </div>
+                {hasTriedSubmit && users < 1 && (
+                  <p className="text-red-500 text-xs mt-1">
+                    Selecione pelo menos 1 usuário
+                  </p>
+                )}
               </div>
 
               <div>
@@ -422,7 +476,7 @@ export default function GetStartInfo() {
                 type="primary"
                 size="large"
                 onClick={handleSubmit}
-                className=" self-end"
+                className="self-end"
               >
                 Continuar
               </Button>

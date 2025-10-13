@@ -10,6 +10,7 @@ export default function CompanyInfo() {
   const [cpf, setCpf] = useState("000.000.000-00");
   const [acceptContact, setAcceptContact] = useState(true);
   const [showServices, setShowServices] = useState(false);
+  const [showServicesWeb, setShowServicesWeb] = useState(true);
 
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ export default function CompanyInfo() {
 
   return (
     <div className="flex flex-col md:flex-row h-[100vh] ">
+      {/* mobile */}
       <div className="md:hidden flex flex-col bg-[#660099] text-white  pt-2">
         <div className=" flex items-end justify-end text-[12px] gap-2 px-3">
           <span className="text-white">🛒</span>
@@ -312,8 +314,8 @@ export default function CompanyInfo() {
           </div>
         </div>
 
-        <div className="">
-          <div className="flex  self-end justify-end ">
+        <div className="fixed bottom-0 left-0 right-0 md:right-90 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+          <div className="flex justify-end max-w-7xl mx-auto">
             <ConfigProvider
               theme={{
                 token: {
@@ -334,6 +336,7 @@ export default function CompanyInfo() {
         </div>
       </div>
 
+      {/* desktop */}
       <div className="hidden md:flex flex-col  w-90 bg-[#660099] text-white p-6">
         <div className="flex items-center gap-2 mb-6">
           <span className="text-white">🛒</span>
@@ -393,9 +396,9 @@ export default function CompanyInfo() {
                   size="small"
                   type="text"
                   variant="text"
-                  onClick={() => setShowServices(!showServices)}
+                  onClick={() => setShowServicesWeb(!showServicesWeb)}
                 >
-                  {showServices ? (
+                  {showServicesWeb ? (
                     <>
                       ver menos <ChevronUp className="inline w-3 h-3" />
                     </>
@@ -408,7 +411,7 @@ export default function CompanyInfo() {
               </ConfigProvider>
             </div>
 
-            {showServices && (
+            {showServicesWeb && (
               <div className="p-4 bg-purple-100">
                 <h4
                   style={{ fontWeight: "bold" }}
@@ -437,7 +440,7 @@ export default function CompanyInfo() {
                   <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
                 </div>
                 <hr className="my-3 border-t border-gray-200" />
-                <div className=" flex flex-col gap-1 text-[#660099] text-[10px]">
+                <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">
                   <div className="flex gap-1 items-center ">
                     <span className="text-[#4f0077] ">
                       <CircleCheck size={11} />

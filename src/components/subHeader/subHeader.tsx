@@ -102,7 +102,7 @@ function SubHeader() {
   return (
     // bg-[#f7f7f7] bg da LP
     // bg-[#f1f1f1] bg do header
-    <div className="flex justify-between gap-4 items-center p-2 bg-[#f1f1f1]  py-2 md:py-4 px-6  md:px-24 lg:px-32   shadow-sm border-b border-gray-300 z-2 sticky top-0">
+    <div className="flex justify-between gap-4 items-center p-2 bg-[#f1f1f1]  py-2  px-6  md:px-24 lg:px-32   shadow-sm border-b border-gray-300 z-2 sticky top-0">
       <div className="flex md:hidden items-center">
         <Dropdown
           menu={{ items: menuItems }}
@@ -197,11 +197,7 @@ function SubHeader() {
       </div>
 
       <Button
-        style={{
-          backgroundColor: "#cb2166",
-          borderColor: "#cb2166",
-          color: "white",
-        }}
+        style={{ width: "120px", height: "35px" }}
         variant="solid"
         size="middle"
         color="magenta"

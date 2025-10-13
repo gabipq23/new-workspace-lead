@@ -55,30 +55,21 @@ function Banner() {
         <div className="mx-6 md:mx-24 lg:mx-30  ">
           <img
             src="/imagem_oferta_workspace.png"
-            className="w-48 sm:w-48 md:w-48 lg:w-56 xl:w-64 h-auto object-contain"
-            alt="Microsoft 365"
+            className="w-48 sm:w-48 md:w-48 lg:w-70 h-auto object-contain"
+            alt="Google Workspace"
           />
         </div>
 
         <div className="px-6 py-0 lg:py-2 md:px-24 lg:px-32  ">
-          <ConfigProvider
-            theme={{
-              token: {
-                colorPrimaryBg: "#f7f7f7",
-                colorPrimaryText: "#660099",
-
-                colorPrimaryHover: "#aa00ff",
-              },
-            }}
+          <Button
+            style={{ width: "120px", height: "50px" }}
+            variant="solid"
+            size="large"
+            color="magenta"
+            onClick={() => navigate("/choose-plan")}
           >
-            <Button
-              variant="solid"
-              size="large"
-              onClick={() => navigate("/choose-plan")}
-            >
-              Contrate
-            </Button>
-          </ConfigProvider>
+            Contrate
+          </Button>
         </div>
       </div>
     </div>

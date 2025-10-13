@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 export default function FinishOrderInfo() {
   return (
     <div className="h-[100vh] flex flex-col flex-1 px-8 pt-8 pb-4  bg-[#f7f7f7] ">
-      <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
+      <div className="flex flex-col gap-4 lg:flex-row items-center justify-between ">
         <img src="/Vivo-Empresas.png" alt="Vivo Empresas" className="h-7" />
 
         <div className="flex items-center gap-2">
@@ -38,8 +38,8 @@ export default function FinishOrderInfo() {
         </div>
       </div>
       <div className="flex w-full h-full items-center justify-center">
-        <div className="max-w-4xl w-full text-center">
-          <div className="mb-6">
+        <div className="max-w-5xl w-full text-center">
+          <div className="mb-4">
             <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mx-auto">
               <Check size={32} className="text-white" />
             </div>
@@ -56,7 +56,7 @@ export default function FinishOrderInfo() {
             </p>
           </div>
 
-          <div className="bg-[#660099] text-white rounded-lg p-6">
+          <div className="bg-[#660099] text-white rounded-lg p-6 py-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-start">
               <div className="space-y-4 text-start">
                 <div className="text-start">
@@ -135,16 +135,13 @@ export default function FinishOrderInfo() {
             </div>
           </div>
 
-          <div className="mt-2 bg-[#ecececfa] text-[12px] rounded-lg text-gray-600 p-2">
+          <div className="mt-2 bg-[#ecececfa] text-[13px] rounded-lg text-gray-600 p-2">
             <p style={{ margin: 0 }}>
               <strong>Sua solicitação está em análise.</strong> Caso necessário,
               um consultor entrará em contato com você pelo telefone cadastrado
               para concluir a contratação. Você receberá notificações sobre sua
-              fatura por e-mail cadastrado. Caso tenha alguma dúvida{" "}
-              <a href="#" className="text-blue-600 underline">
-                clique aqui
-              </a>{" "}
-              e fale pelo WhatsApp.
+              fatura por e-mail cadastrado. Caso tenha alguma dúvidafale pelo
+              WhatsApp.
             </p>
           </div>
         </div>

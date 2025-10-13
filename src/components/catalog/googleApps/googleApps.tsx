@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs } from "antd";
+import { ConfigProvider, Tabs } from "antd";
 import type { TabsProps } from "antd";
 
 const onChange = (key: string) => {
@@ -373,19 +373,20 @@ export default function GoogleApps() {
           equipe
         </p>
       </div>
-
-      <div className=" w-full">
-        <Tabs
-          defaultActiveKey="comunicacao"
-          items={items}
-          onChange={onChange}
-          style={
-            {
-              "--ant-color-primary": "#7c3aed",
-            } as React.CSSProperties
-          }
-        />
-      </div>
+      <ConfigProvider theme={{ token: { colorPrimary: "#660099" } }}>
+        <div className=" w-full">
+          <Tabs
+            defaultActiveKey="comunicacao"
+            items={items}
+            onChange={onChange}
+            style={
+              {
+                "--ant-color-primary": "#7c3aed",
+              } as React.CSSProperties
+            }
+          />
+        </div>
+      </ConfigProvider>
       <div className="flex w-full items-center gap-8 bg-[#f0f0f0] p-8 rounded-md">
         <img src="/vivo-empresas-selo.png" className="h-28" />
 

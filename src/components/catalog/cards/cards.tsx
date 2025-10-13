@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, ConfigProvider } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -159,34 +159,41 @@ export default function Cards() {
 
           <Button
             className="self-center mb-4 mx-6 w-56"
-            style={{
-              backgroundColor: "#cb2166",
-              borderColor: "#cb2166",
-              color: "white",
-            }}
+            style={{ width: "140px", height: "50px" }}
+            variant="solid"
             size="large"
+            color="magenta"
             onClick={() => (navigate("/choose-plan"), window.scrollTo(0, 0))}
           >
             Contratar
           </Button>
-
-          <Button
-            type="text"
-            size="small"
-            className=" cursor-pointer "
-            onClick={() => toggleDetails(cardData.id)}
+          <ConfigProvider
+            theme={{
+              token: {
+                colorBgTextHover: "none",
+                colorBgTextActive: "none",
+                colorText: "#666666",
+                fontSize: 10,
+              },
+            }}
           >
-            {expandedCard === cardData.id ? (
-              <>
-                Menos Detalhes <ChevronUp className="inline w-3 h-3" />
-              </>
-            ) : (
-              <>
-                Mais Detalhes <ChevronDown className="inline w-3 h-3" />
-              </>
-            )}
-          </Button>
-
+            <Button
+              type="text"
+              size="small"
+              className=" cursor-pointer "
+              onClick={() => toggleDetails(cardData.id)}
+            >
+              {expandedCard === cardData.id ? (
+                <>
+                  Menos Detalhes <ChevronUp className="inline w-3 h-3" />
+                </>
+              ) : (
+                <>
+                  Mais Detalhes <ChevronDown className="inline w-3 h-3" />
+                </>
+              )}
+            </Button>
+          </ConfigProvider>
           {expandedCard === cardData.id && (
             <div className=" p-4 text-start bg-[#f0f0f0]  rounded-sm border-t">
               <div className="flex items-start flex-col gap-3 text-sm text-gray-700">

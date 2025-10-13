@@ -1,4 +1,4 @@
-import { Button, ConfigProvider } from "antd";
+import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
 function Banner() {

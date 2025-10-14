@@ -119,18 +119,23 @@ export default function CardLayout({ cardData }: any) {
             {expandedCard === cardData?.id && (
               <div className=" p-4 text-start bg-[#f0f0f0]  rounded-sm border-t">
                 <div className="flex items-start flex-col gap-3 text-sm text-gray-700">
-                  {cardData?.details?.map((detail, index) => (
-                    <div key={index}>
-                      <p style={{ margin: 0 }} className="font-medium  mb-1">
-                        {detail?.title}
-                      </p>
-                      {detail?.subtitle && (
-                        <p style={{ margin: 0 }} className="text-gray-500">
-                          {detail?.subtitle}
+                  {cardData?.details?.map(
+                    (
+                      detail: { title: string; subtitle?: string },
+                      index: number
+                    ) => (
+                      <div key={index}>
+                        <p style={{ margin: 0 }} className="font-medium  mb-1">
+                          {detail?.title}
                         </p>
-                      )}
-                    </div>
-                  ))}
+                        {detail?.subtitle && (
+                          <p style={{ margin: 0 }} className="text-gray-500">
+                            {detail?.subtitle}
+                          </p>
+                        )}
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             )}

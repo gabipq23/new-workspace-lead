@@ -1,19 +1,10 @@
 import { Collapse } from "antd";
-
 import { useState } from "react";
-
 const { Panel } = Collapse;
 
 export default function FAQ() {
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
 
-  // const handleExpandAll = () => {
-  //   if (activeKeys.length === faqItems.length) {
-  //     setActiveKeys([]);
-  //   } else {
-  //     setActiveKeys(faqItems.map((item) => item.key));
-  //   }
-  // };
   const faqItems = [
     {
       key: "1",
@@ -199,18 +190,6 @@ export default function FAQ() {
           <h2 className="text-[32px] font-normal text-gray-600 mb-8">
             Nós temos as respostas que você precisa
           </h2>
-
-          {/* <div className="mb-2 justify-end flex">
-            <Button
-              type="default"
-              className="border-[#1a73e8] text-[#1a73e8] hover:bg-[#1a73e8] hover:text-white"
-              onClick={handleExpandAll}
-            >
-              {activeKeys.length === faqItems.length
-                ? "Fechar tudo"
-                : "Abrir tudo"}
-            </Button>
-          </div> */}
 
           <Collapse
             ghost

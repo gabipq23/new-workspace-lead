@@ -4,38 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Check, ChevronDown, ChevronUp, CircleCheck } from "lucide-react";
 import { useOrderStore } from "../../context/context";
 import { useOrderControler } from "../../controller/controller";
-import { PatternFormat } from "react-number-format";
-import type { PatternFormatProps } from "react-number-format";
+import { CNPJInput, CPFInput, PhoneInput } from "../../utils/input";
 
-const PhoneInput = (props: PatternFormatProps) => (
-  <PatternFormat
-    {...props}
-    format="(##) #####-####"
-    customInput={Input}
-    placeholder="(XX) XXXXX-XXXX"
-    size="middle"
-  />
-);
-
-const CPFInput = (props: PatternFormatProps) => (
-  <PatternFormat
-    {...props}
-    format="###.###.###-##"
-    customInput={Input}
-    placeholder="XXX.XXX.XXX-XX"
-    size="middle"
-  />
-);
-
-const CNPJInput = (props: PatternFormatProps) => (
-  <PatternFormat
-    {...props}
-    format="##.###.###/####-##"
-    customInput={Input}
-    placeholder="XX.XXX.XXX/XXXX-XX"
-    size="middle"
-  />
-);
 export default function CompanyInfo() {
   const [hasWorkspace, setHasWorkspace] = useState(false);
   const [cnpj, setCnpj] = useState("");

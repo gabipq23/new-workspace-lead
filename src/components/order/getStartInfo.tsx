@@ -16,19 +16,7 @@ import {
   CircleQuestionMark,
 } from "lucide-react";
 import { useOrderStore } from "../../context/context";
-
-import { PatternFormat } from "react-number-format";
-import type { PatternFormatProps } from "react-number-format";
-
-const PhoneInput = (props: PatternFormatProps) => (
-  <PatternFormat
-    {...props}
-    format="(##) #####-####"
-    customInput={Input}
-    placeholder="(XX) XXXXX-XXXX"
-    size="middle"
-  />
-);
+import { PhoneInput } from "../../utils/input";
 
 const { Option } = Select;
 
@@ -486,7 +474,6 @@ export default function GetStartInfo() {
       </div>
 
       {/* desktop */}
-
       <div className="hidden md:flex flex-col  w-90 bg-[#660099] text-white p-6">
         <div className="flex items-center gap-2 mb-6">
           <span className="text-white">🛒</span>

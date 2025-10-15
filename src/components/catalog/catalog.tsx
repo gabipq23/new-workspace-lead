@@ -8,6 +8,7 @@ import GoogleApps from "./googleApps/googleApps";
 import Header from "../header/header";
 import SubHeader from "../subHeader/subHeader";
 import Footer from "../footer/footer";
+import BannerOffers from "./bannerOffers/bannerOffers";
 
 export default function Catalog() {
   const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ export default function Catalog() {
         <Header />
         <SubHeader />
         <Banner />
+        <BannerOffers />
         <Cards />
         <InfoAnchor />
         <Privacy />

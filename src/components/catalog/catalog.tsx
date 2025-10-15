@@ -1,16 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Banner from "./banner/banner";
-// import BannerInfo from "./bannerInfo/bannerInfo";
 import Cards from "./cards/cards";
 import InfoAnchor from "./infoAnchor/infoAnchor";
 import Privacy from "./privacy/privacy";
-
 import FAQ from "./faq/faq";
 import GoogleApps from "./googleApps/googleApps";
 import Header from "../header/header";
 import SubHeader from "../subHeader/subHeader";
 import Footer from "../footer/footer";
-// import Solutions from "./solutions/solutions";
+import BannerOffers from "./bannerOffers/bannerOffers";
 
 export default function Catalog() {
   const queryClient = new QueryClient();
@@ -21,16 +19,13 @@ export default function Catalog() {
         <Header />
         <SubHeader />
         <Banner />
-        {/* <BannerInfo /> */}
+        <BannerOffers />
         <Cards />
         <InfoAnchor />
-
         <Privacy />
         <GoogleApps />
-
         <FAQ />
         <Footer />
-        {/* <Solutions /> */}
       </QueryClientProvider>
     </>
   );

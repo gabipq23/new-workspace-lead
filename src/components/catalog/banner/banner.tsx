@@ -23,7 +23,7 @@ function Banner() {
 
       <div
         style={{ margin: 0, padding: 0 }}
-        className="absolute inset-0 flex flex-col justify-evenly  px-6  md:px-24 lg:px-32   "
+        className="absolute inset-0 flex flex-col justify-evenly px-6 md:px-24lg:px-32   "
       >
         <div className="text-start flex gap-2 flex-col px-6 md:py-4 lg:py-6  md:px-24 lg:px-32  ">
           <p
@@ -55,7 +55,7 @@ function Banner() {
         <div className="mx-6 md:mx-24 lg:mx-30  ">
           <img
             src="/imagem_oferta_workspace.png"
-            className="w-48 sm:w-48 md:w-48 lg:w-70 h-auto object-contain"
+            className="w-56 sm:w-56 md:w-70 lg:w-80 h-auto object-contain"
             alt="Google Workspace"
           />
         </div>

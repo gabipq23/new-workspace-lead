@@ -298,9 +298,9 @@ export default function CompanyInfo() {
             <>
               <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-8 flex items-center">
                 <span className="text-orange-600 text-[12px] ">
-                  Inclua 2 sugestões de domínios que gostaria de utilizar para
-                  sua empresa no Google Workspace. Iremos avaliar a
-                  disponibilidade para uso.
+                  Inclua abaixo 2 sugestões de nome para identificação do seu
+                  domínio Google Workspace. Nós iremos avaliar a disponibilidade
+                  de uso.
                 </span>
               </div>
               <div className="flex w-full gap-4">

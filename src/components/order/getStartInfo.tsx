@@ -259,17 +259,16 @@ export default function GetStartInfo() {
           </div>
 
           <h1 className="text-[18px] font-normal text-[#660099] ">
-            Olá! Vamos iniciar sua compra online :)
+            Olá! Vamos iniciar sua pedido online :)
           </h1>
-          {isClient && (
-            <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-8 flex items-center">
-              <span className="text-orange-600 text-[12px] mr-2">🎁</span>
-              <span className="text-orange-600 text-[12px] ">
-                <strong>Aproveite agora!</strong> Clientes Móvel Vivo Empresas
-                ganham +2GB na contratação de Google Workspace
-              </span>
-            </div>
-          )}
+
+          <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-8 flex items-center">
+            <span className="text-orange-600 text-[12px] mr-2">🎁</span>
+            <span className="text-orange-600 text-[12px] ">
+              <strong>Aproveite agora!</strong> Clientes Móvel Vivo Empresas
+              ganham +2GB na contratação de Google Workspace
+            </span>
+          </div>
 
           <div className="mb-8 text-[12px]">
             <h3 className="text-[14px] text-gray-800 mb-4">
@@ -481,11 +480,9 @@ export default function GetStartInfo() {
         </div>
 
         <div className="bg-white text-gray-800 rounded-lg  relative">
-          {isClient && (
-            <div className="bg-orange-500 text-white px-2 py-1 rounded-xl text-[10px] inline-block mb-4 absolute -top-2 right-2">
-              + 2GB na linha móvel
-            </div>
-          )}
+          <div className="bg-orange-500 text-white px-2 py-1 rounded-xl text-[10px] inline-block mb-4 absolute -top-2 right-2">
+            + 2GB na linha móvel
+          </div>
 
           <div className="">
             <h3

@@ -1,35 +1,23 @@
 import { useState } from "react";
-import {
-  Button,
-  Input,
-  Select,
-  Checkbox,
-  Radio,
-  Tooltip,
-  ConfigProvider,
-} from "antd";
+import { Button, Input, Select, Checkbox, Radio, ConfigProvider } from "antd";
 import { useNavigate } from "react-router-dom";
-import {
-  ChevronDown,
-  ChevronUp,
-  CircleCheck,
-  CircleQuestionMark,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, CircleCheck } from "lucide-react";
 import { useOrderStore } from "../../context/context";
-import { PhoneInput } from "../../utils/input";
+import { CNPJInput } from "../../utils/input";
 
 const { Option } = Select;
 
 export default function GetStartInfo() {
-  const [isVivoClient, setIsVivoClient] = useState(true);
+  const [cnpj, setCnpj] = useState("");
+  const [email, setEmail] = useState("");
+  const [managerName, setManagerName] = useState("");
   const [users, setUsers] = useState(1);
-  const [phone, setPhone] = useState("");
+  const [isVivoClient, setIsVivoClient] = useState(true);
   const [acceptContact, setAcceptContact] = useState(true);
   const [showServicesWeb, setShowServicesWeb] = useState(true);
   const { selectedPlan, updateBasicInfo, setSelectedPlan } = useOrderStore();
 
   const [showServices, setShowServices] = useState(false);
-  const [isClient, setIsClient] = useState(true);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
 
@@ -39,9 +27,12 @@ export default function GetStartInfo() {
       return;
     }
     updateBasicInfo({
-      isVivoClient: isVivoClient,
+      planName: selectedPlan?.planName || "Starter",
+      cnpj: cnpj,
+      email: email,
+      managerName: managerName,
       users: users,
-      managerPhone: phone,
+      isVivoClient: isVivoClient,
       acceptContact: acceptContact,
     });
     navigate("/client-information");
@@ -105,10 +96,21 @@ export default function GetStartInfo() {
 
   const isFormValid = () => {
     const hasValidPlan = selectedPlan !== null;
-    const phoneDigits = phone.replace(/\D/g, "");
-    const hasValidPhone = phoneDigits.length === 11;
+    const cnpjDigits = cnpj.replace(/\D/g, "");
+    const hasValidCnpj = cnpjDigits.length === 14;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const hasValidEmail = emailRegex.test(email);
+    const hasValidManagerName = managerName.trim() !== "";
     const hasValidUsers = users >= 1;
-    return hasValidPlan && hasValidPhone && hasValidUsers;
+    const hasAcceptedContact = acceptContact === true;
+    return (
+      hasValidPlan &&
+      hasValidCnpj &&
+      hasValidEmail &&
+      hasValidManagerName &&
+      hasValidUsers &&
+      hasAcceptedContact
+    );
   };
 
   return (
@@ -286,18 +288,10 @@ export default function GetStartInfo() {
                 onChange={(e) => setIsVivoClient(e.target.value)}
                 className="flex gap-6 text-[14px]"
               >
-                <Radio
-                  onClick={() => setIsClient(true)}
-                  value={true}
-                  className="text-gray-700 text-[12px]"
-                >
+                <Radio value={true} className="text-gray-700 text-[12px]">
                   Sim, sou cliente
                 </Radio>
-                <Radio
-                  onClick={() => setIsClient(false)}
-                  value={false}
-                  className="text-gray-700 text-[12px]"
-                >
+                <Radio value={false} className="text-gray-700 text-[12px]">
                   Não sou cliente
                 </Radio>
               </Radio.Group>
@@ -307,7 +301,7 @@ export default function GetStartInfo() {
           <div className="mb-8">
             <h3 className="text-[14px] text-gray-800 mb-4">Defina seu plano</h3>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Plano <span className="text-red-500">*</span>
@@ -341,31 +335,8 @@ export default function GetStartInfo() {
               </div>
 
               <div>
-                <label className="flex items-center gap-1  text-[12px] text-gray-600 mb-2">
-                  Celular do {isClient ? "gestor" : "contratante"}{" "}
-                  <span className="text-red-500">*</span>
-                  <Tooltip
-                    placement="top"
-                    title={
-                      "Número Vivo Empresas que será atrelado à fatura com o produto Google Workspace"
-                    }
-                  >
-                    <CircleQuestionMark className="w-4 h-4 cursor-pointer inline" />
-                  </Tooltip>
-                </label>
-                <PhoneInput
-                  format="(##) #####-####"
-                  value={phone}
-                  onValueChange={(values) => setPhone(values.value)}
-                />
-                {hasTriedSubmit && phone.replace(/\D/g, "").length !== 11 && (
-                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-                )}
-              </div>
-
-              <div>
                 <label className="block text-[12px] text-gray-600 mb-2">
-                  Usuários <span className="text-red-500">*</span>
+                  Quantidade de Usuários <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center">
                   <Button
@@ -416,16 +387,51 @@ export default function GetStartInfo() {
                   </p>
                 )}
               </div>
+              <div>
+                <label className="block text-[12px] text-gray-600 mb-2">
+                  CNPJ <span className="text-red-500">*</span>
+                </label>
+                <CNPJInput
+                  format="##.###.###/####-##"
+                  value={cnpj}
+                  onValueChange={(values) => setCnpj(values.value)}
+                />
+                {hasTriedSubmit && cnpj.replace(/\D/g, "").length !== 14 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
+              </div>
 
               <div>
-                <label className="block  text-[12px] text-gray-600 mb-2">
-                  Valor unitário
+                <label className="block text-[12px] text-gray-600 mb-2">
+                  E-mail <span className="text-red-500">*</span>
                 </label>
-                <div className="h-8 bg-gray-100 border border-gray-300 rounded flex items-center px-3">
-                  <span className="text-gray-800  text-[12px]">
-                    R$ {getPlanPrice()},00/mês
-                  </span>
-                </div>
+                <Input
+                  size="middle"
+                  placeholder="Informe seu e-mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {hasTriedSubmit &&
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
+                    <p className="text-red-500 text-xs mt-1">
+                      Campo obrigatório
+                    </p>
+                  )}
+              </div>
+
+              <div>
+                <label className="block text-[12px] text-gray-600 mb-2">
+                  Nome do Gestor <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  size="middle"
+                  placeholder="Informe o nome do gestor"
+                  value={managerName}
+                  onChange={(e) => setManagerName(e.target.value)}
+                />
+                {hasTriedSubmit && managerName.trim() === "" && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
               </div>
             </div>
 

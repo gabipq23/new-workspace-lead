@@ -2,18 +2,20 @@ import { create } from "zustand";
 import type { Plan, OrderData } from "../interfaces/order";
 
 interface BasicInfo {
-  isVivoClient: boolean;
+  planName: string;
+  cnpj: string;
+  email: string;
+  managerName: string;
   users: number;
-  managerPhone: string;
+  isVivoClient: boolean;
   acceptContact: boolean;
 }
 
 interface CompanyInfo {
-  email: string;
-  domainName: string;
-  cnpj: string;
+  managerPhone: string;
   cpf: string;
-  buyersPhone: string;
+  phone: string;
+  domainName: string;
   alreadyHaveWorkspace: boolean;
   domainSuggestion1: string;
   domainSuggestion2: string;
@@ -34,17 +36,19 @@ interface OrderFlowStore {
 export const useOrderStore = create<OrderFlowStore>((set, get) => ({
   selectedPlan: null,
   basicInfo: {
-    isVivoClient: true,
+    planName: "",
+    cnpj: "",
+    email: "",
+    managerName: "",
     users: 1,
-    managerPhone: "",
+    isVivoClient: true,
     acceptContact: true,
   },
   companyInfo: {
-    email: "",
-    domainName: "",
-    cnpj: "",
+    managerPhone: "2199884465451",
     cpf: "",
-    buyersPhone: "",
+    phone: "",
+    domainName: "",
     alreadyHaveWorkspace: false,
     domainSuggestion1: "",
     domainSuggestion2: "",
@@ -73,13 +77,15 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
     return {
       plan: [state.selectedPlan],
       users: state.basicInfo.users,
+      planName: state.basicInfo.planName,
+      cnpj: state.basicInfo.cnpj,
+      email: state.basicInfo.email,
+      managerName: state.basicInfo.managerName,
       isVivoClient: state.basicInfo.isVivoClient,
-      managerPhone: state.basicInfo.managerPhone,
-      email: state.companyInfo.email || "",
-      domainName: state.companyInfo.domainName || "",
-      cnpj: state.companyInfo.cnpj || "",
+      managerPhone: state.companyInfo.managerPhone || "",
       cpf: state.companyInfo.cpf || "",
-      buyersPhone: state.companyInfo.buyersPhone || "",
+      phone: state.companyInfo.phone || "",
+      domainName: state.companyInfo.domainName || "",
       alreadyHaveWorkspace: state.companyInfo.alreadyHaveWorkspace || false,
       domainSuggestion1: state.companyInfo.domainSuggestion1 || "",
       domainSuggestion2: state.companyInfo.domainSuggestion2 || "",
@@ -90,17 +96,18 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
     set({
       selectedPlan: null,
       basicInfo: {
-        isVivoClient: true,
+        planName: "",
+        cnpj: "",
+        email: "",
+        managerName: "",
         users: 1,
-        managerPhone: "",
+        isVivoClient: true,
         acceptContact: true,
       },
       companyInfo: {
-        email: "",
-        domainName: "",
-        cnpj: "",
         cpf: "",
-        buyersPhone: "",
+        phone: "",
+        domainName: "",
         alreadyHaveWorkspace: false,
         domainSuggestion1: "",
         domainSuggestion2: "",

@@ -4,14 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Check, ChevronDown, ChevronUp, CircleCheck } from "lucide-react";
 import { useOrderStore } from "../../context/context";
 import { useOrderControler } from "../../controller/controller";
-import { CNPJInput, CPFInput, PhoneInput } from "../../utils/input";
+import { CPFInput, PhoneInput } from "../../utils/input";
 
 export default function CompanyInfo() {
   const [hasWorkspace, setHasWorkspace] = useState(false);
-  const [cnpj, setCnpj] = useState("");
   const { updateCompanyInfo } = useOrderStore();
-  const [cpf, setCpf] = useState("");
-  const [email, setEmail] = useState("");
+  const [cpf, setcpf] = useState("");
   const [phone, setPhone] = useState("");
   const [acceptContact, setAcceptContact] = useState(true);
   const [showServices, setShowServices] = useState(false);
@@ -27,14 +25,8 @@ export default function CompanyInfo() {
   const navigate = useNavigate();
 
   const isFormValid = () => {
-    const cnpjDigits = cnpj.replace(/\D/g, "");
-    const hasValidCnpj = cnpjDigits.length === 14;
-
     const cpfDigits = cpf.replace(/\D/g, "");
     const hasValidCpf = cpfDigits.length === 11;
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const hasValidEmail = emailRegex.test(email);
 
     const phoneDigits = phone.replace(/\D/g, "");
     const hasValidPhone = phoneDigits.length === 11;
@@ -50,14 +42,7 @@ export default function CompanyInfo() {
       hasDomainInfo = domainName.trim() !== "";
     }
 
-    return (
-      hasValidCnpj &&
-      hasValidCpf &&
-      hasValidEmail &&
-      hasValidPhone &&
-      hasAcceptedTerms &&
-      hasDomainInfo
-    );
+    return hasValidCpf && hasValidPhone && hasAcceptedTerms && hasDomainInfo;
   };
 
   const handleSubmit = async () => {
@@ -66,10 +51,9 @@ export default function CompanyInfo() {
       return;
     }
     updateCompanyInfo({
+      managerPhone: "2199884465451",
       cpf: cpf,
-      email: email,
-      cnpj: cnpj,
-      buyersPhone: phone,
+      phone: phone,
       alreadyHaveWorkspace: hasWorkspace,
       acceptContact: acceptContact,
       domainName: domainName,
@@ -362,29 +346,15 @@ export default function CompanyInfo() {
           )}
 
           <div className="mb-8 mt-4">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-[12px] text-gray-600 mb-2">
-                  CNPJ <span className="text-red-500">*</span>
-                </label>
-                <CNPJInput
-                  format="##.###.###/####-##"
-                  value={cnpj}
-                  onValueChange={(values) => setCnpj(values.value)}
-                />
-                {hasTriedSubmit && cnpj.replace(/\D/g, "").length !== 14 && (
-                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-                )}
-              </div>
-
-              <div>
-                <label className="flex items-center gap-1  text-[12px] text-gray-600 mb-2">
-                  CPF do representante <span className="text-red-500">*</span>
+                <label className="flex items-center gap-1 text-[12px] text-gray-600 mb-2">
+                  CPF do Gestor <span className="text-red-500">*</span>
                 </label>
                 <CPFInput
                   format="###.###.###-##"
                   value={cpf}
-                  onValueChange={(values) => setCpf(values.value)}
+                  onValueChange={(values) => setcpf(values.value)}
                 />
                 {hasTriedSubmit && cpf.replace(/\D/g, "").length !== 11 && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
@@ -393,25 +363,7 @@ export default function CompanyInfo() {
 
               <div>
                 <label className="block text-[12px] text-gray-600 mb-2">
-                  E-mail <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  size="middle"
-                  placeholder="Informe seu e-mail"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {hasTriedSubmit &&
-                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
-                    <p className="text-red-500 text-xs mt-1">
-                      Campo obrigatório
-                    </p>
-                  )}
-              </div>
-
-              <div>
-                <label className="block  text-[12px] text-gray-600 mb-2">
-                  Celular do contratante <span className="text-red-500">*</span>
+                  Telefone <span className="text-red-500">*</span>
                 </label>
                 <PhoneInput
                   format="(##) #####-####"
@@ -473,8 +425,10 @@ export default function CompanyInfo() {
           <span className="text-white">🛒</span>
           <span className="font-medium">Seu plano</span>
         </div>
-
         <div className="bg-white text-gray-800 rounded-lg  relative">
+          <div className="bg-orange-500 text-white px-2 py-1 rounded-xl text-[10px] inline-block mb-4 absolute -top-2 right-2">
+            + 2GB na linha móvel
+          </div>
           <div className="">
             <h3
               style={{ fontWeight: "bold", padding: "12px" }}

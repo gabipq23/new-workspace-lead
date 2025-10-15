@@ -5,14 +5,16 @@ export interface Plan {
 }
 
 export interface OrderData {
-  email: string;
-  domainName: string;
+  planName: string;
   cnpj: string;
-  cpf: string;
-  buyersPhone: string;
-  managerPhone: string;
+  email: string;
+  managerName: string;
   users: number;
   isVivoClient: boolean;
+  managerPhone: string;
+  cpf: string;
+  phone: string;
+  domainName: string;
   alreadyHaveWorkspace: boolean;
   domainSuggestion1: string;
   domainSuggestion2: string;

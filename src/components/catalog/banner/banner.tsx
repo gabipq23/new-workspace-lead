@@ -30,7 +30,7 @@ function Banner() {
             style={{ lineHeight: "1.", margin: 0 }}
             className="text-[12px] md:text-[12px] lg:text-[16px] text-[#f7f7f7] "
           >
-            SOLUÇÕES COLABORATIVAS
+            CONTRATE OU MIGRE PARA A VIVO
           </p>
           <p
             style={{ lineHeight: "1.0", margin: 0 }}
@@ -52,23 +52,28 @@ function Banner() {
           </p>
         </div>
 
-        <div className="mx-6 md:mx-24 lg:mx-30  ">
+        <div className="mx-4 md:mx-20 lg:mx-30  ">
           <img
-            src="/imagem_oferta_workspace.png"
-            className="w-56 sm:w-56 md:w-70 lg:w-80 h-auto object-contain"
+            src="/Vivo_oferta_Workspace.png"
+            className="hidden md:block w-56 sm:w-70 md:w-90 lg:w-100 h-auto object-contain"
+            alt="Google Workspace"
+          />
+          <img
+            src="/Vivo_oferta_Workspace_mobile.png"
+            className="block md:hidden w-40 sm:w-48  h-auto object-contain"
             alt="Google Workspace"
           />
         </div>
 
         <div className="px-6 py-0 lg:py-2 md:px-24 lg:px-32  ">
           <Button
-            style={{ width: "120px", height: "50px" }}
+            style={{ width: "240px", height: "40px" }}
             variant="solid"
             size="large"
             color="magenta"
             onClick={() => navigate("/choose-plan")}
           >
-            Contrate
+            CONTRATE OU MIGRE AGORA
           </Button>
         </div>
       </div>

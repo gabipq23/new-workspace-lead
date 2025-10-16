@@ -1,4 +1,5 @@
-import { Button, ConfigProvider } from "antd";
+import { Button, ConfigProvider, Radio } from "antd";
+import type { RadioChangeEvent } from "antd";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useOrderStore } from "../../../context/context";
@@ -7,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 export default function CardLayout({ cardData }: any) {
   const navigate = useNavigate();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  const [selectedPricingType, setSelectedPricingType] =
+    useState<string>("monthly");
   const toggleDetails = (cardType: string) => {
     setExpandedCard(expandedCard === cardType ? null : cardType);
   };
@@ -71,13 +74,63 @@ export default function CardLayout({ cardData }: any) {
               </div>
             </div>
 
-            <div className="flex flex-col items-start gap-1  mx-4">
-              <p style={{ margin: 0 }} className=" text-[20px] text-gray-900">
-                R$ {cardData?.price}{" "}
-                <span className="text-[20px] text-gray-600">/mês*</span>
-              </p>
-              <p className="text-[12px] text-gray-600">por usuário</p>
-            </div>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: "#660099",
+                },
+              }}
+            >
+              <div className="px-4 flex text-start flex-col gap-2">
+                <Radio.Group
+                  value={selectedPricingType}
+                  onChange={(e: RadioChangeEvent) =>
+                    setSelectedPricingType(e.target.value)
+                  }
+                  className="flex flex-col gap-2"
+                >
+                  <div className="flex items-start">
+                    <Radio
+                      value="monthly"
+                      style={{
+                        color: "#660099",
+                      }}
+                    />
+                    <div className="flex flex-col">
+                      <p
+                        style={{ margin: 0 }}
+                        className="text-gray-900 text-[20px]"
+                      >
+                        R$ {cardData?.price}{" "}
+                        <span className="text-[20px] text-gray-600">/mês*</span>
+                      </p>
+                      <p className="text-gray-600 text-[12px]">por usuário</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start">
+                    <Radio
+                      value="yearly"
+                      style={{
+                        color: "#660099",
+                      }}
+                    />
+                    <div className="flex flex-col">
+                      <p
+                        style={{ margin: 0 }}
+                        className="text-gray-900 text-[20px]"
+                      >
+                        R$ 35
+                        <span className="text-[20px] text-gray-600">
+                          /anual*
+                        </span>
+                      </p>
+                      <p className="text-gray-600 text-[12px]">por usuário</p>
+                    </div>
+                  </div>
+                </Radio.Group>
+              </div>
+            </ConfigProvider>
 
             <Button
               className="self-center mb-4 mx-6 w-56"

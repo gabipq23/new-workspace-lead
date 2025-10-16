@@ -11,6 +11,14 @@ interface BasicInfo {
   acceptContact: boolean;
 }
 
+interface ConfirmedPlan {
+  id: string;
+  planName: string;
+  price: string;
+  users: number;
+  modalidade: string;
+}
+
 interface CompanyInfo {
   managerPhone: string;
   cpf: string;
@@ -24,9 +32,11 @@ interface CompanyInfo {
 
 interface OrderFlowStore {
   selectedPlan: Plan | null;
+  confirmedPlans: ConfirmedPlan[];
   basicInfo: BasicInfo;
   companyInfo: Partial<CompanyInfo>;
   setSelectedPlan: (plan: Plan) => void;
+  setConfirmedPlans: (plans: ConfirmedPlan[]) => void;
   updateBasicInfo: (info: Partial<BasicInfo>) => void;
   updateCompanyInfo: (info: Partial<CompanyInfo>) => void;
   buildCompleteOrder: () => OrderData | null;
@@ -35,6 +45,7 @@ interface OrderFlowStore {
 
 export const useOrderStore = create<OrderFlowStore>((set, get) => ({
   selectedPlan: null,
+  confirmedPlans: [],
   basicInfo: {
     planName: "",
     cnpj: "",
@@ -57,6 +68,10 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
 
   setSelectedPlan: (plan: Plan) => {
     set({ selectedPlan: plan });
+  },
+
+  setConfirmedPlans: (plans: ConfirmedPlan[]) => {
+    set({ confirmedPlans: plans });
   },
 
   updateBasicInfo: (info: Partial<BasicInfo>) => {
@@ -95,6 +110,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
   clearOrder: () => {
     set({
       selectedPlan: null,
+      confirmedPlans: [],
       basicInfo: {
         planName: "",
         cnpj: "",

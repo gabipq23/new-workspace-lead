@@ -3,69 +3,18 @@ import { Button, Input, Select, Checkbox, Radio, ConfigProvider } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronUp, CircleCheck } from "lucide-react";
 import { useOrderStore } from "../../context/context";
-import { CNPJInput } from "../../utils/input";
+import { CNPJInput, PhoneInput } from "../../utils/input";
 
 const { Option } = Select;
 
-export default function GetStartInfo() {
-  const [cnpj, setCnpj] = useState("");
-  const [email, setEmail] = useState("");
-  const [managerName, setManagerName] = useState("");
-  const [users, setUsers] = useState(1);
-  const [isVivoClient, setIsVivoClient] = useState(true);
-  const [acceptContact, setAcceptContact] = useState(true);
-  const [showServicesWeb, setShowServicesWeb] = useState(true);
-  const { selectedPlan, updateBasicInfo, setSelectedPlan } = useOrderStore();
+function PlanCard({ plan, index }: { plan: any; index: number }) {
+  const [showDetails, setShowDetails] = useState(false);
 
-  const [showServices, setShowServices] = useState(false);
-  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = () => {
-    setHasTriedSubmit(true);
-    if (!isFormValid()) {
-      return;
-    }
-    updateBasicInfo({
-      planName: selectedPlan?.planName || "Starter",
-      cnpj: cnpj,
-      email: email,
-      managerName: managerName,
-      users: users,
-      isVivoClient: isVivoClient,
-      acceptContact: acceptContact,
-    });
-    navigate("/client-information");
-    window.scrollTo(0, 0);
+  const getPlanNameForCard = (planName: string) => {
+    return `Business ${planName}`;
   };
 
-  const handleUserIncrease = () => {
-    setUsers(users + 1);
-  };
-
-  const handleUserDecrease = () => {
-    if (users > 1) {
-      setUsers(users - 1);
-    }
-  };
-
-  const getPlanPrice = () => {
-    if (selectedPlan?.price) {
-      return parseInt(selectedPlan.price);
-    }
-
-    return 49;
-  };
-
-  const getPlanName = () => {
-    if (selectedPlan?.planName) {
-      return `Business ${selectedPlan.planName}`;
-    }
-
-    return "Business Starter";
-  };
-
-  const getPlanDetails = () => {
+  const getPlanDetailsForCard = (planName: string) => {
     const details = {
       Starter: [
         "E-mail comercial personalizado e seguro",
@@ -90,31 +39,238 @@ export default function GetStartInfo() {
       ],
     };
 
-    const planKey = selectedPlan?.planName || "Starter";
-    return details[planKey as keyof typeof details] || details["Starter"];
+    return details[planName as keyof typeof details] || details["Starter"];
+  };
+
+  return (
+    <div className="border-b border-gray-200 pb-2">
+      <div className="flex justify-between gap-2 p-3">
+        <div className="text-start">
+          <div className="text-gray-600 text-[10px]">Plano {index}</div>
+          <div
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] text-[13px]"
+          >
+            {getPlanNameForCard(plan.planName)}
+          </div>
+        </div>
+        <div className="text-start">
+          <div className="text-gray-600 text-[10px]">Usuários</div>
+          <div
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] text-[13px]"
+          >
+            {plan.users}
+          </div>
+        </div>
+        <div className="text-start">
+          <div className="text-gray-600 text-[10px]">Valor Total</div>
+          <div
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] text-[13px]"
+          >
+            R$ {parseInt(plan.price) * plan.users},00/
+            {plan.modalidade === "anual" ? "ano" : "mês"}
+          </div>
+        </div>
+      </div>
+
+      <div className="text-center bg-purple-100">
+        <ConfigProvider
+          theme={{
+            token: {
+              colorBgTextHover: "none",
+              colorBgTextActive: "none",
+              colorText: "#660099",
+            },
+          }}
+        >
+          <Button
+            size="small"
+            type="text"
+            variant="text"
+            onClick={() => setShowDetails(!showDetails)}
+          >
+            {showDetails ? (
+              <>
+                ver menos <ChevronUp className="inline w-3 h-3" />
+              </>
+            ) : (
+              <>
+                ver mais <ChevronDown className="inline w-3 h-3" />
+              </>
+            )}
+          </Button>
+        </ConfigProvider>
+      </div>
+
+      {showDetails && (
+        <div className="p-4 bg-purple-100">
+          <h4
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] font-medium mb-3 text-[12px]"
+          >
+            Serviços inclusos
+          </h4>
+
+          <div className="flex justify-around">
+            <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
+            <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
+            <img src="/icone-calendar.svg" alt="Calendar" className="w-8 h-8" />
+            <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
+            <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
+            <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
+            <img src="/icone-slides.svg" alt="Slides" className="w-8 h-8" />
+            <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
+            <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
+          </div>
+          <hr className="my-3 border-t border-gray-200" />
+          <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">
+            {getPlanDetailsForCard(plan.planName).map((detail, detailIndex) => (
+              <div key={detailIndex} className="flex gap-1 items-center ">
+                <span className="text-[#4f0077] ">
+                  <CircleCheck size={11} />
+                </span>
+                <span>{detail}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function GetStartInfo() {
+  const [cnpj, setCnpj] = useState("");
+  const [email, setEmail] = useState("");
+  const [managerName, setManagerName] = useState("");
+
+  const [isVivoClient, setIsVivoClient] = useState(true);
+  const [acceptContact, setAcceptContact] = useState(true);
+
+  const { updateBasicInfo, confirmedPlans, setConfirmedPlans } =
+    useOrderStore();
+  const [phone, setPhone] = useState("");
+
+  const [currentPlan, setCurrentPlan] = useState({
+    planName: "",
+    price: "",
+    users: 1,
+    modalidade: "",
+  });
+
+  const [showServices, setShowServices] = useState(false);
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    setHasTriedSubmit(true);
+    if (!isFormValid()) {
+      return;
+    }
+    updateBasicInfo({
+      planName:
+        confirmedPlans.length > 0
+          ? `${confirmedPlans.length} plano(s) selecionado(s)`
+          : "",
+      cnpj: cnpj,
+      email: email,
+      managerName: managerName,
+      users: getTotalUsers(),
+      isVivoClient: isVivoClient,
+      acceptContact: acceptContact,
+    });
+    navigate("/client-information");
+    window.scrollTo(0, 0);
+  };
+
+  const addNewPlan = () => {
+    if (currentPlan.planName && currentPlan.price && currentPlan.modalidade) {
+      const newConfirmedPlan = {
+        id: Date.now().toString(),
+        planName: currentPlan.planName,
+        price: currentPlan.price,
+        users: currentPlan.users,
+        modalidade: currentPlan.modalidade,
+      };
+
+      setConfirmedPlans([...confirmedPlans, newConfirmedPlan]);
+
+      // Limpa os inputs para o próximo plano
+      setCurrentPlan({
+        planName: "",
+        price: "",
+        users: 1,
+        modalidade: "",
+      });
+    }
+  };
+
+  const removePlan = (planId: string) => {
+    setConfirmedPlans(confirmedPlans.filter((plan) => plan.id !== planId));
+  };
+
+  const updateCurrentPlan = (field: string, value: string | number) => {
+    setCurrentPlan((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleCurrentUserIncrease = () => {
+    setCurrentPlan((prev) => ({
+      ...prev,
+      users: prev.users + 1,
+    }));
+  };
+
+  const handleCurrentUserDecrease = () => {
+    if (currentPlan.users > 1) {
+      setCurrentPlan((prev) => ({
+        ...prev,
+        users: prev.users - 1,
+      }));
+    }
+  };
+
+  const getPlanPrice = () => {
+    if (currentPlan?.price) {
+      return parseInt(currentPlan.price);
+    }
+    return 0;
+  };
+
+  const getTotalPrice = () => {
+    const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
+      return total + parseInt(plan.price) * plan.users;
+    }, 0);
+    return confirmedPlansTotal;
+  };
+
+  const getTotalUsers = () => {
+    return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
   };
 
   const isFormValid = () => {
-    const hasValidPlan = selectedPlan !== null;
+    const hasAtLeastOnePlan = confirmedPlans.length > 0;
     const cnpjDigits = cnpj.replace(/\D/g, "");
     const hasValidCnpj = cnpjDigits.length === 14;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const hasValidEmail = emailRegex.test(email);
     const hasValidManagerName = managerName.trim() !== "";
-    const hasValidUsers = users >= 1;
     const hasAcceptedContact = acceptContact === true;
     return (
-      hasValidPlan &&
+      hasAtLeastOnePlan &&
       hasValidCnpj &&
       hasValidEmail &&
       hasValidManagerName &&
-      hasValidUsers &&
       hasAcceptedContact
     );
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-[100vh] ">
+    <div className="flex flex-col md:flex-row min-h-[100vh]  ">
       {/* mobile */}
       <div className="md:hidden flex flex-col bg-[#660099] text-white  pt-2">
         <div className=" flex items-end justify-end text-[12px] gap-2 px-3">
@@ -131,12 +287,14 @@ export default function GetStartInfo() {
 
         <div className="flex justify-between gap-2  px-3">
           <div className="text-start">
-            <div className="text-white text-[10px]">Plano</div>
+            <div className="text-white text-[10px]">Planos</div>
             <div
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              {getPlanName()}
+              {confirmedPlans.length > 0
+                ? `${confirmedPlans.length} plano(s)`
+                : "Nenhum plano"}
             </div>
           </div>
           <div className="text-start">
@@ -145,89 +303,87 @@ export default function GetStartInfo() {
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              {users}
+              {getTotalUsers()}
             </div>
           </div>
+
           <div className="text-start">
             <div className="text-white text-[10px]">Valor Total</div>
             <div
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              R$ {getPlanPrice() * users},00/mês
+              R$ {getTotalPrice()},00/mês
             </div>
           </div>
         </div>
 
-        <div className="text-center bg-purple-100  ">
-          <ConfigProvider
-            theme={{
-              token: {
-                colorBgTextHover: "none",
-                colorBgTextActive: "none",
-                colorText: "#660099",
-              },
-            }}
-          >
-            <Button
-              size="small"
-              type="text"
-              variant="text"
-              onClick={() => setShowServices(!showServices)}
+        {confirmedPlans.length > 0 && (
+          <div className="text-center bg-purple-100">
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorBgTextHover: "none",
+                  colorBgTextActive: "none",
+                  colorText: "#660099",
+                },
+              }}
             >
-              {showServices ? (
-                <>
-                  ver menos <ChevronUp className="inline w-3 h-3" />
-                </>
-              ) : (
-                <>
-                  ver mais <ChevronDown className="inline w-3 h-3" />
-                </>
-              )}
-            </Button>
-          </ConfigProvider>
-        </div>
+              <Button
+                size="small"
+                type="text"
+                variant="text"
+                onClick={() => setShowServices(!showServices)}
+              >
+                {showServices ? (
+                  <>
+                    ver menos <ChevronUp className="inline w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    ver planos <ChevronDown className="inline w-3 h-3" />
+                  </>
+                )}
+              </Button>
+            </ConfigProvider>
+          </div>
+        )}
 
-        {showServices && (
+        {showServices && confirmedPlans.length > 0 && (
           <div className="p-4 bg-purple-100">
             <h4
               style={{ fontWeight: "bold" }}
               className="text-[#660099] font-medium mb-3 text-[12px]"
             >
-              Serviços inclusos
+              Planos selecionados
             </h4>
 
-            <div className="flex justify-around">
-              <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
-              <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
-              <img
-                src="/icone-calendar.svg"
-                alt="Calendar"
-                className="w-8 h-8"
-              />
-              <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
-              <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
-              <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
-              <img src="/icone-slides.svg" alt="Slides" className="w-8 h-8" />
-              <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
-              <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
-            </div>
-            <hr className="my-3 border-t border-gray-200" />
-            <div className=" flex flex-col gap-1 text-[#660099] text-[10px]">
-              {getPlanDetails().map((detail, index) => (
-                <div key={index} className="flex gap-1 items-center ">
-                  <span className="text-[#4f0077] ">
-                    <CircleCheck size={11} />
+            {confirmedPlans.map((plan, index) => (
+              <div key={plan.id} className="mb-3 p-3 bg-white rounded-md">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-[#660099] font-bold text-[11px]">
+                    Plano {index + 1}: Business {plan.planName}
                   </span>
-                  <span>{detail}</span>
+                  <span className="text-[#660099] font-bold text-[11px]">
+                    {plan.users} usuário(s)
+                  </span>
                 </div>
-              ))}
-            </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 text-[10px] capitalize">
+                    Modalidade: {plan.modalidade}
+                  </span>
+                  <span className="text-[#ff7f17] font-bold text-[11px]">
+                    R$ {parseInt(plan.price) * plan.users},00/
+                    {plan.modalidade === "anual" ? "ano" : "mês"}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
 
-      <div className="flex flex-col flex-1 px-8 pt-8 pb-4 justify-between bg-[#f7f7f7] ">
+      <div className="flex flex-col flex-1 px-8 pt-4  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
         <div>
           <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
             <img src="/Vivo-Empresas.png" alt="Vivo Empresas" className="h-7" />
@@ -264,7 +420,7 @@ export default function GetStartInfo() {
             Olá! Vamos iniciar sua pedido online :)
           </h1>
 
-          <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-8 flex items-center">
+          <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-4 flex items-center">
             <span className="text-orange-600 text-[12px] mr-2">🎁</span>
             <span className="text-orange-600 text-[12px] ">
               <strong>Aproveite agora!</strong> Clientes Móvel Vivo Empresas
@@ -272,7 +428,7 @@ export default function GetStartInfo() {
             </span>
           </div>
 
-          <div className="mb-8 text-[12px]">
+          <div className="mb-6 text-[12px]">
             <h3 className="text-[14px] text-gray-800 mb-4">
               É cliente Vivo Empresas Móvel?
             </h3>
@@ -301,27 +457,96 @@ export default function GetStartInfo() {
           <div className="mb-8">
             <h3 className="text-[14px] text-gray-800 mb-4">Defina seu plano</h3>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-              <div>
+            {confirmedPlans.map((plan, index) => (
+              <div
+                key={plan.id}
+                className="flex flex-wrap justify-start gap-6 mb-2 max-w-[800px]  bg-green-50 py-3 rounded-r-md"
+              >
+                <div className="w-[180px]">
+                  <label className="block text-[12px] text-gray-600 mb-2">
+                    Plano {index + 1}
+                  </label>
+                  <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                    <span className="text-gray-700 text-[13px]">
+                      Business {plan.planName}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-[160px]">
+                  <label className="block text-[12px] text-gray-600 mb-2">
+                    Quantidade de Usuários
+                  </label>
+                  <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center justify-center">
+                    <span className="text-gray-700 text-[13px]">
+                      {plan.users}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-[100px]">
+                  <label className="block text-[12px] text-gray-600 mb-2">
+                    Modalidade
+                  </label>
+                  <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                    <span className="text-gray-700 text-[13px] capitalize">
+                      {plan.modalidade}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="w-[280px]">
+                  <label className="block text-[12px] text-gray-600 mb-2">
+                    Valor Total
+                  </label>
+                  <div className="flex gap-2">
+                    <div className="w-[180px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                      <span className="text-gray-700 text-[13px] font-bold">
+                        R$ {parseInt(plan.price) * plan.users},00/
+                        {plan.modalidade === "anual" ? "ano" : "mês"}
+                      </span>
+                    </div>
+                    <Button
+                      size="middle"
+                      onClick={() => removePlan(plan.id)}
+                      style={{
+                        backgroundColor: "#dc2626",
+                        borderColor: "#dc2626",
+                        color: "white",
+                        height: "32px",
+                        fontSize: "11px",
+                        padding: "0 8px",
+                        width: "140px",
+                      }}
+                    >
+                      Remover
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="flex flex-wrap justify-start gap-6 mb-6">
+              <div className="w-[180px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
-                  Plano <span className="text-red-500">*</span>
+                  Plano {confirmedPlans.length + 1}{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <Select
                   size="middle"
-                  value={selectedPlan?.planName || "Starter"}
+                  value={currentPlan.planName || undefined}
+                  placeholder="Selecione um plano"
                   onChange={(value) => {
-                    // Mapear os preços baseado na seleção
                     const priceMap = {
                       Starter: "49",
                       Standard: "98",
                       Plus: "154",
                     };
-
-                    setSelectedPlan({
-                      planName: value,
-                      price: priceMap[value as keyof typeof priceMap],
-                      servicesIncluded: [],
-                    });
+                    updateCurrentPlan("planName", value);
+                    updateCurrentPlan(
+                      "price",
+                      priceMap[value as keyof typeof priceMap]
+                    );
                   }}
                   className="w-full"
                 >
@@ -329,24 +554,24 @@ export default function GetStartInfo() {
                   <Option value="Standard">Business Standard</Option>
                   <Option value="Plus">Business Plus</Option>
                 </Select>
-                {hasTriedSubmit && !selectedPlan && (
+                {hasTriedSubmit && !currentPlan.planName && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-
-              <div>
+              <div className="w-[160px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Quantidade de Usuários <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center">
                   <Button
                     size="middle"
-                    onClick={handleUserDecrease}
-                    disabled={users <= 1}
+                    onClick={handleCurrentUserDecrease}
+                    disabled={currentPlan.users <= 1}
                     style={{
-                      backgroundColor: users > 1 ? "#f97316" : "#e5e7eb",
+                      backgroundColor:
+                        currentPlan.users > 1 ? "#f97316" : "#e5e7eb",
                       borderColor: "#d1d5db",
-                      color: users > 1 ? "white" : "#9ca3af",
+                      color: currentPlan.users > 1 ? "white" : "#9ca3af",
                       borderRadius: "6px 0 0 6px",
                       width: "40px",
                       height: "32px",
@@ -355,7 +580,7 @@ export default function GetStartInfo() {
                     −
                   </Button>
                   <Input
-                    value={users}
+                    value={currentPlan.users}
                     readOnly
                     size="middle"
                     style={{
@@ -368,7 +593,7 @@ export default function GetStartInfo() {
                   />
                   <Button
                     size="middle"
-                    onClick={handleUserIncrease}
+                    onClick={handleCurrentUserIncrease}
                     style={{
                       backgroundColor: "#f97316",
                       borderColor: "#f97316",
@@ -381,13 +606,74 @@ export default function GetStartInfo() {
                     +
                   </Button>
                 </div>
-                {hasTriedSubmit && users < 1 && (
+                {hasTriedSubmit && currentPlan.users < 1 && (
                   <p className="text-red-500 text-xs mt-1">
                     Selecione pelo menos 1 usuário
                   </p>
                 )}
               </div>
               <div>
+                <label className="block text-[12px] text-gray-600 mb-2">
+                  Modalidade <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  size="middle"
+                  value={currentPlan.modalidade || undefined}
+                  onChange={(value) => updateCurrentPlan("modalidade", value)}
+                  className="w-[100px]"
+                >
+                  <Option value="mensal">Mensal</Option>
+                  <Option value="anual">Anual</Option>
+                </Select>
+                {hasTriedSubmit && !currentPlan.modalidade && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
+              </div>
+              <div className="w-[280px]">
+                <label className="block text-[12px] text-gray-600 mb-2">
+                  Valor Total
+                </label>
+                <div className="flex gap-2">
+                  <div className="w-[180px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-gray-50 flex items-center">
+                    <span
+                      style={{ fontWeight: "bold" }}
+                      className="text-gray-600 text-[13px]"
+                    >
+                      R$ {getPlanPrice() * currentPlan.users},00/
+                      {currentPlan.modalidade === "anual" ? "ano" : "mês"}
+                    </span>
+                  </div>
+                  <Button
+                    size="middle"
+                    onClick={addNewPlan}
+                    disabled={!currentPlan.planName || !currentPlan.modalidade}
+                    style={{
+                      backgroundColor:
+                        currentPlan.planName && currentPlan.modalidade
+                          ? "#f97316"
+                          : "#e5e7eb",
+                      borderColor:
+                        currentPlan.planName && currentPlan.modalidade
+                          ? "#f97316"
+                          : "#d1d5db",
+                      color:
+                        currentPlan.planName && currentPlan.modalidade
+                          ? "white"
+                          : "#9ca3af",
+                      height: "32px",
+                      fontSize: "11px",
+                      padding: "0 8px",
+                      width: "140px",
+                    }}
+                  >
+                    Adicionar novo plano
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-start gap-6 mb-6">
+              <div className=" w-[170px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   CNPJ <span className="text-red-500">*</span>
                 </label>
@@ -401,7 +687,7 @@ export default function GetStartInfo() {
                 )}
               </div>
 
-              <div>
+              <div className=" w-[210px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   E-mail <span className="text-red-500">*</span>
                 </label>
@@ -419,7 +705,7 @@ export default function GetStartInfo() {
                   )}
               </div>
 
-              <div>
+              <div className=" w-[200px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Nome do Gestor <span className="text-red-500">*</span>
                 </label>
@@ -433,9 +719,22 @@ export default function GetStartInfo() {
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
+              <div className=" w-[140px] ">
+                <label className="block text-[12px] text-gray-600 mb-2">
+                  Telefone <span className="text-red-500">*</span>
+                </label>
+                <PhoneInput
+                  format="(##) #####-####"
+                  value={phone}
+                  onValueChange={(values) => setPhone(values.value)}
+                />
+                {hasTriedSubmit && phone.replace(/\D/g, "").length !== 11 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
+              </div>
             </div>
 
-            <div className="mb-8">
+            <div className="mb-20 md:mb-10">
               <ConfigProvider
                 theme={{
                   token: {
@@ -485,7 +784,7 @@ export default function GetStartInfo() {
           <span className="font-medium">Seu plano</span>
         </div>
 
-        <div className="bg-white text-gray-800 rounded-lg  relative">
+        <div className="bg-white text-gray-800 rounded-lg relative">
           <div className="bg-orange-500 text-white px-2 py-1 rounded-xl text-[10px] inline-block mb-4 absolute -top-2 right-2">
             + 2GB na linha móvel
           </div>
@@ -498,103 +797,21 @@ export default function GetStartInfo() {
               Google Workspace
             </h3>
 
-            <div className="flex justify-between gap-2 p-3 pt-0 ">
-              <div className="text-start">
-                <div className="text-gray-600 text-[10px]">Plano</div>
-                <div
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] text-[13px]"
-                >
-                  {getPlanName()}
-                </div>
-              </div>
-              <div className="text-start">
-                <div className="text-gray-600 text-[10px]">Usuários</div>
-                <div
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] text-[13px]"
-                >
-                  {users}
-                </div>
-              </div>
-              <div className="text-start">
-                <div className="text-gray-600 text-[10px]">Valor Total</div>
-                <div
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] text-[13px]"
-                >
-                  R$ {getPlanPrice() * users},00/mês
-                </div>
-              </div>
-            </div>
+            {/* Todos os planos confirmados */}
+            {confirmedPlans.map((plan, index) => (
+              <PlanCard key={plan.id} plan={plan} index={index + 1} />
+            ))}
 
-            <div className="text-center bg-purple-100 rounded-b-md ">
-              <ConfigProvider
-                theme={{
-                  token: {
-                    colorBgTextHover: "none",
-                    colorBgTextActive: "none",
-                    colorText: "#660099",
-                  },
-                }}
-              >
-                <Button
-                  size="small"
-                  type="text"
-                  variant="text"
-                  onClick={() => setShowServicesWeb(!showServicesWeb)}
-                >
-                  {showServicesWeb ? (
-                    <>
-                      ver menos <ChevronUp className="inline w-3 h-3" />
-                    </>
-                  ) : (
-                    <>
-                      ver mais <ChevronDown className="inline w-3 h-3" />
-                    </>
-                  )}
-                </Button>
-              </ConfigProvider>
-            </div>
-
-            {showServicesWeb && (
-              <div className="p-4 bg-purple-100">
-                <h4
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] font-medium mb-3 text-[12px]"
-                >
-                  Serviços inclusos
-                </h4>
-
-                <div className="flex justify-around">
-                  <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
-                  <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
-                  <img
-                    src="/icone-calendar.svg"
-                    alt="Calendar"
-                    className="w-8 h-8"
-                  />
-                  <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
-                  <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
-                  <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
-                  <img
-                    src="/icone-slides.svg"
-                    alt="Slides"
-                    className="w-8 h-8"
-                  />
-                  <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
-                  <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
-                </div>
-                <hr className="my-3 border-t border-gray-200" />
-                <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">
-                  {getPlanDetails().map((detail, index) => (
-                    <div key={index} className="flex gap-1 items-center ">
-                      <span className="text-[#4f0077] ">
-                        <CircleCheck size={11} />
-                      </span>
-                      <span>{detail}</span>
-                    </div>
-                  ))}
+            {/* Resumo Total */}
+            {confirmedPlans.length > 0 && (
+              <div className="p-3 bg-gray-50 rounded-b-lg">
+                <div className="flex justify-between items-center">
+                  <span className="text-[12px] font-bold text-gray-700">
+                    Total Geral:
+                  </span>
+                  <span className="text-[14px] font-bold text-[#660099]">
+                    R$ {getTotalPrice()},00/mês
+                  </span>
                 </div>
               </div>
             )}

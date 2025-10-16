@@ -1,22 +1,182 @@
 import { useState } from "react";
-import { Button, Input, Checkbox, Radio, ConfigProvider } from "antd";
+import { Button, Input, Checkbox, Radio, ConfigProvider, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
-import { Check, ChevronDown, ChevronUp, CircleCheck } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  CircleAlert,
+  CircleCheck,
+} from "lucide-react";
 import { useOrderStore } from "../../context/context";
 import { useOrderControler } from "../../controller/controller";
-import { CPFInput, PhoneInput } from "../../utils/input";
+
+function PlanCard({
+  plan,
+  index,
+}: {
+  plan: {
+    id: string;
+    planName: string;
+    price: string;
+    users: number;
+    modalidade: string;
+  };
+  index: number;
+}) {
+  const [showDetails, setShowDetails] = useState(false);
+
+  const getPlanNameForCard = (planName: string) => {
+    return `Business ${planName}`;
+  };
+
+  const getPlanDetailsForCard = (planName: string) => {
+    const details = {
+      Starter: [
+        "E-mail comercial personalizado e seguro",
+        "Videochamadas com 100 participantes",
+        "30 GB de armazenamento em pool por usuário",
+        "Controles de segurança e gerenciamento",
+        "Suporte Padrão",
+      ],
+      Standard: [
+        "E-mail comercial personalizado e seguro",
+        "Videochamadas com 150 participantes + gravação",
+        "2 TB de armazenamento em pool por usuário",
+        "Controles de segurança e gerenciamento",
+        "Suporte Padrão (upgrade pago para o Suporte Avançado)",
+      ],
+      Plus: [
+        "E-mail corporativo personalizado e protegido, e-discovery e retenção",
+        "Videochamadas com 500 participantes, gravação de reuniões e controle de presença",
+        "5 TB de armazenamento em pool por usuário",
+        "Segurança reforçada e controles de gerenciamento, incluindo o Vault e o Gerenciamento avançado de endpoints",
+        "Suporte Padrão (upgrade pago para o Suporte Avançado)",
+      ],
+    };
+
+    return details[planName as keyof typeof details] || details["Starter"];
+  };
+
+  return (
+    <div className="border-b border-gray-200 pb-2">
+      <div className="flex justify-between gap-2 p-3">
+        <div className="text-start">
+          <div className="text-gray-600 text-[10px]">Plano {index}</div>
+          <div
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] text-[13px]"
+          >
+            {getPlanNameForCard(plan.planName)}
+          </div>
+        </div>
+        <div className="text-start">
+          <div className="text-gray-600 text-[10px]">Usuários</div>
+          <div
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] text-[13px]"
+          >
+            {plan.users}
+          </div>
+        </div>
+        <div className="text-start">
+          <div className="text-gray-600 text-[10px]">Valor Total</div>
+          <div
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] text-[13px]"
+          >
+            R$ {parseInt(plan.price) * plan.users},00/
+            {plan.modalidade === "anual" ? "ano" : "mês"}
+          </div>
+        </div>
+      </div>
+
+      <div className="text-center bg-purple-100">
+        <ConfigProvider
+          theme={{
+            token: {
+              colorBgTextHover: "none",
+              colorBgTextActive: "none",
+              colorText: "#660099",
+            },
+          }}
+        >
+          <Button
+            size="small"
+            type="text"
+            variant="text"
+            onClick={() => setShowDetails(!showDetails)}
+          >
+            {showDetails ? (
+              <>
+                ver menos <ChevronUp className="inline w-3 h-3" />
+              </>
+            ) : (
+              <>
+                ver mais <ChevronDown className="inline w-3 h-3" />
+              </>
+            )}
+          </Button>
+        </ConfigProvider>
+      </div>
+
+      {showDetails && (
+        <div className="p-4 bg-purple-100">
+          <h4
+            style={{ fontWeight: "bold" }}
+            className="text-[#660099] font-medium mb-3 text-[12px]"
+          >
+            Serviços inclusos
+          </h4>
+
+          <div className="flex justify-around">
+            <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
+            <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
+            <img src="/icone-calendar.svg" alt="Calendar" className="w-8 h-8" />
+            <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
+            <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
+            <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
+            <img src="/icone-slides.svg" alt="Slides" className="w-8 h-8" />
+            <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
+            <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
+          </div>
+          <hr className="my-3 border-t border-gray-200" />
+          <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">
+            {getPlanDetailsForCard(plan.planName).map((detail, detailIndex) => (
+              <div key={detailIndex} className="flex gap-1 items-center ">
+                <span className="text-[#4f0077] ">
+                  <CircleCheck size={11} />
+                </span>
+                <span>{detail}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function CompanyInfo() {
   const [hasWorkspace, setHasWorkspace] = useState(false);
-  const { updateCompanyInfo } = useOrderStore();
-  const [cpf, setcpf] = useState("");
-  const [phone, setPhone] = useState("");
+  const { updateCompanyInfo, confirmedPlans } = useOrderStore();
+
+  // Funções para calcular totais
+  const getTotalPrice = () => {
+    return confirmedPlans.reduce((total, plan) => {
+      return total + parseInt(plan.price) * plan.users;
+    }, 0);
+  };
+
+  const getTotalUsers = () => {
+    return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
+  };
+
   const [acceptContact, setAcceptContact] = useState(true);
   const [showServices, setShowServices] = useState(false);
-  const [showServicesWeb, setShowServicesWeb] = useState(true);
   const [domainName, setDomainName] = useState("");
-  const [domainSuggestion1, setDomainSuggestion1] = useState("");
-  const [domainSuggestion2, setDomainSuggestion2] = useState("");
+  // const [domainSuggestion1, setDomainSuggestion1] = useState("");
+  // const [domainSuggestion2, setDomainSuggestion2] = useState("");
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false); // Controla se já tentou submeter
   const { buildCompleteOrder, clearOrder } = useOrderStore();
 
@@ -25,24 +185,18 @@ export default function CompanyInfo() {
   const navigate = useNavigate();
 
   const isFormValid = () => {
-    const cpfDigits = cpf.replace(/\D/g, "");
-    const hasValidCpf = cpfDigits.length === 11;
-
-    const phoneDigits = phone.replace(/\D/g, "");
-    const hasValidPhone = phoneDigits.length === 11;
-
     const hasAcceptedTerms = acceptContact === true;
 
-    let hasDomainInfo = true;
-    if (!hasWorkspace) {
-      // Se não tem workspace, precisa das DUAS sugestões obrigatórias
-      hasDomainInfo =
-        domainSuggestion1.trim() !== "" && domainSuggestion2.trim() !== "";
-    } else {
-      hasDomainInfo = domainName.trim() !== "";
-    }
+    // let hasDomainInfo = true;
+    // if (!hasWorkspace) {
+    //   // Se não tem workspace, precisa das DUAS sugestões obrigatórias
+    //   hasDomainInfo =
+    //     domainSuggestion1.trim() !== "" && domainSuggestion2.trim() !== "";
+    // } else {
+    //   hasDomainInfo = domainName.trim() !== "";
+    // }
 
-    return hasValidCpf && hasValidPhone && hasAcceptedTerms && hasDomainInfo;
+    return hasAcceptedTerms;
   };
 
   const handleSubmit = async () => {
@@ -52,13 +206,10 @@ export default function CompanyInfo() {
     }
     updateCompanyInfo({
       managerPhone: "2199884465451",
-      cpf: cpf,
-      phone: phone,
+
       alreadyHaveWorkspace: hasWorkspace,
       acceptContact: acceptContact,
       domainName: domainName,
-      domainSuggestion1: domainSuggestion1,
-      domainSuggestion2: domainSuggestion2,
     });
 
     const orderData = buildCompleteOrder();
@@ -88,12 +239,14 @@ export default function CompanyInfo() {
 
         <div className="flex justify-between gap-2  px-3">
           <div className="text-start">
-            <div className="text-white text-[10px]">Plano</div>
+            <div className="text-white text-[10px]">Planos</div>
             <div
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              Business Starter
+              {confirmedPlans.length > 0
+                ? `${confirmedPlans.length} plano(s)`
+                : "Nenhum plano"}
             </div>
           </div>
           <div className="text-start">
@@ -102,7 +255,7 @@ export default function CompanyInfo() {
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              1
+              {getTotalUsers()}
             </div>
           </div>
           <div className="text-start">
@@ -111,99 +264,72 @@ export default function CompanyInfo() {
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              R$ 49,00/mês
+              R$ {getTotalPrice()},00/mês
             </div>
           </div>
         </div>
 
-        <div className="text-center bg-purple-100  ">
-          <ConfigProvider
-            theme={{
-              token: {
-                colorBgTextHover: "none",
-                colorBgTextActive: "none",
-                colorText: "#660099",
-              },
-            }}
-          >
-            <Button
-              size="small"
-              type="text"
-              variant="text"
-              onClick={() => setShowServices(!showServices)}
+        {confirmedPlans.length > 0 && (
+          <div className="text-center bg-purple-100">
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorBgTextHover: "none",
+                  colorBgTextActive: "none",
+                  colorText: "#660099",
+                },
+              }}
             >
-              {showServices ? (
-                <>
-                  ver menos <ChevronUp className="inline w-3 h-3" />
-                </>
-              ) : (
-                <>
-                  ver mais <ChevronDown className="inline w-3 h-3" />
-                </>
-              )}
-            </Button>
-          </ConfigProvider>
-        </div>
+              <Button
+                size="small"
+                type="text"
+                variant="text"
+                onClick={() => setShowServices(!showServices)}
+              >
+                {showServices ? (
+                  <>
+                    ver menos <ChevronUp className="inline w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    ver planos <ChevronDown className="inline w-3 h-3" />
+                  </>
+                )}
+              </Button>
+            </ConfigProvider>
+          </div>
+        )}
 
-        {showServices && (
+        {showServices && confirmedPlans.length > 0 && (
           <div className="p-4 bg-purple-100">
             <h4
               style={{ fontWeight: "bold" }}
               className="text-[#660099] font-medium mb-3 text-[12px]"
             >
-              Serviços inclusos
+              Planos selecionados
             </h4>
 
-            <div className="flex justify-around">
-              <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
-              <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
-              <img
-                src="/icone-calendar.svg"
-                alt="Calendar"
-                className="w-8 h-8"
-              />
-              <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
-              <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
-              <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
-              <img src="/icone-slides.svg" alt="Slides" className="w-8 h-8" />
-              <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
-              <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
-            </div>
-            <hr className="my-3 border-t border-gray-200" />
-            <div className=" flex flex-col gap-1 text-[#660099] text-[10px]">
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>E-mail comercial personalizado e seguro</span>
+            {confirmedPlans.map((plan, index) => (
+              <div key={plan.id} className="mb-3 p-3 bg-white rounded-md">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-[#660099] font-bold text-[11px]">
+                    Plano {index + 1}: Business {plan.planName}
+                  </span>
+                  <span className="text-[#660099] font-bold text-[11px]">
+                    {plan.users} usuário(s)
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 text-[10px] capitalize">
+                    Modalidade: {plan.modalidade}
+                  </span>
+                  <span className="text-[#ff7f17] font-bold text-[11px]">
+                    R$ {parseInt(plan.price) * plan.users},00/
+                    {plan.modalidade === "anual" ? "ano" : "mês"}
+                  </span>
+                </div>
               </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>Videochamadas com 150 participantes + gravação</span>
-              </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>2 TB de armazenamento em pool por usuário</span>
-              </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>Controles de segurança e gerenciamento</span>
-              </div>
-              <div className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>
-                  Suporte Padrão (upgrade pago para o Suporte Avançado)
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
         )}
       </div>
@@ -278,7 +404,7 @@ export default function CompanyInfo() {
               </Radio.Group>
             </ConfigProvider>
           </div>
-          {!hasWorkspace ? (
+          {/* {!hasWorkspace ? (
             <>
               <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-8 flex items-center">
                 <span className="text-orange-600 text-[12px] ">
@@ -326,56 +452,39 @@ export default function CompanyInfo() {
                 </div>
               </div>
             </>
-          ) : (
-            <>
-              <div className="w-full">
-                <label className="flex items-center gap-1  text-[12px] text-gray-600 mb-2">
-                  Domínio <span className="text-red-500">*</span>
-                </label>
-                <Input
-                  value={domainName}
-                  onChange={(e) => setDomainName(e.target.value)}
-                  size="middle"
-                  placeholder="dominio@gmail.com"
-                />
-                {hasTriedSubmit && hasWorkspace && domainName.trim() === "" && (
-                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-                )}
+          ) : ( */}
+          <>
+            <div className="">
+              <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                Qual é o nome do domínio da sua empresa?{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-start mb-4 gap-2 ">
+                <p className="text-[11px]" style={{ margin: 0 }}>
+                  Você usará para configurar endereços de e-mail, como
+                  info@example.com
+                </p>
+                <Tooltip title="Um domínio é o que aparece depois de 'www'. Você o usuará para configurar endereços de e-mail, como info@example.com. Ajudaremos você a confirmar que o domínio pertence à empresa mais tarde.">
+                  <span className="text-gray-500 cursor-pointer">
+                    <CircleAlert size={14} />
+                  </span>
+                </Tooltip>
               </div>
-            </>
-          )}
+
+              <Input
+                value={domainName}
+                onChange={(e) => setDomainName(e.target.value)}
+                size="middle"
+                placeholder="dominio@gmail.com"
+                className="max-w-[300px]"
+              />
+              {hasTriedSubmit && hasWorkspace && domainName.trim() === "" && (
+                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+              )}
+            </div>
+          </>
 
           <div className="mb-8 mt-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-              <div>
-                <label className="flex items-center gap-1 text-[12px] text-gray-600 mb-2">
-                  CPF do Gestor <span className="text-red-500">*</span>
-                </label>
-                <CPFInput
-                  format="###.###.###-##"
-                  value={cpf}
-                  onValueChange={(values) => setcpf(values.value)}
-                />
-                {hasTriedSubmit && cpf.replace(/\D/g, "").length !== 11 && (
-                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-[12px] text-gray-600 mb-2">
-                  Telefone <span className="text-red-500">*</span>
-                </label>
-                <PhoneInput
-                  format="(##) #####-####"
-                  value={phone}
-                  onValueChange={(values) => setPhone(values.value)}
-                />
-                {hasTriedSubmit && phone.replace(/\D/g, "").length !== 11 && (
-                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-                )}
-              </div>
-            </div>
-
             <div className="mb-8">
               <ConfigProvider
                 theme={{
@@ -437,127 +546,21 @@ export default function CompanyInfo() {
               Google Workspace
             </h3>
 
-            <div className="flex justify-between gap-2 p-3 pt-0 ">
-              <div className="text-start">
-                <div className="text-gray-600 text-[10px]">Plano</div>
-                <div
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] text-[13px]"
-                >
-                  Business Starter
-                </div>
-              </div>
-              <div className="text-start">
-                <div className="text-gray-600 text-[10px]">Usuários</div>
-                <div
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] text-[13px]"
-                >
-                  1
-                </div>
-              </div>
-              <div className="text-start">
-                <div className="text-gray-600 text-[10px]">Valor Total</div>
-                <div
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] text-[13px]"
-                >
-                  R$ 49,00/mês
-                </div>
-              </div>
-            </div>
+            {/* Todos os planos confirmados */}
+            {confirmedPlans.map((plan, index) => (
+              <PlanCard key={plan.id} plan={plan} index={index + 1} />
+            ))}
 
-            <div className="text-center bg-purple-100 rounded-b-md ">
-              <ConfigProvider
-                theme={{
-                  token: {
-                    colorBgTextHover: "none",
-                    colorBgTextActive: "none",
-                    colorText: "#660099",
-                  },
-                }}
-              >
-                <Button
-                  size="small"
-                  type="text"
-                  variant="text"
-                  onClick={() => setShowServicesWeb(!showServicesWeb)}
-                >
-                  {showServicesWeb ? (
-                    <>
-                      ver menos <ChevronUp className="inline w-3 h-3" />
-                    </>
-                  ) : (
-                    <>
-                      ver mais <ChevronDown className="inline w-3 h-3" />
-                    </>
-                  )}
-                </Button>
-              </ConfigProvider>
-            </div>
-
-            {showServicesWeb && (
-              <div className="p-4 bg-purple-100">
-                <h4
-                  style={{ fontWeight: "bold" }}
-                  className="text-[#660099] font-medium mb-3 text-[12px]"
-                >
-                  Serviços inclusos
-                </h4>
-
-                <div className="flex justify-around">
-                  <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
-                  <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
-                  <img
-                    src="/icone-calendar.svg"
-                    alt="Calendar"
-                    className="w-8 h-8"
-                  />
-                  <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
-                  <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
-                  <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
-                  <img
-                    src="/icone-slides.svg"
-                    alt="Slides"
-                    className="w-8 h-8"
-                  />
-                  <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
-                  <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
-                </div>
-                <hr className="my-3 border-t border-gray-200" />
-                <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>E-mail comercial personalizado e seguro</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>Videochamadas com 150 participantes + gravação</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>2 TB de armazenamento em pool por usuário</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>Controles de segurança e gerenciamento</span>
-                  </div>
-                  <div className="flex gap-1 items-center ">
-                    <span className="text-[#4f0077] ">
-                      <CircleCheck size={11} />
-                    </span>
-                    <span>
-                      Suporte Padrão (upgrade pago para o Suporte Avançado)
-                    </span>
-                  </div>
+            {/* Resumo Total */}
+            {confirmedPlans.length > 0 && (
+              <div className="p-3 bg-gray-50 rounded-b-lg">
+                <div className="flex justify-between items-center">
+                  <span className="text-[12px] font-bold text-gray-700">
+                    Total Geral:
+                  </span>
+                  <span className="text-[14px] font-bold text-[#660099]">
+                    R$ {getTotalPrice()},00/mês
+                  </span>
                 </div>
               </div>
             )}

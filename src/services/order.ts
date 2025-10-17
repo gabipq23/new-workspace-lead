@@ -15,4 +15,9 @@ export class GetWorkspacePlanService {
   async changeOrderStatus(id: number, data: { status: string }) {
     await api.patch(`/pedidos-workspace/${id}/status`, data);
   }
+
+  async getOrderById(id: number | number) {
+    const response = await api.get(`/workspace/pedidos/${id}`);
+    return response.data;
+  }
 }

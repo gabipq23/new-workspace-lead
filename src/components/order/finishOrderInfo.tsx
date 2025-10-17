@@ -1,22 +1,102 @@
-import { Button, ConfigProvider, Collapse } from "antd";
+import { Button, ConfigProvider, Collapse, Spin } from "antd";
 import type { CollapseProps } from "antd";
 import { Check } from "lucide-react";
 import { MailOutlined, SignatureOutlined } from "@ant-design/icons";
-import { useOrderStore } from "../../context/context";
+import { useParams } from "react-router-dom";
+import { useOrderById } from "../../controller/controller";
 
 export default function FinishOrderInfo() {
-  const { basicInfo, companyInfo, confirmedPlans } = useOrderStore();
+  const { id } = useParams<{ id: string }>();
+
+  console.log("orderId from params:", id);
+  console.log("orderId parsed to number:", Number(id));
+  console.log("orderId is valid:", !!id && !isNaN(Number(id)));
+
+  const { data: orderData, isLoading } = useOrderById(Number(id));
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spin size="large" />
+        <span className="ml-4">Carregando dados do pedido...</span>
+      </div>
+    );
+  }
+
+  console.log("Dados do pedido:", orderData);
+  console.log("Order Details:", orderData?.data);
+  console.log(
+    "Todos os campos do orderData.data:",
+    Object.keys(orderData?.data || {})
+  );
+
+  // Extrai os dados do pedido da API (dados estão em orderData.data)
+  const orderDetails = orderData?.data;
+  const confirmedPlans =
+    orderDetails?.plan ||
+    orderDetails?.plans ||
+    orderDetails?.workspace_plans ||
+    [];
+  const basicInfo = orderDetails
+    ? {
+        cnpj: orderDetails.cnpj || orderDetails.company_cnpj,
+        email: orderDetails.email || orderDetails.manager_email,
+        managerName:
+          orderDetails.managerName ||
+          orderDetails.manager_name ||
+          orderDetails.name,
+        managerPhone: orderDetails.managerPhone || orderDetails.manager_phone,
+        isVivoClient: orderDetails.isVivoClient || orderDetails.is_vivo_client,
+        acceptContact:
+          orderDetails.acceptContact || orderDetails.accept_contact,
+      }
+    : null;
+
+  const companyInfo = orderDetails
+    ? {
+        domainName:
+          orderDetails.domainName ||
+          orderDetails.domain_name ||
+          orderDetails.company_domain,
+        alreadyHaveWorkspace:
+          orderDetails.alreadyHaveWorkspace ||
+          orderDetails.already_have_workspace,
+        acceptTerms: orderDetails.acceptTerms || orderDetails.accept_terms,
+      }
+    : null;
+
+  console.log("BasicInfo extraído:", basicInfo);
+  console.log("CompanyInfo extraído:", companyInfo);
+  console.log("ConfirmedPlans extraído:", confirmedPlans);
+
+  // Debug: vamos ver todos os campos disponíveis
+  if (orderDetails) {
+    console.log("=== CAMPOS DISPONÍVEIS NA API ===");
+    Object.entries(orderDetails).forEach(([key, value]) => {
+      console.log(`${key}:`, value);
+    });
+    console.log("=== FIM DOS CAMPOS ===");
+  }
+
+  interface Plan {
+    id: string;
+    planName: string;
+    price: string;
+    users: number;
+    modalidade: string;
+  }
 
   const getTotalPrice = () => {
-    return confirmedPlans.reduce((total, plan) => {
-      return total + parseInt(plan.price) * plan.users;
+    return confirmedPlans.reduce((total: number, plan: Plan) => {
+      return total + parseFloat(plan.price.replace(",", ".")) * plan.users;
     }, 0);
   };
 
   const getTotalUsers = () => {
-    return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
+    return confirmedPlans.reduce(
+      (total: number, plan: Plan) => total + plan.users,
+      0
+    );
   };
-
   const planosDetalhes = (
     <div className="flex flex-col bg-white rounded-[4px] p-4 w-full py-4 mb-4">
       {/* Desktop Version */}
@@ -30,7 +110,7 @@ export default function FinishOrderInfo() {
         </div>
         <hr className="border-t border-neutral-300 mx-2 mb-4" />
 
-        {confirmedPlans.map((plan, index) => (
+        {confirmedPlans.map((plan: Plan, index: number) => (
           <div key={plan.id}>
             <div className="flex items-center py-4 text-[14px] text-neutral-700">
               <p className="text-[14px] font-semibold w-48 text-center">
@@ -58,7 +138,7 @@ export default function FinishOrderInfo() {
 
       {/* Mobile Version */}
       <div className="block md:hidden">
-        {confirmedPlans.map((plan) => (
+        {confirmedPlans.map((plan: Plan) => (
           <div
             key={plan.id}
             className="bg-white rounded-lg shadow p-4 mb-4 flex flex-col gap-2 border"
@@ -102,42 +182,42 @@ export default function FinishOrderInfo() {
         {/* CNPJ e Nome do Gestor */}
         <div className="hidden md:grid grid-cols-2 gap-4 text-[14px] w-full text-neutral-700">
           <p>
-            <strong>CNPJ:</strong> {basicInfo.cnpj || "-"}
+            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
           </p>
           <p>
-            <strong>Nome do Gestor:</strong> {basicInfo.managerName || "-"}
+            <strong>Nome do Gestor:</strong> {basicInfo?.managerName || "-"}
           </p>
         </div>
 
         {/* Mobile: CNPJ e Nome do Gestor em coluna */}
         <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
           <p>
-            <strong>CNPJ:</strong> {basicInfo.cnpj || "-"}
+            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
           </p>
           <p>
-            <strong>Nome do Gestor:</strong> {basicInfo.managerName || "-"}
+            <strong>Nome do Gestor:</strong> {basicInfo?.managerName || "-"}
           </p>
         </div>
 
         {/* Email e Telefone */}
         <div className="hidden md:grid grid-cols-2 gap-4 text-[14px] w-full text-neutral-700">
           <p>
-            <strong>Email:</strong> {basicInfo.email || "-"}
+            <strong>Email:</strong> {basicInfo?.email || "-"}
           </p>
           <p>
             <strong>Cliente Vivo:</strong>{" "}
-            {basicInfo.isVivoClient ? "Sim" : "Não"}
+            {basicInfo?.isVivoClient ? "Sim" : "Não"}
           </p>
         </div>
 
         {/* Mobile: Email e Cliente Vivo em coluna */}
         <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
           <p>
-            <strong>Email:</strong> {basicInfo.email || "-"}
+            <strong>Email:</strong> {basicInfo?.email || "-"}
           </p>
           <p>
             <strong>Cliente Vivo:</strong>{" "}
-            {basicInfo.isVivoClient ? "Sim" : "Não"}
+            {basicInfo?.isVivoClient ? "Sim" : "Não"}
           </p>
         </div>
       </div>
@@ -150,13 +230,14 @@ export default function FinishOrderInfo() {
       <div className="flex flex-col text-neutral-800 gap-2 rounded-lg min-h-[120px] p-4">
         <div className="text-[14px] w-full text-neutral-700">
           <p>
-            <strong>Domínio da Empresa:</strong> {companyInfo.domainName || "-"}
+            <strong>Domínio da Empresa:</strong>{" "}
+            {companyInfo?.domainName || "-"}
           </p>
         </div>
         <div className="text-[14px] w-full text-neutral-700">
           <p>
             <strong>Já possui Workspace:</strong>{" "}
-            {companyInfo.alreadyHaveWorkspace ? "Sim" : "Não"}
+            {companyInfo?.alreadyHaveWorkspace ? "Sim" : "Não"}
           </p>
         </div>
       </div>

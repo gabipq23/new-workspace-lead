@@ -15,7 +15,7 @@ interface ConfirmedPlan {
   planName: string;
   price: string;
   users: number;
-  modalidade: string;
+  type: string;
 }
 
 interface CompanyInfo {
@@ -82,7 +82,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
     const apiPlans: Plan[] = state.confirmedPlans.map((plan) => ({
       planName: `Google Workspace Business ${plan.planName}`,
       price: plan.price,
-      type: plan.modalidade as "mensal" | "anual",
+      type: plan.type as "mensal" | "anual",
       users: plan.users,
     }));
 

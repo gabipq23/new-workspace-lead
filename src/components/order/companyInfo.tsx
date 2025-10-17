@@ -20,7 +20,7 @@ function PlanCard({
     planName: string;
     price: string;
     users: number;
-    modalidade: string;
+    type: string;
   };
   index: number;
 }) {
@@ -86,7 +86,7 @@ function PlanCard({
             className="text-[#660099] text-[13px]"
           >
             R$ {parseInt(plan.price) * plan.users},00/
-            {plan.modalidade === "anual" ? "ano" : "mês"}
+            {plan.type === "anual" ? "ano" : "mês"}
           </div>
         </div>
       </div>
@@ -212,10 +212,18 @@ export default function CompanyInfo() {
 
     const orderData = buildCompleteOrder();
     if (orderData) {
-      await createOrder({ data: orderData });
-      clearOrder();
-      navigate("/order");
-      window.scrollTo(0, 0);
+      try {
+        const response = await createOrder({ data: orderData });
+        console.log("Resposta completa da API:", response);
+        console.log("ID do pedido criado:", response.id);
+
+        clearOrder();
+
+        navigate(`/order/${response.id}`);
+        window.scrollTo(0, 0);
+      } catch (error) {
+        console.error("Erro ao criar pedido:", error);
+      }
     }
   };
 
@@ -319,11 +327,11 @@ export default function CompanyInfo() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 text-[10px] capitalize">
-                    Modalidade: {plan.modalidade}
+                    Modalidade: {plan.type}
                   </span>
                   <span className="text-[#ff7f17] font-bold text-[11px]">
                     R$ {parseInt(plan.price) * plan.users},00/
-                    {plan.modalidade === "anual" ? "ano" : "mês"}
+                    {plan.type === "anual" ? "ano" : "mês"}
                   </span>
                 </div>
               </div>

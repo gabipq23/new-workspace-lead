@@ -20,19 +20,11 @@ export default function CardLayout({ cardData }: any) {
 
   const handlePlanSelection = (cardData: any) => {
     // Define a modalidade baseada na seleção do usuário
-    const modalidade = selectedPricingType === "monthly" ? "mensal" : "anual";
+    const type = selectedPricingType === "monthly" ? "mensal" : "anual";
 
     // Define o preço baseado na modalidade selecionada
     const price =
       selectedPricingType === "monthly" ? cardData?.price : cardData?.priceYear;
-
-    console.log("=== DEBUG PLAN SELECTION ===");
-    console.log("Card clicado:", cardData?.title);
-    console.log("Modalidade selecionada:", selectedPricingType);
-    console.log("Modalidade convertida:", modalidade);
-    console.log("Preço mensal (cardData.price):", cardData?.price);
-    console.log("Preço anual (cardData.priceYear):", cardData?.priceYear);
-    console.log("Preço final selecionado:", price);
 
     // Cria o novo plano
     const newPlan = {
@@ -40,7 +32,7 @@ export default function CardLayout({ cardData }: any) {
       planName: cardData?.title,
       price: price,
       users: 1, // Padrão de 1 usuário
-      modalidade: modalidade,
+      type: type,
     };
 
     console.log("Plano criado:", newPlan);

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { GetWorkspacePlanService } from "../services/order";
 import type { OrderData } from "../interfaces/order";
@@ -14,7 +14,10 @@ export function useOrderControler() {
         orderService.createOrder(data),
       onMutate: async () =>
         await queryClient.cancelQueries({ queryKey: ["order"] }),
-      onSuccess: () => {
+      onSuccess: (response) => {
+        // response contém: { success: true, message: "Pedido criado com sucesso", id: 27 }
+        console.log("Pedido criado com ID:", response.id);
+        toast.success(`Pedido criado com sucesso! ID: ${response.id}`);
         queryClient.invalidateQueries({ queryKey: ["order"] });
       },
       onError: (error) => {
@@ -67,4 +70,20 @@ export function useOrderControler() {
     isUpdateOrderFetching,
     changeOrderStatus,
   };
+}
+
+export function useOrderById(orderId: number) {
+  const orderService = new GetWorkspacePlanService();
+
+  console.log("useOrderById called with:", orderId);
+  console.log("Query enabled?", !!orderId && !isNaN(orderId) && orderId > 0);
+
+  return useQuery({
+    queryKey: ["order", orderId],
+    queryFn: () => {
+      console.log("Executando query para orderId:", orderId);
+      return orderService.getOrderById(orderId);
+    },
+    enabled: !!orderId && !isNaN(orderId) && orderId > 0,
+  });
 }

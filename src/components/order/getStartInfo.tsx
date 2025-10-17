@@ -80,7 +80,7 @@ function PlanCard({ plan, index }: { plan: any; index: number }) {
             className="text-[#660099] text-[13px]"
           >
             R$ {formatPrice(plan.price, plan.users)}/
-            {plan.modalidade === "anual" ? "mês" : "mês"}
+            {plan.type === "anual" ? "mês" : "mês"}
           </div>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function GetStartInfo() {
     planName: "",
     price: "",
     users: 1,
-    modalidade: "",
+    type: "",
   });
 
   const [showServices, setShowServices] = useState(false);
@@ -191,13 +191,13 @@ export default function GetStartInfo() {
   };
 
   const addNewPlan = () => {
-    if (currentPlan.planName && currentPlan.price && currentPlan.modalidade) {
+    if (currentPlan.planName && currentPlan.price && currentPlan.type) {
       const newConfirmedPlan = {
         id: Date.now().toString(),
         planName: currentPlan.planName,
         price: currentPlan.price,
         users: currentPlan.users,
-        modalidade: currentPlan.modalidade,
+        type: currentPlan.type,
       };
 
       setConfirmedPlans([...confirmedPlans, newConfirmedPlan]);
@@ -206,7 +206,7 @@ export default function GetStartInfo() {
         planName: "",
         price: "",
         users: 1,
-        modalidade: "",
+        type: "",
       });
     }
   };
@@ -371,11 +371,11 @@ export default function GetStartInfo() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 text-[10px] capitalize">
-                    Modalidade: {plan.modalidade}
+                    Modalidade: {plan.type}
                   </span>
                   <span className="text-[#ff7f17] font-bold text-[11px]">
                     R$ {formatPrice(plan.price, plan.users)}/
-                    {plan.modalidade === "anual" ? "mês" : "mês"}
+                    {plan.type === "anual" ? "mês" : "mês"}
                   </span>
                 </div>
               </div>
@@ -474,7 +474,7 @@ export default function GetStartInfo() {
                   </div>
                 </div>
 
-                <div className="w-[130px]">
+                <div className="w-[140px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
                     Quant. de Usuários
                   </label>
@@ -491,7 +491,7 @@ export default function GetStartInfo() {
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
                     <span className="text-gray-700 text-[13px] capitalize">
-                      {plan.modalidade}
+                      {plan.type}
                     </span>
                   </div>
                 </div>
@@ -504,7 +504,7 @@ export default function GetStartInfo() {
                     <div className="w-[180px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
                       <span className="text-gray-700 text-[13px] font-bold">
                         R$ {formatPrice(plan.price, plan.users)}/
-                        {plan.modalidade === "anual" ? "mês" : "mês"}
+                        {plan.type === "anual" ? "mês" : "mês"}
                       </span>
                     </div>
                     <Button
@@ -546,17 +546,15 @@ export default function GetStartInfo() {
 
                     updateCurrentPlan("planName", value);
 
-                    // Define o preço baseado na modalidade atual
-                    const modalidade = currentPlan.modalidade as
-                      | "mensal"
-                      | "anual";
-                    if (modalidade) {
+                    // Define o preço baseado na type atual
+                    const type = currentPlan.type as "mensal" | "anual";
+                    if (type) {
                       updateCurrentPlan(
                         "price",
-                        priceMap[value as keyof typeof priceMap][modalidade]
+                        priceMap[value as keyof typeof priceMap][type]
                       );
                     } else {
-                      // Se não há modalidade definida, usa o preço mensal como padrão
+                      // Se não há type definida, usa o preço mensal como padrão
                       updateCurrentPlan(
                         "price",
                         priceMap[value as keyof typeof priceMap].mensal
@@ -597,7 +595,7 @@ export default function GetStartInfo() {
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className="w-[130px]">
+              <div className="w-[140px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Quant. de Usuários <span className="text-red-500">*</span>
                 </label>
@@ -657,9 +655,9 @@ export default function GetStartInfo() {
                 </label>
                 <Select
                   size="middle"
-                  value={currentPlan.modalidade || undefined}
+                  value={currentPlan.type || undefined}
                   onChange={(value) => {
-                    updateCurrentPlan("modalidade", value);
+                    updateCurrentPlan("type", value);
 
                     // Recalcula o preço quando a modalidade muda
                     if (currentPlan.planName) {
@@ -682,7 +680,7 @@ export default function GetStartInfo() {
                   <Option value="mensal">Mensal</Option>
                   <Option value="anual">Anual</Option>
                 </Select>
-                {hasTriedSubmit && !currentPlan.modalidade && (
+                {hasTriedSubmit && !currentPlan.type && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
@@ -701,24 +699,24 @@ export default function GetStartInfo() {
                         currentPlan?.price || "0",
                         currentPlan.users
                       )}
-                      /{currentPlan.modalidade === "anual" ? "mês" : "mês"}
+                      /{currentPlan.type === "anual" ? "mês" : "mês"}
                     </span>
                   </div>
                   <Button
                     size="middle"
                     onClick={addNewPlan}
-                    disabled={!currentPlan.planName || !currentPlan.modalidade}
+                    disabled={!currentPlan.planName || !currentPlan.type}
                     style={{
                       backgroundColor:
-                        currentPlan.planName && currentPlan.modalidade
+                        currentPlan.planName && currentPlan.type
                           ? "#f97316"
                           : "#e5e7eb",
                       borderColor:
-                        currentPlan.planName && currentPlan.modalidade
+                        currentPlan.planName && currentPlan.type
                           ? "#f97316"
                           : "#d1d5db",
                       color:
-                        currentPlan.planName && currentPlan.modalidade
+                        currentPlan.planName && currentPlan.type
                           ? "white"
                           : "#9ca3af",
                       height: "32px",

@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 export default function CardLayout({ cardData }: any) {
   const navigate = useNavigate();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
-  // Cada card tem seu próprio estado de pricing
   const [selectedPricingType, setSelectedPricingType] =
     useState<string>("monthly");
 
@@ -19,31 +18,21 @@ export default function CardLayout({ cardData }: any) {
     useOrderStore();
 
   const handlePlanSelection = (cardData: any) => {
-    // Define a modalidade baseada na seleção do usuário
     const type = selectedPricingType === "monthly" ? "mensal" : "anual";
 
-    // Define o preço baseado na modalidade selecionada
     const price =
       selectedPricingType === "monthly" ? cardData?.price : cardData?.priceYear;
 
-    // Cria o novo plano
     const newPlan = {
       id: Date.now().toString(),
       planName: cardData?.title,
       price: price,
-      users: 1, // Padrão de 1 usuário
+      users: 1,
       type: type,
     };
 
-    console.log("Plano criado:", newPlan);
-    console.log("Planos confirmados antes:", confirmedPlans);
-
-    // Adiciona o plano aos planos confirmados
     setConfirmedPlans([...confirmedPlans, newPlan]);
 
-    console.log("=== FIM DEBUG ===");
-
-    // Também define como plano selecionado (para compatibilidade)
     setSelectedPlan({
       planName: cardData?.title,
       price: cardData?.price,
@@ -54,7 +43,7 @@ export default function CardLayout({ cardData }: any) {
     navigate("/choose-plan");
     window.scrollTo(0, 0);
   };
-  console.log(cardData);
+
   return (
     <>
       <div className="flex flex-col w-full items-center relative">

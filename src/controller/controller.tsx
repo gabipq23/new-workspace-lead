@@ -16,7 +16,7 @@ export function useOrderControler() {
         await queryClient.cancelQueries({ queryKey: ["order"] }),
       onSuccess: (response) => {
         // response contém: { success: true, message: "Pedido criado com sucesso", id: 27 }
-        console.log("Pedido criado com ID:", response.id);
+
         toast.success(`Pedido criado com sucesso! ID: ${response.id}`);
         queryClient.invalidateQueries({ queryKey: ["order"] });
       },
@@ -75,13 +75,9 @@ export function useOrderControler() {
 export function useOrderById(orderId: number) {
   const orderService = new GetWorkspacePlanService();
 
-  console.log("useOrderById called with:", orderId);
-  console.log("Query enabled?", !!orderId && !isNaN(orderId) && orderId > 0);
-
   return useQuery({
     queryKey: ["order", orderId],
     queryFn: () => {
-      console.log("Executando query para orderId:", orderId);
       return orderService.getOrderById(orderId);
     },
     enabled: !!orderId && !isNaN(orderId) && orderId > 0,

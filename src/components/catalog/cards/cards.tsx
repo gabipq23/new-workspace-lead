@@ -7,7 +7,7 @@ export default function Cards() {
 
   const scrollToSlide = (index: number) => {
     if (scrollContainerRef.current) {
-      const cardWidth = 280; // width of card + gap
+      const cardWidth = 280;
       scrollContainerRef.current.scrollTo({
         left: index * cardWidth,
         behavior: "smooth",
@@ -131,7 +131,6 @@ export default function Cards() {
               ))}
             </div>
 
-            {/* Custom Dots Indicator */}
             <div className="flex gap-2 mt-4">
               {cardsData.map((_, index) => (
                 <button

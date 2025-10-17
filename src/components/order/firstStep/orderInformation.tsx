@@ -1,168 +1,30 @@
-import { useState } from "react";
 import {
   Button,
-  Input,
-  Select,
   Checkbox,
-  Radio,
   ConfigProvider,
+  Input,
+  Radio,
+  Select,
   Tooltip,
 } from "antd";
+import { CircleAlert } from "lucide-react";
+import { formatPrice } from "../../../utils/formatPrice";
+import { CNPJInput, PhoneInput } from "../../../utils/input";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, CircleAlert, CircleCheck } from "lucide-react";
-import { useOrderStore } from "../../context/context";
-import { CNPJInput, PhoneInput } from "../../utils/input";
-
 const { Option } = Select;
-
-// Função helper para formatar valores monetários
-const formatPrice = (price: string | number, users: number = 1) => {
-  // Se for string, converte vírgula para ponto antes de fazer parseFloat
-  const numericPrice =
-    typeof price === "string" ? parseFloat(price.replace(",", ".")) : price;
-  const total = numericPrice * users;
-  // Retorna no formato brasileiro com vírgula
-  return total.toFixed(2).replace(".", ",");
-};
-
-function PlanCard({ plan, index }: { plan: any; index: number }) {
-  const [showDetails, setShowDetails] = useState(false);
-
-  const getPlanNameForCard = (planName: string) => {
-    return `Business ${planName}`;
-  };
-
-  const getPlanDetailsForCard = (planName: string) => {
-    const details = {
-      Starter: [
-        "E-mail comercial personalizado e seguro",
-        "Videochamadas com 100 participantes",
-        "30 GB de armazenamento em pool por usuário",
-        "Controles de segurança e gerenciamento",
-        "Suporte Padrão",
-      ],
-      Standard: [
-        "E-mail comercial personalizado e seguro",
-        "Videochamadas com 150 participantes + gravação",
-        "2 TB de armazenamento em pool por usuário",
-        "Controles de segurança e gerenciamento",
-        "Suporte Padrão (upgrade pago para o Suporte Avançado)",
-      ],
-      Plus: [
-        "E-mail corporativo personalizado e protegido, e-discovery e retenção",
-        "Videochamadas com 500 participantes, gravação de reuniões e controle de presença",
-        "5 TB de armazenamento em pool por usuário",
-        "Segurança reforçada e controles de gerenciamento, incluindo o Vault e o Gerenciamento avançado de endpoints",
-        "Suporte Padrão (upgrade pago para o Suporte Avançado)",
-      ],
-    };
-
-    return details[planName as keyof typeof details] || details["Starter"];
-  };
-
-  return (
-    <div className="border-b border-gray-200 pb-2">
-      <div className="flex justify-between gap-2 p-3">
-        <div className="text-start">
-          <div className="text-gray-600 text-[10px]">Plano {index}</div>
-          <div
-            style={{ fontWeight: "bold" }}
-            className="text-[#660099] text-[13px]"
-          >
-            {getPlanNameForCard(plan.planName)}
-          </div>
-        </div>
-        <div className="text-start">
-          <div className="text-gray-600 text-[10px]">Usuários</div>
-          <div
-            style={{ fontWeight: "bold" }}
-            className="text-[#660099] text-[13px]"
-          >
-            {plan.users}
-          </div>
-        </div>
-        <div className="text-start">
-          <div className="text-gray-600 text-[10px]">Valor Total</div>
-          <div
-            style={{ fontWeight: "bold" }}
-            className="text-[#660099] text-[13px]"
-          >
-            R$ {formatPrice(plan.price, plan.users)}/
-            {plan.type === "anual" ? "mês" : "mês"}
-          </div>
-        </div>
-      </div>
-
-      <div className="text-center bg-purple-100">
-        <ConfigProvider
-          theme={{
-            token: {
-              colorBgTextHover: "none",
-              colorBgTextActive: "none",
-              colorText: "#660099",
-            },
-          }}
-        >
-          <Button
-            size="small"
-            type="text"
-            variant="text"
-            onClick={() => setShowDetails(!showDetails)}
-          >
-            {showDetails ? (
-              <>
-                ver menos <ChevronUp className="inline w-3 h-3" />
-              </>
-            ) : (
-              <>
-                ver mais <ChevronDown className="inline w-3 h-3" />
-              </>
-            )}
-          </Button>
-        </ConfigProvider>
-      </div>
-
-      {showDetails && (
-        <div className="p-4 bg-purple-100">
-          <h4
-            style={{ fontWeight: "bold" }}
-            className="text-[#660099] font-medium mb-3 text-[12px]"
-          >
-            Serviços inclusos
-          </h4>
-
-          <div className="flex justify-around">
-            <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
-            <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
-            <img src="/icone-calendar.svg" alt="Calendar" className="w-8 h-8" />
-            <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
-            <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
-            <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
-            <img src="/icone-slides.svg" alt="Slides" className="w-8 h-8" />
-            <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
-            <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
-          </div>
-          <hr className="my-3 border-t border-gray-200" />
-          <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">
-            {getPlanDetailsForCard(plan.planName).map((detail, detailIndex) => (
-              <div key={detailIndex} className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>{detail}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function GetStartInfo() {
-  const { basicInfo, updateBasicInfo, confirmedPlans, setConfirmedPlans } =
-    useOrderStore();
-
+export default function OrderInformation({
+  basicInfo,
+  updateBasicInfo,
+  confirmedPlans,
+  setConfirmedPlans,
+}: any) {
+  const [currentPlan, setCurrentPlan] = useState({
+    planName: "",
+    price: "",
+    users: 1,
+    type: "",
+  });
   const [cnpj, setCnpj] = useState(basicInfo.cnpj);
   const [email, setEmail] = useState(basicInfo.email);
   const [managerName, setManagerName] = useState(basicInfo.managerName);
@@ -170,16 +32,26 @@ export default function GetStartInfo() {
   const [isVivoClient, setIsVivoClient] = useState(basicInfo.isVivoClient);
   const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
 
-  const [currentPlan, setCurrentPlan] = useState({
-    planName: "",
-    price: "",
-    users: 1,
-    type: "",
-  });
-
-  const [showServices, setShowServices] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
+  const isFormValid = () => {
+    const hasAtLeastOnePlan = confirmedPlans.length > 0;
+    const cnpjDigits = cnpj.replace(/\D/g, "");
+    const hasValidCnpj = cnpjDigits.length === 14;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const hasValidEmail = emailRegex.test(email);
+    const hasValidManagerName = managerName.trim() !== "";
+    const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
+    const hasAcceptedContact = acceptContact === true;
+    return (
+      hasAtLeastOnePlan &&
+      hasValidCnpj &&
+      hasValidEmail &&
+      hasValidManagerName &&
+      hasValidManagerPhone &&
+      hasAcceptedContact
+    );
+  };
 
   const handleSubmit = () => {
     setHasTriedSubmit(true);
@@ -246,152 +118,8 @@ export default function GetStartInfo() {
     }
   };
 
-  const getTotalPrice = () => {
-    const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
-      // Converte vírgula para ponto antes de fazer parseFloat
-      const numericPrice = parseFloat(plan.price.replace(",", "."));
-      return total + numericPrice * plan.users;
-    }, 0);
-    return confirmedPlansTotal.toFixed(2).replace(".", ",");
-  };
-
-  const getTotalUsers = () => {
-    return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
-  };
-
-  const isFormValid = () => {
-    const hasAtLeastOnePlan = confirmedPlans.length > 0;
-    const cnpjDigits = cnpj.replace(/\D/g, "");
-    const hasValidCnpj = cnpjDigits.length === 14;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const hasValidEmail = emailRegex.test(email);
-    const hasValidManagerName = managerName.trim() !== "";
-    const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
-    const hasAcceptedContact = acceptContact === true;
-    return (
-      hasAtLeastOnePlan &&
-      hasValidCnpj &&
-      hasValidEmail &&
-      hasValidManagerName &&
-      hasValidManagerPhone &&
-      hasAcceptedContact
-    );
-  };
-
   return (
-    <div className="flex flex-col md:flex-row min-h-[100vh]  ">
-      {/* mobile */}
-      <div className="md:hidden flex flex-col bg-[#660099] text-white  pt-2">
-        <div className=" flex items-end justify-end text-[12px] gap-2 px-3">
-          <span className="text-white">🛒</span>
-          <span className="">Seu plano</span>
-        </div>
-
-        <h3
-          style={{ fontWeight: "bold", paddingInline: "12px" }}
-          className="text-[14px] text-white "
-        >
-          Google Workspace
-        </h3>
-
-        <div className="flex justify-between gap-2  px-3">
-          <div className="text-start">
-            <div className="text-white text-[10px]">Planos</div>
-            <div
-              style={{ fontWeight: "bold" }}
-              className="text-[#ff7f17] text-[13px]"
-            >
-              {confirmedPlans.length > 0
-                ? `${confirmedPlans.length} plano(s)`
-                : "Nenhum plano"}
-            </div>
-          </div>
-          <div className="text-start">
-            <div className="text-white text-[10px]">Usuários</div>
-            <div
-              style={{ fontWeight: "bold" }}
-              className="text-[#ff7f17] text-[13px]"
-            >
-              {getTotalUsers()}
-            </div>
-          </div>
-
-          <div className="text-start">
-            <div className="text-white text-[10px]">Valor Total</div>
-            <div
-              style={{ fontWeight: "bold" }}
-              className="text-[#ff7f17] text-[13px]"
-            >
-              R$ {getTotalPrice()}/mês
-            </div>
-          </div>
-        </div>
-
-        {confirmedPlans.length > 0 && (
-          <div className="text-center bg-purple-100">
-            <ConfigProvider
-              theme={{
-                token: {
-                  colorBgTextHover: "none",
-                  colorBgTextActive: "none",
-                  colorText: "#660099",
-                },
-              }}
-            >
-              <Button
-                size="small"
-                type="text"
-                variant="text"
-                onClick={() => setShowServices(!showServices)}
-              >
-                {showServices ? (
-                  <>
-                    ver menos <ChevronUp className="inline w-3 h-3" />
-                  </>
-                ) : (
-                  <>
-                    ver planos <ChevronDown className="inline w-3 h-3" />
-                  </>
-                )}
-              </Button>
-            </ConfigProvider>
-          </div>
-        )}
-
-        {showServices && confirmedPlans.length > 0 && (
-          <div className="p-4 bg-purple-100">
-            <h4
-              style={{ fontWeight: "bold" }}
-              className="text-[#660099] font-medium mb-3 text-[12px]"
-            >
-              Planos selecionados
-            </h4>
-
-            {confirmedPlans.map((plan, index) => (
-              <div key={plan.id} className="mb-3 p-3 bg-white rounded-md">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-[#660099] font-bold text-[11px]">
-                    Plano {index + 1}: Business {plan.planName}
-                  </span>
-                  <span className="text-[#660099] font-bold text-[11px]">
-                    {plan.users} usuário(s)
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 text-[10px] capitalize">
-                    Modalidade: {plan.type}
-                  </span>
-                  <span className="text-[#ff7f17] font-bold text-[11px]">
-                    R$ {formatPrice(plan.price, plan.users)}/
-                    {plan.type === "anual" ? "mês" : "mês"}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
+    <>
       <div className="flex flex-col flex-1 px-8 pt-4  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
         <div>
           <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
@@ -558,10 +286,7 @@ export default function GetStartInfo() {
                       Standard: { mensal: "98,00", anual: "81,80" },
                       Plus: { mensal: "154,00", anual: "128,40" },
                     };
-
                     updateCurrentPlan("planName", value);
-
-                    // Define o preço baseado na type atual
                     const type = currentPlan.type as "mensal" | "anual";
                     if (type) {
                       updateCurrentPlan(
@@ -569,7 +294,6 @@ export default function GetStartInfo() {
                         priceMap[value as keyof typeof priceMap][type]
                       );
                     } else {
-                      // Se não há type definida, usa o preço mensal como padrão
                       updateCurrentPlan(
                         "price",
                         priceMap[value as keyof typeof priceMap].mensal
@@ -674,7 +398,6 @@ export default function GetStartInfo() {
                   onChange={(value) => {
                     updateCurrentPlan("type", value);
 
-                    // Recalcula o preço quando a modalidade muda
                     if (currentPlan.planName) {
                       const priceMap = {
                         Starter: { mensal: "49,00", anual: "32,72" },
@@ -853,48 +576,6 @@ export default function GetStartInfo() {
           </div>
         </div>
       </div>
-
-      {/* desktop */}
-      <div className="hidden md:flex flex-col  w-90 bg-[#660099] text-white p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-white">🛒</span>
-          <span className="font-medium">Seu plano</span>
-        </div>
-
-        <div className="bg-white text-gray-800 rounded-lg relative">
-          <div className="bg-orange-500 text-white px-2 py-1 rounded-xl text-[10px] inline-block mb-4 absolute -top-2 right-2">
-            + 2GB na linha móvel
-          </div>
-
-          <div className="">
-            <h3
-              style={{ fontWeight: "bold", padding: "12px" }}
-              className="text-[14px] text-[#660099]"
-            >
-              Google Workspace
-            </h3>
-
-            {/* Todos os planos confirmados */}
-            {confirmedPlans.map((plan, index) => (
-              <PlanCard key={plan.id} plan={plan} index={index + 1} />
-            ))}
-
-            {/* Resumo Total */}
-            {confirmedPlans.length > 0 && (
-              <div className="p-3 bg-gray-50 rounded-b-lg">
-                <div className="flex justify-between items-center">
-                  <span className="text-[12px] font-bold text-gray-700">
-                    Total Geral:
-                  </span>
-                  <span className="text-[14px] font-bold text-[#660099]">
-                    R$ {getTotalPrice()}/mês
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

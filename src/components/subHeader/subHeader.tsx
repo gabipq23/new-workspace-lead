@@ -123,11 +123,11 @@ function SubHeader() {
         </Dropdown>
       </div>
 
-      <div className="hidden md:flex  items-center justify-center gap-3">
-        <p style={{ margin: 0 }} className="text-[13px]">
+      <div className="hidden  md:flex items-center justify-center gap-3">
+        <p style={{ margin: 0 }} className="text-[14px] text-[#575757]">
           Google Workspace
         </p>
-        <div className="flex items-center self-end  h-full gap-2 md:text-[10px] lg:text-[11px] text-[#666666] cursor-pointer">
+        <div className="flex   items-end self-end  h-full gap-2 md:text-[10px] lg:text-[11px] text-[#666666] cursor-pointer">
           <a
             onClick={(e) => {
               e.preventDefault();
@@ -137,7 +137,7 @@ function SubHeader() {
               });
             }}
             href="#ofertas"
-            className="hover:text-[#660099] "
+            className="hover:text-[#660099]"
           >
             Ofertas
           </a>

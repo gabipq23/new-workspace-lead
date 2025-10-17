@@ -7,11 +7,6 @@ import { useOrderById } from "../../controller/controller";
 
 export default function FinishOrderInfo() {
   const { id } = useParams<{ id: string }>();
-
-  console.log("orderId from params:", id);
-  console.log("orderId parsed to number:", Number(id));
-  console.log("orderId is valid:", !!id && !isNaN(Number(id)));
-
   const { data: orderData, isLoading } = useOrderById(Number(id));
   if (isLoading) {
     return (
@@ -22,14 +17,6 @@ export default function FinishOrderInfo() {
     );
   }
 
-  console.log("Dados do pedido:", orderData);
-  console.log("Order Details:", orderData?.data);
-  console.log(
-    "Todos os campos do orderData.data:",
-    Object.keys(orderData?.data || {})
-  );
-
-  // Extrai os dados do pedido da API (dados estão em orderData.data)
   const orderDetails = orderData?.data;
   const confirmedPlans =
     orderDetails?.plan ||
@@ -63,19 +50,6 @@ export default function FinishOrderInfo() {
         acceptTerms: orderDetails.acceptTerms || orderDetails.accept_terms,
       }
     : null;
-
-  console.log("BasicInfo extraído:", basicInfo);
-  console.log("CompanyInfo extraído:", companyInfo);
-  console.log("ConfirmedPlans extraído:", confirmedPlans);
-
-  // Debug: vamos ver todos os campos disponíveis
-  if (orderDetails) {
-    console.log("=== CAMPOS DISPONÍVEIS NA API ===");
-    Object.entries(orderDetails).forEach(([key, value]) => {
-      console.log(`${key}:`, value);
-    });
-    console.log("=== FIM DOS CAMPOS ===");
-  }
 
   interface Plan {
     id: string;

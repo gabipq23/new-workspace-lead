@@ -7,6 +7,15 @@ import { CNPJInput, PhoneInput } from "../../utils/input";
 
 const { Option } = Select;
 
+// Função helper para formatar valores monetários
+const formatPrice = (price: string | number, users: number = 1) => {
+  // Se for string, converte vírgula para ponto antes de fazer parseFloat
+  const numericPrice =
+    typeof price === "string" ? parseFloat(price.replace(",", ".")) : price;
+  const total = numericPrice * users;
+  return total.toFixed(2).replace(".", ",");
+};
+
 function PlanCard({ plan, index }: { plan: any; index: number }) {
   const [showDetails, setShowDetails] = useState(false);
 
@@ -69,7 +78,7 @@ function PlanCard({ plan, index }: { plan: any; index: number }) {
             style={{ fontWeight: "bold" }}
             className="text-[#660099] text-[13px]"
           >
-            R$ {parseInt(plan.price) * plan.users},00/
+            R$ {formatPrice(plan.price, plan.users)}/
             {plan.modalidade === "anual" ? "ano" : "mês"}
           </div>
         </div>
@@ -142,16 +151,15 @@ function PlanCard({ plan, index }: { plan: any; index: number }) {
 }
 
 export default function GetStartInfo() {
-  const [cnpj, setCnpj] = useState("");
-  const [email, setEmail] = useState("");
-  const [managerName, setManagerName] = useState("");
-
-  const [isVivoClient, setIsVivoClient] = useState(true);
-  const [acceptContact, setAcceptContact] = useState(true);
-
-  const { updateBasicInfo, confirmedPlans, setConfirmedPlans } =
+  const { basicInfo, updateBasicInfo, confirmedPlans, setConfirmedPlans } =
     useOrderStore();
-  const [phone, setPhone] = useState("");
+
+  const [cnpj, setCnpj] = useState(basicInfo.cnpj);
+  const [email, setEmail] = useState(basicInfo.email);
+  const [managerName, setManagerName] = useState(basicInfo.managerName);
+  const [managerPhone, setManagerPhone] = useState(basicInfo.managerPhone);
+  const [isVivoClient, setIsVivoClient] = useState(basicInfo.isVivoClient);
+  const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
 
   const [currentPlan, setCurrentPlan] = useState({
     planName: "",
@@ -170,14 +178,10 @@ export default function GetStartInfo() {
       return;
     }
     updateBasicInfo({
-      planName:
-        confirmedPlans.length > 0
-          ? `${confirmedPlans.length} plano(s) selecionado(s)`
-          : "",
       cnpj: cnpj,
       email: email,
       managerName: managerName,
-      users: getTotalUsers(),
+      managerPhone: managerPhone,
       isVivoClient: isVivoClient,
       acceptContact: acceptContact,
     });
@@ -235,16 +239,19 @@ export default function GetStartInfo() {
 
   const getPlanPrice = () => {
     if (currentPlan?.price) {
-      return parseInt(currentPlan.price);
+      // Converte vírgula para ponto antes de fazer parseFloat
+      return parseFloat(currentPlan.price.replace(",", "."));
     }
     return 0;
   };
 
   const getTotalPrice = () => {
     const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
-      return total + parseInt(plan.price) * plan.users;
+      // Converte vírgula para ponto antes de fazer parseFloat
+      const numericPrice = parseFloat(plan.price.replace(",", "."));
+      return total + numericPrice * plan.users;
     }, 0);
-    return confirmedPlansTotal;
+    return confirmedPlansTotal.toFixed(2).replace(".", ",");
   };
 
   const getTotalUsers = () => {
@@ -258,12 +265,14 @@ export default function GetStartInfo() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const hasValidEmail = emailRegex.test(email);
     const hasValidManagerName = managerName.trim() !== "";
+    const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
     const hasAcceptedContact = acceptContact === true;
     return (
       hasAtLeastOnePlan &&
       hasValidCnpj &&
       hasValidEmail &&
       hasValidManagerName &&
+      hasValidManagerPhone &&
       hasAcceptedContact
     );
   };
@@ -312,7 +321,7 @@ export default function GetStartInfo() {
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              R$ {getTotalPrice()},00/mês
+              R$ {getTotalPrice()}/mês
             </div>
           </div>
         </div>
@@ -372,7 +381,7 @@ export default function GetStartInfo() {
                     Modalidade: {plan.modalidade}
                   </span>
                   <span className="text-[#ff7f17] font-bold text-[11px]">
-                    R$ {parseInt(plan.price) * plan.users},00/
+                    R$ {formatPrice(plan.price, plan.users)}/
                     {plan.modalidade === "anual" ? "ano" : "mês"}
                   </span>
                 </div>
@@ -525,8 +534,8 @@ export default function GetStartInfo() {
               </div>
             ))}
 
-            <div className="flex flex-wrap justify-start gap-6 mb-6">
-              <div className="w-[180px]">
+            <div className="flex flex-wrap justify-start gap-2 mb-6">
+              <div className="w-[360px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Plano {confirmedPlans.length + 1}{" "}
                   <span className="text-red-500">*</span>
@@ -537,21 +546,47 @@ export default function GetStartInfo() {
                   placeholder="Selecione um plano"
                   onChange={(value) => {
                     const priceMap = {
-                      Starter: "49",
-                      Standard: "98",
-                      Plus: "154",
+                      Starter: { mensal: "49,00", anual: "32,72" },
+                      Standard: { mensal: "98,00", anual: "81,80" },
+                      Plus: { mensal: "154,00", anual: "128,40" },
                     };
+
                     updateCurrentPlan("planName", value);
-                    updateCurrentPlan(
-                      "price",
-                      priceMap[value as keyof typeof priceMap]
-                    );
+
+                    // Define o preço baseado na modalidade atual
+                    const modalidade = currentPlan.modalidade as
+                      | "mensal"
+                      | "anual";
+                    if (modalidade) {
+                      updateCurrentPlan(
+                        "price",
+                        priceMap[value as keyof typeof priceMap][modalidade]
+                      );
+                    } else {
+                      // Se não há modalidade definida, usa o preço mensal como padrão
+                      updateCurrentPlan(
+                        "price",
+                        priceMap[value as keyof typeof priceMap].mensal
+                      );
+                    }
                   }}
                   className="w-full"
                 >
-                  <Option value="Starter">Business Starter</Option>
-                  <Option value="Standard">Business Standard</Option>
-                  <Option value="Plus">Business Plus</Option>
+                  <Option value="Starter">
+                    Business Starter -{" "}
+                    <span className="text-gray-500">R$ 49,00/mês ou </span>
+                    <span className="text-gray-500">R$ 32,72/ano</span>
+                  </Option>
+                  <Option value="Standard">
+                    Business Standard -{" "}
+                    <span className="text-gray-500">R$ 98,00/mês ou </span>
+                    <span className="text-gray-500">R$ 81,80/ano</span>
+                  </Option>
+                  <Option value="Plus">
+                    Business Plus -{" "}
+                    <span className="text-gray-500">R$ 154,00/mês ou </span>
+                    <span className="text-gray-500">R$ 128,40/ano</span>
+                  </Option>
                 </Select>
                 {hasTriedSubmit && !currentPlan.planName && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
@@ -618,7 +653,25 @@ export default function GetStartInfo() {
                 <Select
                   size="middle"
                   value={currentPlan.modalidade || undefined}
-                  onChange={(value) => updateCurrentPlan("modalidade", value)}
+                  onChange={(value) => {
+                    updateCurrentPlan("modalidade", value);
+
+                    // Recalcula o preço quando a modalidade muda
+                    if (currentPlan.planName) {
+                      const priceMap = {
+                        Starter: { mensal: "49,00", anual: "32,72" },
+                        Standard: { mensal: "98,00", anual: "81,80" },
+                        Plus: { mensal: "154,00", anual: "128,40" },
+                      };
+
+                      updateCurrentPlan(
+                        "price",
+                        priceMap[currentPlan.planName as keyof typeof priceMap][
+                          value as "mensal" | "anual"
+                        ]
+                      );
+                    }
+                  }}
                   className="w-[100px]"
                 >
                   <Option value="mensal">Mensal</Option>
@@ -724,12 +777,15 @@ export default function GetStartInfo() {
                 </label>
                 <PhoneInput
                   format="(##) #####-####"
-                  value={phone}
-                  onValueChange={(values) => setPhone(values.value)}
+                  value={managerPhone}
+                  onValueChange={(values) => setManagerPhone(values.value)}
                 />
-                {hasTriedSubmit && phone.replace(/\D/g, "").length !== 11 && (
-                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-                )}
+                {hasTriedSubmit &&
+                  managerPhone.replace(/\D/g, "").length !== 11 && (
+                    <p className="text-red-500 text-xs mt-1">
+                      Campo obrigatório
+                    </p>
+                  )}
               </div>
             </div>
 
@@ -809,7 +865,7 @@ export default function GetStartInfo() {
                     Total Geral:
                   </span>
                   <span className="text-[14px] font-bold text-[#660099]">
-                    R$ {getTotalPrice()},00/mês
+                    R$ {getTotalPrice()}/mês
                   </span>
                 </div>
               </div>

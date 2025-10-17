@@ -42,7 +42,7 @@ export default function Cards() {
       title: "Starter",
       storage: "30 GB de armazenamento em nuvem por usuário",
       price: "49,00",
-      priceYear: "32,70",
+      priceYear: "32,72",
       details: [
         {
           title: "E-mail @gmail",

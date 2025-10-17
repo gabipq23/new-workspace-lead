@@ -2,11 +2,10 @@ import { create } from "zustand";
 import type { Plan, OrderData } from "../interfaces/order";
 
 interface BasicInfo {
-  planName: string;
   cnpj: string;
   email: string;
   managerName: string;
-  users: number;
+  managerPhone: string;
   isVivoClient: boolean;
   acceptContact: boolean;
 }
@@ -20,14 +19,9 @@ interface ConfirmedPlan {
 }
 
 interface CompanyInfo {
-  managerPhone: string;
-  cpf: string;
-  phone: string;
   domainName: string;
   alreadyHaveWorkspace: boolean;
-  domainSuggestion1: string;
-  domainSuggestion2: string;
-  acceptContact: boolean;
+  acceptTerms: boolean;
 }
 
 interface OrderFlowStore {
@@ -47,23 +41,17 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
   selectedPlan: null,
   confirmedPlans: [],
   basicInfo: {
-    planName: "",
     cnpj: "",
     email: "",
     managerName: "",
-    users: 1,
+    managerPhone: "",
     isVivoClient: true,
     acceptContact: true,
   },
   companyInfo: {
-    managerPhone: "2199884465451",
-    cpf: "",
-    phone: "",
     domainName: "",
     alreadyHaveWorkspace: false,
-    domainSuggestion1: "",
-    domainSuggestion2: "",
-    acceptContact: true,
+    acceptTerms: false,
   },
 
   setSelectedPlan: (plan: Plan) => {
@@ -88,22 +76,27 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
   // junta todas as infos ja preenchidas em um unico objeto para criar o pedido
   buildCompleteOrder: (): OrderData | null => {
     const state = get();
-    if (!state.selectedPlan) return null;
+    if (state.confirmedPlans.length === 0) return null;
+
+    // Converte os planos confirmados para o formato da API
+    const apiPlans: Plan[] = state.confirmedPlans.map((plan) => ({
+      planName: `Google Workspace Business ${plan.planName}`,
+      price: plan.price,
+      type: plan.modalidade as "mensal" | "anual",
+      users: plan.users,
+    }));
+
     return {
-      plan: [state.selectedPlan],
-      users: state.basicInfo.users,
-      planName: state.basicInfo.planName,
-      cnpj: state.basicInfo.cnpj,
       email: state.basicInfo.email,
-      managerName: state.basicInfo.managerName,
-      isVivoClient: state.basicInfo.isVivoClient,
-      managerPhone: state.companyInfo.managerPhone || "",
-      cpf: state.companyInfo.cpf || "",
-      phone: state.companyInfo.phone || "",
       domainName: state.companyInfo.domainName || "",
+      cnpj: state.basicInfo.cnpj,
+      managerPhone: state.basicInfo.managerPhone,
+      manager_name: state.basicInfo.managerName,
+      isVivoClient: state.basicInfo.isVivoClient,
       alreadyHaveWorkspace: state.companyInfo.alreadyHaveWorkspace || false,
-      domainSuggestion1: state.companyInfo.domainSuggestion1 || "",
-      domainSuggestion2: state.companyInfo.domainSuggestion2 || "",
+      acceptContact: state.basicInfo.acceptContact,
+      acceptTerms: state.companyInfo.acceptTerms || false,
+      plan: apiPlans,
     };
   },
 
@@ -112,22 +105,17 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       selectedPlan: null,
       confirmedPlans: [],
       basicInfo: {
-        planName: "",
         cnpj: "",
         email: "",
         managerName: "",
-        users: 1,
+        managerPhone: "",
         isVivoClient: true,
         acceptContact: true,
       },
       companyInfo: {
-        cpf: "",
-        phone: "",
         domainName: "",
         alreadyHaveWorkspace: false,
-        domainSuggestion1: "",
-        domainSuggestion2: "",
-        acceptContact: true,
+        acceptTerms: false,
       },
     });
   },

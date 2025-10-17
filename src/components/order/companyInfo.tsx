@@ -158,8 +158,24 @@ function PlanCard({
 }
 
 export default function CompanyInfo() {
-  const [hasWorkspace, setHasWorkspace] = useState(false);
-  const { updateCompanyInfo, confirmedPlans } = useOrderStore();
+  const {
+    companyInfo,
+    updateCompanyInfo,
+    confirmedPlans,
+    buildCompleteOrder,
+    clearOrder,
+  } = useOrderStore();
+
+  // Estados locais para os campos do formulário
+  const [domainName, setDomainName] = useState(companyInfo.domainName || "");
+  const [hasWorkspace, setHasWorkspace] = useState(
+    companyInfo.alreadyHaveWorkspace || false
+  );
+  const [acceptTerms, setAcceptTerms] = useState(
+    companyInfo.acceptTerms || false
+  );
+  const [showServices, setShowServices] = useState(false);
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
   // Funções para calcular totais
   const getTotalPrice = () => {
@@ -172,31 +188,15 @@ export default function CompanyInfo() {
     return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
   };
 
-  const [acceptContact, setAcceptContact] = useState(true);
-  const [showServices, setShowServices] = useState(false);
-  const [domainName, setDomainName] = useState("");
-  // const [domainSuggestion1, setDomainSuggestion1] = useState("");
-  // const [domainSuggestion2, setDomainSuggestion2] = useState("");
-  const [hasTriedSubmit, setHasTriedSubmit] = useState(false); // Controla se já tentou submeter
-  const { buildCompleteOrder, clearOrder } = useOrderStore();
-
   const { createOrder } = useOrderControler();
 
   const navigate = useNavigate();
 
   const isFormValid = () => {
-    const hasAcceptedTerms = acceptContact === true;
+    const hasAcceptedTerms = acceptTerms === true;
+    const hasDomainName = domainName.trim() !== "";
 
-    // let hasDomainInfo = true;
-    // if (!hasWorkspace) {
-    //   // Se não tem workspace, precisa das DUAS sugestões obrigatórias
-    //   hasDomainInfo =
-    //     domainSuggestion1.trim() !== "" && domainSuggestion2.trim() !== "";
-    // } else {
-    //   hasDomainInfo = domainName.trim() !== "";
-    // }
-
-    return hasAcceptedTerms;
+    return hasAcceptedTerms && hasDomainName;
   };
 
   const handleSubmit = async () => {
@@ -205,11 +205,9 @@ export default function CompanyInfo() {
       return;
     }
     updateCompanyInfo({
-      managerPhone: "2199884465451",
-
-      alreadyHaveWorkspace: hasWorkspace,
-      acceptContact: acceptContact,
       domainName: domainName,
+      alreadyHaveWorkspace: hasWorkspace,
+      acceptTerms: acceptTerms,
     });
 
     const orderData = buildCompleteOrder();
@@ -478,7 +476,7 @@ export default function CompanyInfo() {
                 placeholder="dominio@gmail.com"
                 className="max-w-[300px]"
               />
-              {hasTriedSubmit && hasWorkspace && domainName.trim() === "" && (
+              {hasTriedSubmit && domainName.trim() === "" && (
                 <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
               )}
             </div>
@@ -494,14 +492,19 @@ export default function CompanyInfo() {
                 }}
               >
                 <Checkbox
-                  checked={acceptContact}
-                  onChange={(e) => setAcceptContact(e.target.checked)}
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
                   className="text-gray-600"
                 >
                   <span className="text-red-500">*</span> Aceito e concordo com
                   os termos e contratos.
                 </Checkbox>
               </ConfigProvider>
+              {hasTriedSubmit && !acceptTerms && (
+                <p className="text-red-500 text-xs mt-1">
+                  Você deve aceitar os termos para continuar
+                </p>
+              )}
             </div>
           </div>
         </div>

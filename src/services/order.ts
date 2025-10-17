@@ -6,4 +6,13 @@ export class GetWorkspacePlanService {
     const response = await api.post(`/workspace/pedidos`, data);
     return response.data;
   }
+
+  async updateOrder(id: number, data: any): Promise<any> {
+    const response = await api.put(`/workspace/pedidos/${id}`, data);
+    return response.data;
+  }
+
+  async changeOrderStatus(id: number, data: { status: string }) {
+    await api.patch(`/pedidos-workspace/${id}/status`, data);
+  }
 }

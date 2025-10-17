@@ -2,8 +2,9 @@ import { ChevronDown, ChevronUp, CircleCheck } from "lucide-react";
 import { useState } from "react";
 import { formatPrice } from "../../../utils/formatPrice";
 import { Button, ConfigProvider } from "antd";
+import type { Plan } from "../../../interfaces/order";
 
-export function PlanCard({ plan, index }: { plan: any; index: number }) {
+export function PlanCard({ plan, index }: { plan: Plan; index: number }) {
   const [showDetails, setShowDetails] = useState(false);
 
   const getPlanNameForCard = (planName: string) => {
@@ -47,7 +48,7 @@ export function PlanCard({ plan, index }: { plan: any; index: number }) {
             style={{ fontWeight: "bold" }}
             className="text-[#660099] text-[13px]"
           >
-            {getPlanNameForCard(plan.planName)}
+            {getPlanNameForCard(plan?.planName)}
           </div>
         </div>
         <div className="text-start">
@@ -56,7 +57,7 @@ export function PlanCard({ plan, index }: { plan: any; index: number }) {
             style={{ fontWeight: "bold" }}
             className="text-[#660099] text-[13px]"
           >
-            {plan.users}
+            {plan?.users}
           </div>
         </div>
         <div className="text-start">
@@ -65,8 +66,8 @@ export function PlanCard({ plan, index }: { plan: any; index: number }) {
             style={{ fontWeight: "bold" }}
             className="text-[#660099] text-[13px]"
           >
-            R$ {formatPrice(plan.price, plan.users)}/
-            {plan.type === "anual" ? "mês" : "mês"}
+            R$ {formatPrice(plan?.price, plan?.users)}/
+            {plan?.type === "anual" ? "mês" : "mês"}
           </div>
         </div>
       </div>
@@ -122,14 +123,16 @@ export function PlanCard({ plan, index }: { plan: any; index: number }) {
           </div>
           <hr className="my-3 border-t border-gray-200" />
           <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">
-            {getPlanDetailsForCard(plan.planName).map((detail, detailIndex) => (
-              <div key={detailIndex} className="flex gap-1 items-center ">
-                <span className="text-[#4f0077] ">
-                  <CircleCheck size={11} />
-                </span>
-                <span>{detail}</span>
-              </div>
-            ))}
+            {getPlanDetailsForCard(plan?.planName).map(
+              (detail, detailIndex) => (
+                <div key={detailIndex} className="flex gap-1 items-center ">
+                  <span className="text-[#4f0077] ">
+                    <CircleCheck size={11} />
+                  </span>
+                  <span>{detail}</span>
+                </div>
+              )
+            )}
           </div>
         </div>
       )}

@@ -56,7 +56,7 @@ export default function FinishOrderInfo() {
     planName: string;
     price: string;
     users: number;
-    modalidade: string;
+    type: string;
   }
 
   const getTotalPrice = () => {
@@ -72,11 +72,11 @@ export default function FinishOrderInfo() {
     );
   };
   const planosDetalhes = (
-    <div className="flex flex-col bg-white rounded-[4px] p-4 w-full py-4 mb-4">
+    <div className="flex flex-col items-center bg-white rounded-[26px] w-full p-4  py-4 ">
       {/* Desktop Version */}
-      <div className="hidden md:block">
+      <div className="hidden md:block ">
         <div className="flex items-center font-semibold text-[#666666] text-[15px] mb-4">
-          <p className="w-48 text-center">Plano</p>
+          <p className="w-76 text-center">Plano</p>
           <p className="w-32 text-center">Usuários</p>
           <p className="w-32 text-center">Modalidade</p>
           <p className="w-40 text-center">Valor Unitário</p>
@@ -84,26 +84,26 @@ export default function FinishOrderInfo() {
         </div>
         <hr className="border-t border-neutral-300 mx-2 mb-4" />
 
-        {confirmedPlans.map((plan: Plan, index: number) => (
-          <div key={plan.id}>
+        {confirmedPlans?.map((plan: Plan, index: number) => (
+          <div key={plan?.id}>
             <div className="flex items-center py-4 text-[14px] text-neutral-700">
-              <p className="text-[14px] font-semibold w-48 text-center">
-                Business {plan.planName}
+              <p className="text-[14px] font-semibold w-76 text-center">
+                {plan?.planName}
               </p>
-              <p className="text-[14px] w-32 text-center">{plan.users}</p>
+              <p className="text-[14px] w-32 text-center">{plan?.users}</p>
               <p className="text-[14px] w-32 text-center capitalize">
-                {plan.modalidade}
+                {plan?.type}
               </p>
               <p className="text-[14px] font-semibold w-40 text-center">
-                R$ {parseInt(plan.price)},00/
-                {plan.modalidade === "anual" ? "ano" : "mês"}
+                R$ {parseInt(plan?.price)},00/
+                {plan?.type === "anual" ? "ano" : "mês"}
               </p>
               <p className="text-[16px] text-neutral-700 font-semibold w-40 text-center">
-                R$ {parseInt(plan.price) * plan.users},00/
-                {plan.modalidade === "anual" ? "ano" : "mês"}
+                R$ {parseInt(plan?.price) * plan?.users},00/
+                {plan.type === "anual" ? "ano" : "mês"}
               </p>
             </div>
-            {index < confirmedPlans.length - 1 && (
+            {index < confirmedPlans?.length - 1 && (
               <hr className="border-t border-neutral-300 mx-2" />
             )}
           </div>
@@ -119,7 +119,7 @@ export default function FinishOrderInfo() {
           >
             <div className="flex justify-between">
               <span className="font-semibold text-[#666]">Plano:</span>
-              <span>Business {plan.planName}</span>
+              <span>Business {plan?.planName}</span>
             </div>
             <div className="flex justify-between">
               <span className="font-semibold text-[#666]">Usuários:</span>
@@ -127,20 +127,20 @@ export default function FinishOrderInfo() {
             </div>
             <div className="flex justify-between">
               <span className="font-semibold text-[#666]">Modalidade:</span>
-              <span className="capitalize">{plan.modalidade}</span>
+              <span className="capitalize">{plan.type}</span>
             </div>
             <div className="flex justify-between">
               <span className="font-semibold text-[#666]">Valor Unitário:</span>
               <span>
                 R$ {parseInt(plan.price)},00/
-                {plan.modalidade === "anual" ? "ano" : "mês"}
+                {plan.type === "anual" ? "ano" : "mês"}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="font-semibold text-[#666]">Valor Total:</span>
               <span className="font-bold">
                 R$ {parseInt(plan.price) * plan.users},00/
-                {plan.modalidade === "anual" ? "ano" : "mês"}
+                {plan.type === "anual" ? "ano" : "mês"}
               </span>
             </div>
           </div>
@@ -151,67 +151,70 @@ export default function FinishOrderInfo() {
 
   // Informações do Comprador
   const infoComprador = (
-    <div className="flex flex-col bg-white rounded-[4px] p-4 gap-2 w-full">
-      <div className="flex flex-col text-neutral-800 gap-2 rounded-lg min-h-[120px] p-4">
+    <div className="flex flex-col items-start rounded-[26px] w-full p-4 gap-8 ">
+      <div className="flex flex-col bg-white text-neutral-800 gap-2 w-full  rounded-lg min-h-[120px] p-4">
         {/* CNPJ e Nome do Gestor */}
-        <div className="hidden md:grid grid-cols-2 gap-4 text-[14px] w-full text-neutral-700">
-          <p>
-            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
-          </p>
+        <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
           <p>
             <strong>Nome do Gestor:</strong> {basicInfo?.managerName || "-"}
+          </p>{" "}
+          <p>
+            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
           </p>
         </div>
 
         {/* Mobile: CNPJ e Nome do Gestor em coluna */}
         <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
           <p>
-            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
-          </p>
-          <p>
             <strong>Nome do Gestor:</strong> {basicInfo?.managerName || "-"}
+          </p>{" "}
+          <p>
+            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
           </p>
         </div>
 
         {/* Email e Telefone */}
-        <div className="hidden md:grid grid-cols-2 gap-4 text-[14px] w-full text-neutral-700">
-          <p>
-            <strong>Email:</strong> {basicInfo?.email || "-"}
-          </p>
+        <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
           <p>
             <strong>Cliente Vivo:</strong>{" "}
             {basicInfo?.isVivoClient ? "Sim" : "Não"}
+          </p>
+          <p>
+            <strong>Email:</strong> {basicInfo?.email || "-"}
           </p>
         </div>
 
         {/* Mobile: Email e Cliente Vivo em coluna */}
         <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
           <p>
-            <strong>Email:</strong> {basicInfo?.email || "-"}
-          </p>
-          <p>
             <strong>Cliente Vivo:</strong>{" "}
             {basicInfo?.isVivoClient ? "Sim" : "Não"}
+          </p>{" "}
+          <p>
+            <strong>Email:</strong> {basicInfo?.email || "-"}
           </p>
         </div>
-      </div>
-    </div>
-  );
-
-  // Informações de Domínio
-  const infoDominio = (
-    <div className="flex flex-col bg-white rounded-[4px] p-4 gap-2 w-full">
-      <div className="flex flex-col text-neutral-800 gap-2 rounded-lg min-h-[120px] p-4">
-        <div className="text-[14px] w-full text-neutral-700">
+        {/* Email e Telefone */}
+        <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
+          <p>
+            <strong>Já possui Workspace:</strong>{" "}
+            {companyInfo?.alreadyHaveWorkspace ? "Sim" : "Não"}
+          </p>{" "}
           <p>
             <strong>Domínio da Empresa:</strong>{" "}
             {companyInfo?.domainName || "-"}
           </p>
         </div>
-        <div className="text-[14px] w-full text-neutral-700">
+
+        {/* Mobile: Email e Cliente Vivo em coluna */}
+        <div className="flex flex-col gap-2 md:hidden text-[14px]  text-neutral-700">
           <p>
             <strong>Já possui Workspace:</strong>{" "}
             {companyInfo?.alreadyHaveWorkspace ? "Sim" : "Não"}
+          </p>{" "}
+          <p>
+            <strong>Domínio da Empresa:</strong>{" "}
+            {companyInfo?.domainName || "-"}
           </p>
         </div>
       </div>
@@ -220,8 +223,8 @@ export default function FinishOrderInfo() {
 
   // Resumo do Pedido
   const resumoPedido = (
-    <div className="flex flex-col justify-center mt-4 bg-white min-h-[200px] text-[14px] rounded-[4px] mb-[29px]">
-      <div className="flex m-3 flex-col gap-4">
+    <div className="flex flex-col bg-white items-start rounded-[26px] w-full pr-10 p-4 gap-8">
+      <div className="flex m-3 flex-col w-full gap-4">
         <div className="px-2">
           <p className="text-[15px]">Resumo Google Workspace</p>
         </div>
@@ -236,11 +239,11 @@ export default function FinishOrderInfo() {
           <p className="text-[14px] text-[#666666]">Total de Usuários</p>
           <p className="text-end">{getTotalUsers()}</p>
         </div>
-        <hr className="border-t border-neutral-300 mb-2 w-full" />
+        <hr className="border-t border-neutral-300  w-full" />
       </div>
 
-      <div className="flex flex-col items-start m-3 gap-2">
-        <div className="flex w-full justify-between mb-4 text-[16px] font-bold">
+      <div className="flex flex-col w-full items-start mx-3 gap-2">
+        <div className="flex w-full justify-between text-[16px] font-bold">
           <p className="text-[#666666]">Valor Total Mensal</p>
           <p className="text-end text-[#660099]">R$ {getTotalPrice()},00/mês</p>
         </div>
@@ -259,24 +262,39 @@ export default function FinishOrderInfo() {
       label: <p className="text-[15px]">Informações do Comprador</p>,
       children: infoComprador,
     },
+
     {
       key: "3",
-      label: <p className="text-[15px]">Informações de Domínio</p>,
-      children: infoDominio,
-    },
-    {
-      key: "4",
       label: <p className="text-[15px]">Resumo do Pedido</p>,
       children: resumoPedido,
     },
   ];
 
   return (
-    <div className="h-[100vh] flex flex-col flex-1 px-8 pt-8 pb-4 bg-[#f7f7f7]">
+    <div className="min-h-[100vh] flex flex-col flex-1 px-8 pt-8 pb-4 bg-[#f1f1f1]">
       {/* Header com steps */}
       <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
-        <img src="/Vivo-Empresas.png" alt="Vivo Empresas" className="h-7" />
+        <div className="flex items-center gap-4 ">
+          <img
+            src="/Vivo-Empresas.png"
+            className="h-5 md:h-8 hover:cursor-pointer"
+            alt="Vivo Empresas"
+          />
 
+          <div className="h-4 md:h-6 border-l border-gray-400"></div>
+
+          <a
+            href="https://www.goldempresas.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/Gold-Logo.png"
+              className="h-5 md:h-10"
+              alt="Gold Empresas"
+            />
+          </a>
+        </div>
         <div className="flex items-center gap-2">
           <div className="flex flex-col gap-1 items-center">
             <div className="w-6 h-6 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[12px] font-semibold">
@@ -313,7 +331,7 @@ export default function FinishOrderInfo() {
       <div className="flex flex-col min-h-[617px]">
         <div className="flex w-full justify-between mb-2">
           <h1 className="flex items-center justify-center text-[18px] md:text-[20px] lg:text-[20px] font-semibold">
-            Pedido Nº XEWUCB6LF8
+            Pedido Nº {orderDetails?.id || "-"}
           </h1>
           <div className="">
             <ConfigProvider
@@ -328,22 +346,12 @@ export default function FinishOrderInfo() {
                 },
               }}
             >
-              <Button type="default" variant="solid">
-                Imprimir
+              <Button type="default" variant="solid" disabled>
+                Gerar PDF
               </Button>
             </ConfigProvider>
           </div>
         </div>
-
-        {/* <div className="bg-purple-100 rounded-lg p-2 mb-4">
-          <p
-            style={{ margin: 0 }}
-            className="text-gray-600 text-[12px] text-center"
-          >
-            O código do seu pedido Google Workspace é{" "}
-            <span className="text-orange-500 font-semibold">XEWUCB6LF8</span>
-          </p>
-        </div> */}
 
         {/* Instruções de próximos passos */}
         <div className="flex flex-col items-center justify-center mt-4 gap-4 mb-6">

@@ -1,4 +1,5 @@
 export interface Plan {
+  id?: number;
   planName: string;
   price: string;
   type?: "mensal" | "anual";

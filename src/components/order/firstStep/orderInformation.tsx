@@ -12,6 +12,7 @@ import { formatPrice } from "../../../utils/formatPrice";
 import { CNPJInput, PhoneInput } from "../../../utils/input";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Plan } from "../../../interfaces/order";
 const { Option } = Select;
 export default function OrderInformation({
   basicInfo,
@@ -71,13 +72,13 @@ export default function OrderInformation({
   };
 
   const addNewPlan = () => {
-    if (currentPlan.planName && currentPlan.price && currentPlan.type) {
+    if (currentPlan?.planName && currentPlan?.price && currentPlan?.type) {
       const newConfirmedPlan = {
         id: Date.now().toString(),
-        planName: currentPlan.planName,
-        price: currentPlan.price,
-        users: currentPlan.users,
-        type: currentPlan.type,
+        planName: currentPlan?.planName,
+        price: currentPlan?.price,
+        users: currentPlan?.users,
+        type: currentPlan?.type,
       };
 
       setConfirmedPlans([...confirmedPlans, newConfirmedPlan]);
@@ -92,7 +93,9 @@ export default function OrderInformation({
   };
 
   const removePlan = (planId: string) => {
-    setConfirmedPlans(confirmedPlans.filter((plan) => plan.id !== planId));
+    setConfirmedPlans(
+      confirmedPlans.filter((plan: Plan) => plan?.id?.toString() !== planId)
+    );
   };
 
   const updateCurrentPlan = (field: string, value: string | number) => {
@@ -201,9 +204,9 @@ export default function OrderInformation({
               </Tooltip>
             </h3>
 
-            {confirmedPlans.map((plan, index) => (
+            {confirmedPlans?.map((plan: Plan, index: number) => (
               <div
-                key={plan.id}
+                key={plan?.id}
                 className="flex flex-wrap justify-between gap-4 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
               >
                 <div className="w-[170px]">
@@ -212,7 +215,7 @@ export default function OrderInformation({
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
                     <span className="text-gray-700 text-[13px]">
-                      Business {plan.planName}
+                      Business {plan?.planName}
                     </span>
                   </div>
                 </div>
@@ -223,7 +226,7 @@ export default function OrderInformation({
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center justify-center">
                     <span className="text-gray-700 text-[13px]">
-                      {plan.users}
+                      {plan?.users}
                     </span>
                   </div>
                 </div>
@@ -234,7 +237,7 @@ export default function OrderInformation({
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
                     <span className="text-gray-700 text-[13px] capitalize">
-                      {plan.type}
+                      {plan?.type}
                     </span>
                   </div>
                 </div>
@@ -246,13 +249,13 @@ export default function OrderInformation({
                   <div className="flex gap-2">
                     <div className="w-[180px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
                       <span className="text-gray-700 text-[13px] font-bold">
-                        R$ {formatPrice(plan.price, plan.users)}/
-                        {plan.type === "anual" ? "mês" : "mês"}
+                        R$ {formatPrice(plan?.price, plan?.users)}/
+                        {plan?.type === "anual" ? "mês" : "mês"}
                       </span>
                     </div>
                     <Button
                       size="middle"
-                      onClick={() => removePlan(plan.id)}
+                      onClick={() => removePlan(plan?.id?.toString() || "0")}
                       style={{
                         backgroundColor: "#dc2626",
                         borderColor: "#dc2626",
@@ -278,7 +281,7 @@ export default function OrderInformation({
                 </label>
                 <Select
                   size="middle"
-                  value={currentPlan.planName || undefined}
+                  value={currentPlan?.planName || undefined}
                   placeholder="Selecione um plano"
                   onChange={(value) => {
                     const priceMap = {
@@ -330,7 +333,7 @@ export default function OrderInformation({
                     </span> */}
                   </Option>
                 </Select>
-                {hasTriedSubmit && !currentPlan.planName && (
+                {hasTriedSubmit && !currentPlan?.planName && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
@@ -342,10 +345,10 @@ export default function OrderInformation({
                   <Button
                     size="middle"
                     onClick={handleCurrentUserDecrease}
-                    disabled={currentPlan.users <= 1}
+                    disabled={currentPlan?.users <= 1}
                     style={{
                       backgroundColor:
-                        currentPlan.users > 1 ? "#f97316" : "#e5e7eb",
+                        currentPlan?.users > 1 ? "#f97316" : "#e5e7eb",
                       borderColor: "#d1d5db",
                       color: currentPlan.users > 1 ? "white" : "#9ca3af",
                       borderRadius: "6px 0 0 6px",
@@ -398,7 +401,7 @@ export default function OrderInformation({
                   onChange={(value) => {
                     updateCurrentPlan("type", value);
 
-                    if (currentPlan.planName) {
+                    if (currentPlan?.planName) {
                       const priceMap = {
                         Starter: { mensal: "49,00", anual: "32,72" },
                         Standard: { mensal: "98,00", anual: "81,80" },
@@ -407,9 +410,9 @@ export default function OrderInformation({
 
                       updateCurrentPlan(
                         "price",
-                        priceMap[currentPlan.planName as keyof typeof priceMap][
-                          value as "mensal" | "anual"
-                        ]
+                        priceMap[
+                          currentPlan?.planName as keyof typeof priceMap
+                        ][value as "mensal" | "anual"]
                       );
                     }
                   }}
@@ -443,18 +446,18 @@ export default function OrderInformation({
                   <Button
                     size="middle"
                     onClick={addNewPlan}
-                    disabled={!currentPlan.planName || !currentPlan.type}
+                    disabled={!currentPlan?.planName || !currentPlan.type}
                     style={{
                       backgroundColor:
-                        currentPlan.planName && currentPlan.type
+                        currentPlan?.planName && currentPlan.type
                           ? "#f97316"
                           : "#e5e7eb",
                       borderColor:
-                        currentPlan.planName && currentPlan.type
+                        currentPlan?.planName && currentPlan.type
                           ? "#f97316"
                           : "#d1d5db",
                       color:
-                        currentPlan.planName && currentPlan.type
+                        currentPlan?.planName && currentPlan.type
                           ? "white"
                           : "#9ca3af",
                       height: "32px",

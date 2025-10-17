@@ -8,13 +8,50 @@ import { useNavigate } from "react-router-dom";
 export default function CardLayout({ cardData }: any) {
   const navigate = useNavigate();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  // Cada card tem seu próprio estado de pricing
   const [selectedPricingType, setSelectedPricingType] =
     useState<string>("monthly");
+
   const toggleDetails = (cardType: string) => {
     setExpandedCard(expandedCard === cardType ? null : cardType);
   };
-  const setSelectedPlan = useOrderStore((state) => state.setSelectedPlan);
+  const { setSelectedPlan, confirmedPlans, setConfirmedPlans } =
+    useOrderStore();
+
   const handlePlanSelection = (cardData: any) => {
+    // Define a modalidade baseada na seleção do usuário
+    const modalidade = selectedPricingType === "monthly" ? "mensal" : "anual";
+
+    // Define o preço baseado na modalidade selecionada
+    const price =
+      selectedPricingType === "monthly" ? cardData?.price : cardData?.priceYear;
+
+    console.log("=== DEBUG PLAN SELECTION ===");
+    console.log("Card clicado:", cardData?.title);
+    console.log("Modalidade selecionada:", selectedPricingType);
+    console.log("Modalidade convertida:", modalidade);
+    console.log("Preço mensal (cardData.price):", cardData?.price);
+    console.log("Preço anual (cardData.priceYear):", cardData?.priceYear);
+    console.log("Preço final selecionado:", price);
+
+    // Cria o novo plano
+    const newPlan = {
+      id: Date.now().toString(),
+      planName: cardData?.title,
+      price: price,
+      users: 1, // Padrão de 1 usuário
+      modalidade: modalidade,
+    };
+
+    console.log("Plano criado:", newPlan);
+    console.log("Planos confirmados antes:", confirmedPlans);
+
+    // Adiciona o plano aos planos confirmados
+    setConfirmedPlans([...confirmedPlans, newPlan]);
+
+    console.log("=== FIM DEBUG ===");
+
+    // Também define como plano selecionado (para compatibilidade)
     setSelectedPlan({
       planName: cardData?.title,
       price: cardData?.price,

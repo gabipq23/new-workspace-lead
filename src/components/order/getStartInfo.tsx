@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { Button, Input, Select, Checkbox, Radio, ConfigProvider } from "antd";
+import {
+  Button,
+  Input,
+  Select,
+  Checkbox,
+  Radio,
+  ConfigProvider,
+  Tooltip,
+} from "antd";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, CircleCheck } from "lucide-react";
+import { ChevronDown, ChevronUp, CircleAlert, CircleCheck } from "lucide-react";
 import { useOrderStore } from "../../context/context";
 import { CNPJInput, PhoneInput } from "../../utils/input";
 
@@ -456,7 +464,14 @@ export default function GetStartInfo() {
           </div>
 
           <div className="mb-8">
-            <h3 className="text-[14px] text-gray-800 mb-4">Defina seu plano</h3>
+            <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
+              Defina seus planos{" "}
+              <Tooltip title="Você pode escolher 1 ou mais planos.">
+                <span className="text-gray-500 cursor-pointer">
+                  <CircleAlert size={14} />
+                </span>
+              </Tooltip>
+            </h3>
 
             {confirmedPlans.map((plan, index) => (
               <div
@@ -725,7 +740,7 @@ export default function GetStartInfo() {
                       width: "140px",
                     }}
                   >
-                    Adicionar novo plano
+                    Adicionar plano
                   </Button>
                 </div>
               </div>

@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<Catalog />} />
           <Route path="/choose-plan" element={<GetStartInfo />} />
           <Route path="/client-information" element={<CompanyInfo />} />
-          <Route path="/order" element={<FinishOrderInfo />} />
+          <Route path="/order/:id" element={<FinishOrderInfo />} />
         </Routes>
       </QueryClientProvider>
     </div>

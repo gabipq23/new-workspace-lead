@@ -41,7 +41,8 @@ export default function Cards() {
         "text-[#1659b1] px-4 py-1 rounded-t-sm text-[11px] font-medium h-6",
       title: "Starter",
       storage: "30 GB de armazenamento em nuvem por usuário",
-      price: "49",
+      price: "49,00",
+      priceYear: "32,70",
       details: [
         {
           title: "E-mail @gmail",
@@ -59,7 +60,8 @@ export default function Cards() {
         "bg-[#660099] text-white px-4 py-1 text-[10px] font-medium text-center",
       title: "Standard",
       storage: "2 TB de armazenamento em nuvem por usuário",
-      price: "98",
+      price: "98,00",
+      priceYear: "81,80",
       details: [
         {
           title: "E-mail comercial personalizado",
@@ -79,7 +81,8 @@ export default function Cards() {
         "text-[#1659b1] px-4 py-1 rounded-t-sm text-[11px] font-medium h-6",
       title: "Plus",
       storage: "5 TB de armazenamento em nuvem por usuário",
-      price: "154",
+      price: "154,00",
+      priceYear: "128,40",
       details: [
         {
           title: "Todos os recursos do Standard",

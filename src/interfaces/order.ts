@@ -1,6 +1,8 @@
 export interface Plan {
   planName: string;
   price: string;
+  priceYear: string;
+  modalidade?: string;
   servicesIncluded: string[];
 }
 

@@ -197,7 +197,6 @@ export default function GetStartInfo() {
 
       setConfirmedPlans([...confirmedPlans, newConfirmedPlan]);
 
-      // Limpa os inputs para o próximo plano
       setCurrentPlan({
         planName: "",
         price: "",

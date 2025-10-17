@@ -18,6 +18,7 @@ export default function CardLayout({ cardData }: any) {
     setSelectedPlan({
       planName: cardData?.title,
       price: cardData?.price,
+      priceYear: cardData?.priceYear,
       servicesIncluded: [],
     });
 
@@ -120,7 +121,7 @@ export default function CardLayout({ cardData }: any) {
                         style={{ margin: 0 }}
                         className="text-gray-900 text-[20px]"
                       >
-                        R$ 35
+                        R$ {cardData?.priceYear}{" "}
                         <span className="text-[20px] text-gray-600">
                           /anual*
                         </span>

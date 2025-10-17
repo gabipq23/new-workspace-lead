@@ -1,9 +1,225 @@
+import { Button, ConfigProvider, Collapse } from "antd";
+import type { CollapseProps } from "antd";
 import { Check } from "lucide-react";
+import { MailOutlined, SignatureOutlined } from "@ant-design/icons";
+import { useOrderStore } from "../../context/context";
 
 export default function FinishOrderInfo() {
+  const { basicInfo, companyInfo, confirmedPlans } = useOrderStore();
+
+  const getTotalPrice = () => {
+    return confirmedPlans.reduce((total, plan) => {
+      return total + parseInt(plan.price) * plan.users;
+    }, 0);
+  };
+
+  const getTotalUsers = () => {
+    return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
+  };
+
+  const planosDetalhes = (
+    <div className="flex flex-col bg-white rounded-[4px] p-4 w-full py-4 mb-4">
+      {/* Desktop Version */}
+      <div className="hidden md:block">
+        <div className="flex items-center font-semibold text-[#666666] text-[15px] mb-4">
+          <p className="w-48 text-center">Plano</p>
+          <p className="w-32 text-center">Usuários</p>
+          <p className="w-32 text-center">Modalidade</p>
+          <p className="w-40 text-center">Valor Unitário</p>
+          <p className="w-40 text-center">Valor Total</p>
+        </div>
+        <hr className="border-t border-neutral-300 mx-2 mb-4" />
+
+        {confirmedPlans.map((plan, index) => (
+          <div key={plan.id}>
+            <div className="flex items-center py-4 text-[14px] text-neutral-700">
+              <p className="text-[14px] font-semibold w-48 text-center">
+                Business {plan.planName}
+              </p>
+              <p className="text-[14px] w-32 text-center">{plan.users}</p>
+              <p className="text-[14px] w-32 text-center capitalize">
+                {plan.modalidade}
+              </p>
+              <p className="text-[14px] font-semibold w-40 text-center">
+                R$ {parseInt(plan.price)},00/
+                {plan.modalidade === "anual" ? "ano" : "mês"}
+              </p>
+              <p className="text-[16px] text-neutral-700 font-semibold w-40 text-center">
+                R$ {parseInt(plan.price) * plan.users},00/
+                {plan.modalidade === "anual" ? "ano" : "mês"}
+              </p>
+            </div>
+            {index < confirmedPlans.length - 1 && (
+              <hr className="border-t border-neutral-300 mx-2" />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Mobile Version */}
+      <div className="block md:hidden">
+        {confirmedPlans.map((plan) => (
+          <div
+            key={plan.id}
+            className="bg-white rounded-lg shadow p-4 mb-4 flex flex-col gap-2 border"
+          >
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#666]">Plano:</span>
+              <span>Business {plan.planName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#666]">Usuários:</span>
+              <span>{plan.users}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#666]">Modalidade:</span>
+              <span className="capitalize">{plan.modalidade}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#666]">Valor Unitário:</span>
+              <span>
+                R$ {parseInt(plan.price)},00/
+                {plan.modalidade === "anual" ? "ano" : "mês"}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-[#666]">Valor Total:</span>
+              <span className="font-bold">
+                R$ {parseInt(plan.price) * plan.users},00/
+                {plan.modalidade === "anual" ? "ano" : "mês"}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Informações do Comprador
+  const infoComprador = (
+    <div className="flex flex-col bg-white rounded-[4px] p-4 gap-2 w-full">
+      <div className="flex flex-col text-neutral-800 gap-2 rounded-lg min-h-[120px] p-4">
+        {/* CNPJ e Nome do Gestor */}
+        <div className="hidden md:grid grid-cols-2 gap-4 text-[14px] w-full text-neutral-700">
+          <p>
+            <strong>CNPJ:</strong> {basicInfo.cnpj || "-"}
+          </p>
+          <p>
+            <strong>Nome do Gestor:</strong> {basicInfo.managerName || "-"}
+          </p>
+        </div>
+
+        {/* Mobile: CNPJ e Nome do Gestor em coluna */}
+        <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
+          <p>
+            <strong>CNPJ:</strong> {basicInfo.cnpj || "-"}
+          </p>
+          <p>
+            <strong>Nome do Gestor:</strong> {basicInfo.managerName || "-"}
+          </p>
+        </div>
+
+        {/* Email e Telefone */}
+        <div className="hidden md:grid grid-cols-2 gap-4 text-[14px] w-full text-neutral-700">
+          <p>
+            <strong>Email:</strong> {basicInfo.email || "-"}
+          </p>
+          <p>
+            <strong>Cliente Vivo:</strong>{" "}
+            {basicInfo.isVivoClient ? "Sim" : "Não"}
+          </p>
+        </div>
+
+        {/* Mobile: Email e Cliente Vivo em coluna */}
+        <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
+          <p>
+            <strong>Email:</strong> {basicInfo.email || "-"}
+          </p>
+          <p>
+            <strong>Cliente Vivo:</strong>{" "}
+            {basicInfo.isVivoClient ? "Sim" : "Não"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Informações de Domínio
+  const infoDominio = (
+    <div className="flex flex-col bg-white rounded-[4px] p-4 gap-2 w-full">
+      <div className="flex flex-col text-neutral-800 gap-2 rounded-lg min-h-[120px] p-4">
+        <div className="text-[14px] w-full text-neutral-700">
+          <p>
+            <strong>Domínio da Empresa:</strong> {companyInfo.domainName || "-"}
+          </p>
+        </div>
+        <div className="text-[14px] w-full text-neutral-700">
+          <p>
+            <strong>Já possui Workspace:</strong>{" "}
+            {companyInfo.alreadyHaveWorkspace ? "Sim" : "Não"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Resumo do Pedido
+  const resumoPedido = (
+    <div className="flex flex-col justify-center mt-4 bg-white min-h-[200px] text-[14px] rounded-[4px] mb-[29px]">
+      <div className="flex m-3 flex-col gap-4">
+        <div className="px-2">
+          <p className="text-[15px]">Resumo Google Workspace</p>
+        </div>
+
+        <div className="flex w-full justify-between px-2">
+          <p className="text-[14px] text-[#666666]">Quantidade de Planos</p>
+          <p className="text-end">{confirmedPlans.length}</p>
+        </div>
+        <hr className="border-t border-neutral-300 mb-2 w-full" />
+
+        <div className="flex w-full justify-between px-2">
+          <p className="text-[14px] text-[#666666]">Total de Usuários</p>
+          <p className="text-end">{getTotalUsers()}</p>
+        </div>
+        <hr className="border-t border-neutral-300 mb-2 w-full" />
+      </div>
+
+      <div className="flex flex-col items-start m-3 gap-2">
+        <div className="flex w-full justify-between mb-4 text-[16px] font-bold">
+          <p className="text-[#666666]">Valor Total Mensal</p>
+          <p className="text-end text-[#660099]">R$ {getTotalPrice()},00/mês</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const items: CollapseProps["items"] = [
+    {
+      key: "1",
+      label: <p className="text-[15px]">Detalhes dos Planos</p>,
+      children: planosDetalhes,
+    },
+    {
+      key: "2",
+      label: <p className="text-[15px]">Informações do Comprador</p>,
+      children: infoComprador,
+    },
+    {
+      key: "3",
+      label: <p className="text-[15px]">Informações de Domínio</p>,
+      children: infoDominio,
+    },
+    {
+      key: "4",
+      label: <p className="text-[15px]">Resumo do Pedido</p>,
+      children: resumoPedido,
+    },
+  ];
+
   return (
-    <div className="h-[100vh] flex flex-col flex-1 px-8 pt-8 pb-4  bg-[#f7f7f7] ">
-      <div className="flex flex-col gap-4 lg:flex-row items-center justify-between ">
+    <div className="h-[100vh] flex flex-col flex-1 px-8 pt-8 pb-4 bg-[#f7f7f7]">
+      {/* Header com steps */}
+      <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
         <img src="/Vivo-Empresas.png" alt="Vivo Empresas" className="h-7" />
 
         <div className="flex items-center gap-2">
@@ -37,114 +253,83 @@ export default function FinishOrderInfo() {
           </div>
         </div>
       </div>
-      <div className="flex w-full h-full items-center justify-center">
-        <div className="max-w-5xl w-full text-center">
-          <div className="mb-4">
-            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mx-auto">
-              <Check size={32} className="text-white" />
-            </div>
-          </div>
 
-          <h1 className="text-[16px]  text-gray-700 mb-6">
-            Pedido realizado com sucesso
+      {/* Título e código do pedido */}
+      <div className="flex flex-col min-h-[617px]">
+        <div className="flex w-full justify-between mb-2">
+          <h1 className="flex items-center justify-center text-[18px] md:text-[20px] lg:text-[20px] font-semibold">
+            Pedido Nº XEWUCB6LF8
           </h1>
-
-          <div className="bg-purple-100 rounded-lg p-2 mb-2">
-            <p style={{ margin: 0 }} className="text-gray-600 text-[10px] ">
-              O código do seu pedido Google Workspace é{" "}
-              <span className="text-orange-500 font-semibold">XEWUCB6LF8</span>
-            </p>
-          </div>
-
-          <div className="bg-[#660099] text-white rounded-lg p-6 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-start">
-              <div className="space-y-4 text-start">
-                <div className="text-start">
-                  <p
-                    style={{ margin: 0 }}
-                    className="text-purple-200 text-[12px] mb-1"
-                  >
-                    Plano
-                  </p>
-                  <p style={{ margin: 0 }} className="text-[14px]">
-                    Google Workspace - Business Starter
-                  </p>
-                </div>
-                <div>
-                  <p
-                    style={{ margin: 0 }}
-                    className="text-purple-200 text-[12px] mb-1"
-                  >
-                    CNPJ
-                  </p>
-                  <p style={{ margin: 0 }} className="text-[14px]">
-                    01.234.400/0001-56
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <p
-                    style={{ margin: 0 }}
-                    className="text-purple-200 text-[12px] mb-1"
-                  >
-                    Usuários
-                  </p>
-                  <p style={{ margin: 0 }} className="text-[14px]">
-                    1
-                  </p>
-                </div>
-                <div>
-                  <p
-                    style={{ margin: 0 }}
-                    className="text-purple-200 text-[12px] mb-1"
-                  >
-                    Celular do gestor
-                  </p>
-                  <p style={{ margin: 0 }} className="text-[14px]">
-                    (00) 00000-0000
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <p
-                    style={{ margin: 0 }}
-                    className="text-purple-200 text-[12px] mb-1"
-                  >
-                    Valor Total
-                  </p>
-                  <p style={{ margin: 0 }} className="text-[14px]">
-                    R$ 49,00/mês
-                  </p>
-                </div>
-                <div>
-                  <p
-                    style={{ margin: 0 }}
-                    className="text-purple-200 text-[12px] mb-1"
-                  >
-                    E-mail
-                  </p>
-                  <p style={{ margin: 0 }} className="text-[14px]">
-                    teste@gmail.com
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-2 bg-[#ecececfa] text-[13px] rounded-lg text-gray-600 p-2">
-            <p style={{ margin: 0 }}>
-              <strong>Sua solicitação está em análise.</strong> Caso necessário,
-              um consultor entrará em contato com você pelo telefone cadastrado
-              para concluir a contratação. Você receberá notificações sobre sua
-              fatura por e-mail cadastrado. Caso tenha alguma dúvidafale pelo
-              WhatsApp.
-            </p>
+          <div className="">
+            <ConfigProvider
+              theme={{
+                components: {
+                  Button: {
+                    colorBorder: "#660099",
+                    colorText: "#660099",
+                    colorPrimaryHover: "#cb1ef5",
+                    colorPrimaryBorderHover: "#cb1ef5",
+                  },
+                },
+              }}
+            >
+              <Button type="default" variant="solid">
+                Imprimir
+              </Button>
+            </ConfigProvider>
           </div>
         </div>
+
+        {/* <div className="bg-purple-100 rounded-lg p-2 mb-4">
+          <p
+            style={{ margin: 0 }}
+            className="text-gray-600 text-[12px] text-center"
+          >
+            O código do seu pedido Google Workspace é{" "}
+            <span className="text-orange-500 font-semibold">XEWUCB6LF8</span>
+          </p>
+        </div> */}
+
+        {/* Instruções de próximos passos */}
+        <div className="flex flex-col items-center justify-center mt-4 gap-4 mb-6">
+          <div className="flex gap-2 items-center justify-center w-full max-w-[900px]">
+            <div className="text-[36px] md:text-[64px] lg:text-[64px] text-[#660099] mr-2">
+              <MailOutlined />
+            </div>
+            <div className="flex flex-col text-[13px] md:text-[16px] lg:text-[16px]">
+              <p>
+                <span className="font-bold">1.</span> Em breve você receberá um
+                e-mail da Vivo através do remetente{" "}
+                <span className="font-bold">noreply@vivo.com.br</span> com as{" "}
+                <span className="font-bold">instruções de configuração</span> do
+                seu Google Workspace.
+              </p>
+              <p>
+                <span className="text-red-700 font-bold">Importante:</span> Caso
+                não encontre o e-mail em sua caixa de entrada, lembre-se de
+                verificar o{" "}
+                <span className="font-bold">spam ou lixo eletrônico</span>.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 w-full max-w-[900px]">
+            <div className="text-[36px] md:text-[64px] lg:text-[64px] text-[#660099] mr-2">
+              <SignatureOutlined />
+            </div>
+            <div className="text-[13px] md:text-[16px] lg:text-[16px]">
+              <p>
+                <span className="font-bold">2.</span> Siga as instruções do
+                e-mail para{" "}
+                <span className="font-bold">configurar seus usuários</span> e
+                começar a usar o Google Workspace.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Collapse com informações detalhadas */}
+        <Collapse items={items} ghost defaultActiveKey={["1"]} />
       </div>
     </div>
   );

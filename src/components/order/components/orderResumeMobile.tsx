@@ -1,6 +1,7 @@
 import { Button, ConfigProvider } from "antd";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { formatPrice } from "../../../utils/formatPrice";
+import type { Plan } from "../../../interfaces/order";
 
 export default function OrderResumeMobile({
   confirmedPlans,
@@ -97,7 +98,7 @@ export default function OrderResumeMobile({
               Planos selecionados
             </h4>
 
-            {confirmedPlans.map((plan, index) => (
+            {confirmedPlans.map((plan: Plan, index: number) => (
               <div key={plan.id} className="mb-3 p-3 bg-white rounded-md">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-[#660099] font-bold text-[11px]">

@@ -13,6 +13,7 @@ const formatPrice = (price: string | number, users: number = 1) => {
   const numericPrice =
     typeof price === "string" ? parseFloat(price.replace(",", ".")) : price;
   const total = numericPrice * users;
+  // Retorna no formato brasileiro com vírgula
   return total.toFixed(2).replace(".", ",");
 };
 
@@ -79,7 +80,7 @@ function PlanCard({ plan, index }: { plan: any; index: number }) {
             className="text-[#660099] text-[13px]"
           >
             R$ {formatPrice(plan.price, plan.users)}/
-            {plan.modalidade === "anual" ? "ano" : "mês"}
+            {plan.modalidade === "anual" ? "mês" : "mês"}
           </div>
         </div>
       </div>
@@ -237,14 +238,6 @@ export default function GetStartInfo() {
     }
   };
 
-  const getPlanPrice = () => {
-    if (currentPlan?.price) {
-      // Converte vírgula para ponto antes de fazer parseFloat
-      return parseFloat(currentPlan.price.replace(",", "."));
-    }
-    return 0;
-  };
-
   const getTotalPrice = () => {
     const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
       // Converte vírgula para ponto antes de fazer parseFloat
@@ -382,7 +375,7 @@ export default function GetStartInfo() {
                   </span>
                   <span className="text-[#ff7f17] font-bold text-[11px]">
                     R$ {formatPrice(plan.price, plan.users)}/
-                    {plan.modalidade === "anual" ? "ano" : "mês"}
+                    {plan.modalidade === "anual" ? "mês" : "mês"}
                   </span>
                 </div>
               </div>
@@ -468,9 +461,9 @@ export default function GetStartInfo() {
             {confirmedPlans.map((plan, index) => (
               <div
                 key={plan.id}
-                className="flex flex-wrap justify-start gap-6 mb-2 max-w-[800px]  bg-green-50 py-3 rounded-r-md"
+                className="flex flex-wrap justify-between gap-4 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
               >
-                <div className="w-[180px]">
+                <div className="w-[170px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
                     Plano {index + 1}
                   </label>
@@ -481,9 +474,9 @@ export default function GetStartInfo() {
                   </div>
                 </div>
 
-                <div className="w-[160px]">
+                <div className="w-[130px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
-                    Quantidade de Usuários
+                    Quant. de Usuários
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center justify-center">
                     <span className="text-gray-700 text-[13px]">
@@ -492,7 +485,7 @@ export default function GetStartInfo() {
                   </div>
                 </div>
 
-                <div className="w-[100px]">
+                <div className="w-[90px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
                     Modalidade
                   </label>
@@ -510,8 +503,8 @@ export default function GetStartInfo() {
                   <div className="flex gap-2">
                     <div className="w-[180px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
                       <span className="text-gray-700 text-[13px] font-bold">
-                        R$ {parseInt(plan.price) * plan.users},00/
-                        {plan.modalidade === "anual" ? "ano" : "mês"}
+                        R$ {formatPrice(plan.price, plan.users)}/
+                        {plan.modalidade === "anual" ? "mês" : "mês"}
                       </span>
                     </div>
                     <Button
@@ -534,8 +527,8 @@ export default function GetStartInfo() {
               </div>
             ))}
 
-            <div className="flex flex-wrap justify-start gap-2 mb-6">
-              <div className="w-[360px]">
+            <div className="flex max-w-[800px] flex-wrap justify-between gap-2 mb-6">
+              <div className="w-[170px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Plano {confirmedPlans.length + 1}{" "}
                   <span className="text-red-500">*</span>
@@ -573,28 +566,40 @@ export default function GetStartInfo() {
                   className="w-full"
                 >
                   <Option value="Starter">
-                    Business Starter -{" "}
-                    <span className="text-gray-500">R$ 49,00/mês ou </span>
-                    <span className="text-gray-500">R$ 32,72/ano</span>
+                    Business Starter{" "}
+                    {/* <span className="text-[12px] text-gray-500">
+                      R$ 49,00/mês ou{" "}
+                    </span>
+                    <span className="text-[12px] text-gray-500">
+                      R$ 32,72/mês
+                    </span> */}
                   </Option>
                   <Option value="Standard">
-                    Business Standard -{" "}
-                    <span className="text-gray-500">R$ 98,00/mês ou </span>
-                    <span className="text-gray-500">R$ 81,80/ano</span>
+                    Business Standard{" "}
+                    {/* <span className="text-[12px] text-gray-500">
+                      R$ 98,00/mês ou{" "}
+                    </span>
+                    <span className="text-[12px] text-gray-500">
+                      R$ 81,80/mês
+                    </span> */}
                   </Option>
                   <Option value="Plus">
-                    Business Plus -{" "}
-                    <span className="text-gray-500">R$ 154,00/mês ou </span>
-                    <span className="text-gray-500">R$ 128,40/ano</span>
+                    Business Plus{" "}
+                    {/* <span className="text-[12px] text-gray-500">
+                      R$ 154,00/mês ou{" "}
+                    </span>
+                    <span className="text-[12px] text-gray-500">
+                      R$ 128,40/mês
+                    </span> */}
                   </Option>
                 </Select>
                 {hasTriedSubmit && !currentPlan.planName && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className="w-[160px]">
+              <div className="w-[130px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
-                  Quantidade de Usuários <span className="text-red-500">*</span>
+                  Quant. de Usuários <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center">
                   <Button
@@ -646,7 +651,7 @@ export default function GetStartInfo() {
                   </p>
                 )}
               </div>
-              <div>
+              <div className="w-[90px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Modalidade <span className="text-red-500">*</span>
                 </label>
@@ -691,8 +696,12 @@ export default function GetStartInfo() {
                       style={{ fontWeight: "bold" }}
                       className="text-gray-600 text-[13px]"
                     >
-                      R$ {getPlanPrice() * currentPlan.users},00/
-                      {currentPlan.modalidade === "anual" ? "ano" : "mês"}
+                      R${" "}
+                      {formatPrice(
+                        currentPlan?.price || "0",
+                        currentPlan.users
+                      )}
+                      /{currentPlan.modalidade === "anual" ? "mês" : "mês"}
                     </span>
                   </div>
                   <Button
@@ -724,7 +733,7 @@ export default function GetStartInfo() {
               </div>
             </div>
 
-            <div className="flex flex-wrap justify-start gap-6 mb-6">
+            <div className="flex  max-w-[800px] flex-wrap justify-between gap-6 mb-6">
               <div className=" w-[170px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   CNPJ <span className="text-red-500">*</span>

@@ -142,7 +142,9 @@ export default function CardLayout({ cardData }: any) {
                         R$ {cardData?.price}{" "}
                         <span className="text-[20px] text-gray-600">/mês*</span>
                       </p>
-                      <p className="text-gray-600 text-[12px]">por usuário</p>
+                      <p className="text-gray-600 text-[12px]">
+                        por usuário no plano mensal
+                      </p>
                     </div>
                   </div>
 
@@ -159,11 +161,11 @@ export default function CardLayout({ cardData }: any) {
                         className="text-gray-900 text-[20px]"
                       >
                         R$ {cardData?.priceYear}{" "}
-                        <span className="text-[20px] text-gray-600">
-                          /anual*
-                        </span>
+                        <span className="text-[20px] text-gray-600">/mês*</span>
                       </p>
-                      <p className="text-gray-600 text-[12px]">por usuário</p>
+                      <p className="text-gray-600 text-[12px]">
+                        por usuário no plano anual
+                      </p>
                     </div>
                   </div>
                 </Radio.Group>

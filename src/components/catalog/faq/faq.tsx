@@ -1,16 +1,20 @@
 import { Collapse } from "antd";
+import type { CollapseProps } from "antd";
 import { useState } from "react";
-const { Panel } = Collapse;
 
 export default function FAQ() {
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
 
-  const faqItems = [
+  const faqItems: CollapseProps["items"] = [
     {
       key: "1",
-      question:
-        "Estou com dúvidas sobre a contratação e ativação do meu serviço, o que devo fazer?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Estou com dúvidas sobre a contratação e ativação do meu serviço, o que
+          devo fazer?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             O nosso suporte está preparado para te orientar, envie sua dúvida
@@ -29,8 +33,12 @@ export default function FAQ() {
     },
     {
       key: "2",
-      question: "O que é o Google Workspace?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          O que é o Google Workspace?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             O Google Workspace é uma solução do Google que aumenta a
@@ -46,8 +54,12 @@ export default function FAQ() {
     },
     {
       key: "3",
-      question: "Posso substituir meu software atual pelo Google Workspace?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Posso substituir meu software atual pelo Google Workspace?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             Sim, você pode substituir seus pacotes de produtividade existentes
@@ -62,9 +74,13 @@ export default function FAQ() {
     },
     {
       key: "4",
-      question:
-        "Quais são as ferramentas disponíveis em todos os planos do Google Workspace?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Quais são as ferramentas disponíveis em todos os planos do Google
+          Workspace?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             Todos os planos do Google Workspace incluem os seguintes
@@ -76,9 +92,13 @@ export default function FAQ() {
     },
     {
       key: "5",
-      question:
-        "Qual a diferença entre o Google Workspace e os aplicativos grátis do Google?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Qual a diferença entre o Google Workspace e os aplicativos grátis do
+          Google?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             O Google Workspace oferece serviços empresariais adicionais não
@@ -95,8 +115,12 @@ export default function FAQ() {
     },
     {
       key: "6",
-      question: "Quais são as vantagens dos planos do Google Workspace?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Quais são as vantagens dos planos do Google Workspace?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             Com o Google Workspace, você pode trabalhar em documentos, planilhas
@@ -111,8 +135,12 @@ export default function FAQ() {
     },
     {
       key: "7",
-      question: "Quais são as diferenças entre os planos do Google Workspace?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Quais são as diferenças entre os planos do Google Workspace?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             O Google Workspace oferece três planos: Basic, Business e
@@ -127,9 +155,13 @@ export default function FAQ() {
     },
     {
       key: "8",
-      question:
-        "Posso migrar meu e-mail, eventos da agenda e contatos para o Google Workspace?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Posso migrar meu e-mail, eventos da agenda e contatos para o Google
+          Workspace?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             Sim, você pode migrar seus e-mails, contatos e dados da agenda para
@@ -142,9 +174,13 @@ export default function FAQ() {
     },
     {
       key: "9",
-      question:
-        "Como funciona o Google Workspace em casos de problemas que precisam de suporte?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Como funciona o Google Workspace em casos de problemas que precisam de
+          suporte?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             O Google Workspace oferece suporte 24/7 por meio dos canais de
@@ -155,8 +191,12 @@ export default function FAQ() {
     },
     {
       key: "10",
-      question: "O Google Workspace é seguro para minha empresa?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          O Google Workspace é seguro para minha empresa?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             Sim, o Google Workspace oferece segurança avançada com autenticação
@@ -168,8 +208,12 @@ export default function FAQ() {
     },
     {
       key: "11",
-      question: "Posso cancelar o Google Workspace quando quiser?",
-      answer: (
+      label: (
+        <span className="text-[16px] font-medium text-[#3c4043]">
+          Posso cancelar o Google Workspace quando quiser?
+        </span>
+      ),
+      children: (
         <div className="text-[14px] text-[#5f6368] leading-6">
           <p>
             Sim, os planos mensais do Google Workspace permitem cancelamento sem
@@ -191,34 +235,20 @@ export default function FAQ() {
             Nós temos as respostas que você precisa
           </h2>
 
-          <Collapse
-            ghost
-            className="bg-white border-none w-full max-w-4xl"
-            activeKey={activeKeys}
-            onChange={(keys) =>
-              setActiveKeys(Array.isArray(keys) ? keys : [keys].filter(Boolean))
-            }
-            expandIconPosition="end"
-          >
-            {faqItems.map((item, index) => (
-              <>
-                {index === 0 && <hr className="mb-4 mt-4 border-[#dadce0]" />}
-
-                <Panel
-                  header={
-                    <span className="text-[16px] font-medium text-[#3c4043]">
-                      {item.question}
-                    </span>
-                  }
-                  key={item.key}
-                  className="border-b border-[#dadce0] last:border-b-0"
-                >
-                  {item.answer}
-                </Panel>
-                <hr className="mb-4 mt-4 border-[#dadce0]" />
-              </>
-            ))}
-          </Collapse>
+          <div className="border-t border-[#dadce0] pt-4">
+            <Collapse
+              ghost
+              className="bg-white border-none w-full max-w-4xl [&_.ant-collapse-item]:border-b [&_.ant-collapse-item]:border-[#dadce0] [&_.ant-collapse-item]:py-4"
+              activeKey={activeKeys}
+              onChange={(keys) =>
+                setActiveKeys(
+                  Array.isArray(keys) ? keys : [keys].filter(Boolean)
+                )
+              }
+              expandIconPosition="end"
+              items={faqItems}
+            />
+          </div>
         </div>
       </div>
     </div>

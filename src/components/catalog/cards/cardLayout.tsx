@@ -1,4 +1,5 @@
-import { Button, ConfigProvider } from "antd";
+import { Button, ConfigProvider, Radio } from "antd";
+import type { RadioChangeEvent } from "antd";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useOrderStore } from "../../../context/context";
@@ -7,21 +8,42 @@ import { useNavigate } from "react-router-dom";
 export default function CardLayout({ cardData }: any) {
   const navigate = useNavigate();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  const [selectedPricingType, setSelectedPricingType] =
+    useState<string>("monthly");
+
   const toggleDetails = (cardType: string) => {
     setExpandedCard(expandedCard === cardType ? null : cardType);
   };
-  const setSelectedPlan = useOrderStore((state) => state.setSelectedPlan);
+  const { setSelectedPlan, confirmedPlans, setConfirmedPlans } =
+    useOrderStore();
+
   const handlePlanSelection = (cardData: any) => {
+    const type = selectedPricingType === "monthly" ? "mensal" : "anual";
+
+    const price =
+      selectedPricingType === "monthly" ? cardData?.price : cardData?.priceYear;
+
+    const newPlan = {
+      id: Date.now().toString(),
+      planName: cardData?.title,
+      price: price,
+      users: 1,
+      type: type,
+    };
+
+    setConfirmedPlans([...confirmedPlans, newPlan]);
+
     setSelectedPlan({
       planName: cardData?.title,
       price: cardData?.price,
+      priceYear: cardData?.priceYear,
       servicesIncluded: [],
     });
 
     navigate("/choose-plan");
     window.scrollTo(0, 0);
   };
-  console.log(cardData);
+
   return (
     <>
       <div className="flex flex-col w-full items-center relative">
@@ -71,13 +93,65 @@ export default function CardLayout({ cardData }: any) {
               </div>
             </div>
 
-            <div className="flex flex-col items-start gap-1  mx-4">
-              <p style={{ margin: 0 }} className=" text-[20px] text-gray-900">
-                R$ {cardData?.price}{" "}
-                <span className="text-[20px] text-gray-600">/mês*</span>
-              </p>
-              <p className="text-[12px] text-gray-600">por usuário</p>
-            </div>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: "#660099",
+                },
+              }}
+            >
+              <div className="px-4 flex text-start flex-col gap-2">
+                <Radio.Group
+                  value={selectedPricingType}
+                  onChange={(e: RadioChangeEvent) =>
+                    setSelectedPricingType(e.target.value)
+                  }
+                  className="flex flex-col gap-2"
+                >
+                  <div className="flex items-start">
+                    <Radio
+                      value="monthly"
+                      style={{
+                        color: "#660099",
+                      }}
+                    />
+                    <div className="flex flex-col">
+                      <p
+                        style={{ margin: 0 }}
+                        className="text-gray-900 text-[20px]"
+                      >
+                        R$ {cardData?.price}{" "}
+                        <span className="text-[20px] text-gray-600">/mês*</span>
+                      </p>
+                      <p className="text-gray-600 text-[12px]">
+                        por usuário no plano mensal
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start">
+                    <Radio
+                      value="yearly"
+                      style={{
+                        color: "#660099",
+                      }}
+                    />
+                    <div className="flex flex-col">
+                      <p
+                        style={{ margin: 0 }}
+                        className="text-gray-900 text-[20px]"
+                      >
+                        R$ {cardData?.priceYear}{" "}
+                        <span className="text-[20px] text-gray-600">/mês*</span>
+                      </p>
+                      <p className="text-gray-600 text-[12px]">
+                        por usuário no plano anual
+                      </p>
+                    </div>
+                  </div>
+                </Radio.Group>
+              </div>
+            </ConfigProvider>
 
             <Button
               className="self-center mb-4 mx-6 w-56"

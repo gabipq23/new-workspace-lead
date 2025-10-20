@@ -4,7 +4,7 @@ import type { Plan, OrderData } from "../interfaces/order";
 interface BasicInfo {
   cnpj: string;
   email: string;
-  managerName: string;
+  manager_name: string;
   managerPhone: string;
   isVivoClient: boolean;
   acceptContact: boolean;
@@ -43,7 +43,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
   basicInfo: {
     cnpj: "",
     email: "",
-    managerName: "",
+    manager_name: "",
     managerPhone: "",
     isVivoClient: true,
     acceptContact: true,
@@ -91,7 +91,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       domainName: state.companyInfo.domainName || "",
       cnpj: state.basicInfo.cnpj,
       managerPhone: state.basicInfo.managerPhone,
-      manager_name: state.basicInfo.managerName,
+      manager_name: state.basicInfo.manager_name,
       isVivoClient: state.basicInfo.isVivoClient,
       alreadyHaveWorkspace: state.companyInfo.alreadyHaveWorkspace || false,
       acceptContact: state.basicInfo.acceptContact,
@@ -107,7 +107,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       basicInfo: {
         cnpj: "",
         email: "",
-        managerName: "",
+        manager_name: "",
         managerPhone: "",
         isVivoClient: true,
         acceptContact: true,

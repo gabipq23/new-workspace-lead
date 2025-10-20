@@ -29,7 +29,7 @@ export default function OrderInformation({
   });
   const [cnpj, setCnpj] = useState(basicInfo.cnpj);
   const [email, setEmail] = useState(basicInfo.email);
-  const [managerName, setManagerName] = useState(basicInfo.managerName);
+  const [manager_name, setmanager_name] = useState(basicInfo.manager_name);
   const [managerPhone, setManagerPhone] = useState(basicInfo.managerPhone);
   const [isVivoClient, setIsVivoClient] = useState(basicInfo.isVivoClient);
   const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
@@ -44,14 +44,14 @@ export default function OrderInformation({
     const hasValidCnpj = cnpjDigits.length === 14;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const hasValidEmail = emailRegex.test(email);
-    const hasValidManagerName = managerName.trim() !== "";
+    const hasValidmanager_name = manager_name.trim() !== "";
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
     const hasAcceptedContact = acceptContact === true;
     return (
       hasAtLeastOnePlan &&
       hasValidCnpj &&
       hasValidEmail &&
-      hasValidManagerName &&
+      hasValidmanager_name &&
       hasValidManagerPhone &&
       hasAcceptedContact
     );
@@ -67,7 +67,7 @@ export default function OrderInformation({
     updateBasicInfo({
       cnpj: cnpj,
       email: email,
-      managerName: managerName,
+      manager_name: manager_name,
       managerPhone: managerPhone,
       isVivoClient: isVivoClient,
       acceptContact: acceptContact,
@@ -77,6 +77,7 @@ export default function OrderInformation({
     const partialOrderData = {
       email: email,
       cnpj: cnpj,
+      manager_name: manager_name,
       managerPhone: managerPhone,
       isVivoClient: isVivoClient,
       acceptContact: acceptContact,
@@ -539,10 +540,10 @@ export default function OrderInformation({
                 <Input
                   size="middle"
                   placeholder="Informe o nome do gestor"
-                  value={managerName}
-                  onChange={(e) => setManagerName(e.target.value)}
+                  value={manager_name}
+                  onChange={(e) => setmanager_name(e.target.value)}
                 />
-                {hasTriedSubmit && managerName.trim() === "" && (
+                {hasTriedSubmit && manager_name.trim() === "" && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>

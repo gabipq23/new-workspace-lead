@@ -27,8 +27,8 @@ export default function FinishOrderInfo() {
     ? {
         cnpj: orderDetails.cnpj || orderDetails.company_cnpj,
         email: orderDetails.email || orderDetails.manager_email,
-        managerName:
-          orderDetails.managerName ||
+        manager_name:
+          orderDetails.manager_name ||
           orderDetails.manager_name ||
           orderDetails.name,
         managerPhone: orderDetails.managerPhone || orderDetails.manager_phone,
@@ -156,7 +156,7 @@ export default function FinishOrderInfo() {
         {/* CNPJ e Nome do Gestor */}
         <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
           <p>
-            <strong>Nome do Gestor:</strong> {basicInfo?.managerName || "-"}
+            <strong>Nome do Gestor:</strong> {basicInfo?.manager_name || "-"}
           </p>{" "}
           <p>
             <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
@@ -166,7 +166,7 @@ export default function FinishOrderInfo() {
         {/* Mobile: CNPJ e Nome do Gestor em coluna */}
         <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
           <p>
-            <strong>Nome do Gestor:</strong> {basicInfo?.managerName || "-"}
+            <strong>Nome do Gestor:</strong> {basicInfo?.manager_name || "-"}
           </p>{" "}
           <p>
             <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}

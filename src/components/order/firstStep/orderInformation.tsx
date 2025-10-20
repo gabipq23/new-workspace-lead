@@ -13,6 +13,7 @@ import { CNPJInput, PhoneInput } from "../../../utils/input";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Plan } from "../../../interfaces/order";
+import { useOrderControler } from "../../../controller/controller";
 const { Option } = Select;
 export default function OrderInformation({
   basicInfo,
@@ -35,6 +36,7 @@ export default function OrderInformation({
 
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
+  const { createOrder, isCreatingOrderLoading } = useOrderControler();
 
   const isFormValid = () => {
     const hasAtLeastOnePlan = confirmedPlans.length > 0;
@@ -55,11 +57,13 @@ export default function OrderInformation({
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setHasTriedSubmit(true);
     if (!isFormValid()) {
       return;
     }
+
+    // Atualiza o contexto com os dados básicos
     updateBasicInfo({
       cnpj: cnpj,
       email: email,
@@ -68,8 +72,31 @@ export default function OrderInformation({
       isVivoClient: isVivoClient,
       acceptContact: acceptContact,
     });
-    navigate("/client-information");
-    window.scrollTo(0, 0);
+
+    // Cria pedido parcial com os dados do primeiro step
+    const partialOrderData = {
+      email: email,
+      cnpj: cnpj,
+      managerPhone: managerPhone,
+      isVivoClient: isVivoClient,
+      acceptContact: acceptContact,
+      plan: confirmedPlans,
+      // Dados do second step como vazios (serão preenchidos depois)
+      domainName: "",
+      alreadyHaveWorkspace: false,
+      acceptTerms: false,
+    };
+
+    try {
+      const response = await createOrder({ data: partialOrderData });
+      console.log("Pedido parcial criado com ID:", response.id);
+
+      // Navega para second step com o ID do pedido
+      navigate(`/client-information/${response.id}`);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.error("Erro ao criar pedido parcial:", error);
+    }
   };
 
   const addNewPlan = () => {
@@ -473,7 +500,7 @@ export default function OrderInformation({
             </div>
 
             <div className="flex justify-start max-w-[800px] flex-wrap  gap-2 mb-6">
-              <div className=" w-[150px] ">
+              <div className=" w-[160px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   CNPJ <span className="text-red-500">*</span>
                 </label>
@@ -519,7 +546,7 @@ export default function OrderInformation({
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className=" w-[130px] ">
+              <div className=" w-[140px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Telefone <span className="text-red-500">*</span>
                 </label>
@@ -571,9 +598,11 @@ export default function OrderInformation({
                 type="primary"
                 size="large"
                 onClick={handleSubmit}
+                loading={isCreatingOrderLoading}
+                disabled={isCreatingOrderLoading}
                 className="self-end"
               >
-                Continuar
+                {isCreatingOrderLoading ? "Criando pedido..." : "Continuar"}
               </Button>
             </ConfigProvider>
           </div>

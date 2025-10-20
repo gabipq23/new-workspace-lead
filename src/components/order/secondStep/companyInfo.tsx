@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Input, Checkbox, Radio, ConfigProvider, Tooltip } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Check, CircleAlert } from "lucide-react";
 import { useOrderStore } from "../../../context/context";
 import { useOrderControler } from "../../../controller/controller";
@@ -8,13 +8,8 @@ import OrderResumeMobile from "../components/orderResumeMobile";
 import OrderResumeDesktop from "../components/orderResumeDesktop";
 
 export default function CompanyInfo() {
-  const {
-    companyInfo,
-    updateCompanyInfo,
-    confirmedPlans,
-    buildCompleteOrder,
-    clearOrder,
-  } = useOrderStore();
+  const { companyInfo, updateCompanyInfo, confirmedPlans, clearOrder } =
+    useOrderStore();
 
   const [domainName, setDomainName] = useState(companyInfo.domainName || "");
   const [hasWorkspace, setHasWorkspace] = useState(
@@ -38,7 +33,9 @@ export default function CompanyInfo() {
     return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
   };
 
-  const { createOrder } = useOrderControler();
+  const { orderId } = useParams<{ orderId: string }>();
+  const { updateOrder, isUpdateOrderFetching, changeOrderStatus } =
+    useOrderControler();
 
   const navigate = useNavigate();
 
@@ -54,24 +51,38 @@ export default function CompanyInfo() {
     if (!isFormValid()) {
       return;
     }
+
+    // Atualiza o contexto
     updateCompanyInfo({
       domainName: domainName,
       alreadyHaveWorkspace: hasWorkspace,
       acceptTerms: acceptTerms,
     });
 
-    const orderData = buildCompleteOrder();
-    if (orderData) {
-      try {
-        const response = await createOrder({ data: orderData });
+    // Dados para completar o pedido existente
+    const updateData = {
+      domainName: domainName,
+      alreadyHaveWorkspace: hasWorkspace,
+      acceptTerms: acceptTerms,
+    };
 
-        clearOrder();
+    try {
+      await updateOrder({
+        id: Number(orderId),
+        data: updateData,
+      });
 
-        navigate(`/order/${response.id}`);
-        window.scrollTo(0, 0);
-      } catch (error) {
-        console.error("Erro ao criar pedido:", error);
-      }
+      changeOrderStatus({
+        id: Number(orderId),
+        data: { status: "fechado" },
+      });
+
+      clearOrder();
+
+      navigate(`/order/${orderId}`);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.error("Erro ao atualizar pedido:", error);
     }
   };
 
@@ -278,9 +289,11 @@ export default function CompanyInfo() {
                 type="primary"
                 size="large"
                 onClick={handleSubmit}
+                loading={isUpdateOrderFetching}
+                disabled={isUpdateOrderFetching}
                 className=" self-end"
               >
-                Concluir pedido
+                {isUpdateOrderFetching ? "Finalizando..." : "Concluir pedido"}
               </Button>
             </ConfigProvider>
           </div>

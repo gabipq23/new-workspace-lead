@@ -1,8 +1,8 @@
 export default function BannerOffers() {
   return (
-    <div className="flex flex-col text-[#5f6368] bg-[#f7f7f7] items-start justify-around text-center px-6 md:px-24 lg:px-32 pt-10  w-full ">
+    <div className="flex flex-col text-[#5f6368] bg-[#f7f7f7] items-start justify-around text-center px-6 md:px-20 lg:px-24 pt-10  w-full ">
       <div className="flex flex-col w-full items-center justify-center">
-        <div className="flex  flex-col gap-2 items-center justify-centertext-center ">
+        <div className="flex  flex-col gap-2 items-center justify-center text-center ">
           <h2
             style={{ margin: 0 }}
             className="text-[26px] md:text-[32px] text-[#660099]"
@@ -16,7 +16,31 @@ export default function BannerOffers() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6 mb-6 ">
+          {/* Vivo Empresas */}
+          <div className=" flex flex-col py-4 items-center justify-center gap-2 bg-white border border-gray-200 rounded-sm  px-4 text-center shadow-sm">
+            <div className="w-full flex flex-col ">
+              <img
+                src="/Vivo-Empresas.png"
+                alt="Vivo Empresas Logo"
+                className=" w-36 self-center h-8"
+              />
+              <hr className="border-gray-300 mt-4 mb-2" />
+            </div>
+
+            <div className="">
+              <div className="text-sm  font-bold text-gray-700 ">
+                +2GB de internet
+              </div>
+              <div className="text-sm  font-bold text-gray-700"> móvel</div>
+            </div>
+
+            <div className="text-md font-bold text-gray-700">
+              por usuário
+              <br />
+              migrado
+            </div>
+          </div>
           {/* Perplexity */}
           <div className=" flex flex-col py-4 items-center justify-center gap-2 bg-white border border-gray-200 rounded-sm  px-4 text-center shadow-sm">
             <div className="w-full flex flex-col ">

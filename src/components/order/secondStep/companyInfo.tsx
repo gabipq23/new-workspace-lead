@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Input, Checkbox, Radio, ConfigProvider, Tooltip } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, CircleAlert } from "lucide-react";
@@ -20,6 +20,14 @@ export default function CompanyInfo() {
   );
   const [showServices, setShowServices] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+
+  useEffect(() => {
+    const savedWorkspaceValue = sessionStorage.getItem("alreadyHaveWorkspace");
+    if (savedWorkspaceValue !== null) {
+      const boolValue = savedWorkspaceValue === "true";
+      setHasWorkspace(boolValue);
+    }
+  }, []);
 
   const getTotalPrice = () => {
     const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
@@ -52,14 +60,12 @@ export default function CompanyInfo() {
       return;
     }
 
-    // Atualiza o contexto
     updateCompanyInfo({
       domainName: domainName,
       alreadyHaveWorkspace: hasWorkspace,
       acceptTerms: acceptTerms,
     });
 
-    // Dados para completar o pedido existente
     const updateData = {
       domainName: domainName,
       alreadyHaveWorkspace: hasWorkspace,

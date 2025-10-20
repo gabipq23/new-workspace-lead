@@ -123,7 +123,7 @@ export default function OrderInformation({
 
   return (
     <>
-      <div className="flex flex-col flex-1 px-8 pt-4  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
+      <div className="flex flex-col flex-1 px-8 pt-2  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
         <div>
           <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
             <img src="/Vivo-Empresas.png" alt="Vivo Empresas" className="h-7" />
@@ -207,9 +207,9 @@ export default function OrderInformation({
             {confirmedPlans?.map((plan: Plan, index: number) => (
               <div
                 key={plan?.id}
-                className="flex flex-wrap justify-between gap-4 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
+                className="flex flex-wrap justify-start gap-2 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
               >
-                <div className="w-[170px]">
+                <div className="w-[160px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
                     Plano {index + 1}
                   </label>
@@ -220,7 +220,7 @@ export default function OrderInformation({
                   </div>
                 </div>
 
-                <div className="w-[140px]">
+                <div className="w-[120px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
                     Quant. de Usuários
                   </label>
@@ -231,7 +231,7 @@ export default function OrderInformation({
                   </div>
                 </div>
 
-                <div className="w-[90px]">
+                <div className="w-[100px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
                     Modalidade
                   </label>
@@ -242,12 +242,12 @@ export default function OrderInformation({
                   </div>
                 </div>
 
-                <div className="w-[280px]">
+                <div className="w-[250px]">
                   <label className="block text-[12px] text-gray-600 mb-2">
                     Valor Total
                   </label>
                   <div className="flex gap-2">
-                    <div className="w-[180px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                    <div className="w-[150px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
                       <span className="text-gray-700 text-[13px] font-bold">
                         R$ {formatPrice(plan?.price, plan?.users)}/
                         {plan?.type === "anual" ? "mês" : "mês"}
@@ -263,7 +263,7 @@ export default function OrderInformation({
                         height: "32px",
                         fontSize: "11px",
                         padding: "0 8px",
-                        width: "140px",
+                        width: "100px",
                       }}
                     >
                       Remover
@@ -273,8 +273,8 @@ export default function OrderInformation({
               </div>
             ))}
 
-            <div className="flex max-w-[800px] flex-wrap justify-between gap-2 mb-6">
-              <div className="w-[170px]">
+            <div className="flex max-w-[800px] flex-wrap justify-start gap-2 mb-6">
+              <div className="w-[160px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Plano {confirmedPlans.length + 1}{" "}
                   <span className="text-red-500">*</span>
@@ -282,7 +282,6 @@ export default function OrderInformation({
                 <Select
                   size="middle"
                   value={currentPlan?.planName || undefined}
-                  placeholder="Selecione um plano"
                   onChange={(value) => {
                     const priceMap = {
                       Starter: { mensal: "49,00", anual: "32,72" },
@@ -337,7 +336,7 @@ export default function OrderInformation({
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className="w-[140px]">
+              <div className="w-[120px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Quant. de Usuários <span className="text-red-500">*</span>
                 </label>
@@ -391,7 +390,7 @@ export default function OrderInformation({
                   </p>
                 )}
               </div>
-              <div className="w-[90px]">
+              <div className="w-[100px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Modalidade <span className="text-red-500">*</span>
                 </label>
@@ -425,12 +424,12 @@ export default function OrderInformation({
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className="w-[280px]">
+              <div className="w-[250px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Valor Total
                 </label>
                 <div className="flex gap-2">
-                  <div className="w-[180px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-gray-50 flex items-center">
+                  <div className="w-[150px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-gray-50 flex items-center">
                     <span
                       style={{ fontWeight: "bold" }}
                       className="text-gray-600 text-[13px]"
@@ -463,7 +462,7 @@ export default function OrderInformation({
                       height: "32px",
                       fontSize: "11px",
                       padding: "0 8px",
-                      width: "140px",
+                      width: "100px",
                     }}
                   >
                     Adicionar plano
@@ -472,8 +471,8 @@ export default function OrderInformation({
               </div>
             </div>
 
-            <div className="flex  max-w-[800px] flex-wrap justify-between gap-6 mb-6">
-              <div className=" w-[170px] ">
+            <div className="flex justify-start max-w-[800px] flex-wrap  gap-2 mb-6">
+              <div className=" w-[150px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   CNPJ <span className="text-red-500">*</span>
                 </label>
@@ -487,7 +486,7 @@ export default function OrderInformation({
                 )}
               </div>
 
-              <div className=" w-[210px] ">
+              <div className=" w-[200px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   E-mail <span className="text-red-500">*</span>
                 </label>
@@ -505,7 +504,7 @@ export default function OrderInformation({
                   )}
               </div>
 
-              <div className=" w-[200px] ">
+              <div className=" w-[150px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Nome do Gestor <span className="text-red-500">*</span>
                 </label>
@@ -519,7 +518,7 @@ export default function OrderInformation({
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className=" w-[140px] ">
+              <div className=" w-[130px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Telefone <span className="text-red-500">*</span>
                 </label>

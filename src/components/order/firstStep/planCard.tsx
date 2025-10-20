@@ -102,7 +102,7 @@ export function PlanCard({ plan, index }: { plan: Plan; index: number }) {
       </div>
 
       {showDetails && (
-        <div className="p-4 bg-purple-100">
+        <div className="p-3 py-2 bg-purple-100">
           <h4
             style={{ fontWeight: "bold" }}
             className="text-[#660099] font-medium mb-3 text-[12px]"
@@ -111,15 +111,15 @@ export function PlanCard({ plan, index }: { plan: Plan; index: number }) {
           </h4>
 
           <div className="flex justify-around">
-            <img src="/icone-gmail.svg" alt="Gmail" className="w-8 h-8" />
-            <img src="/icone-drive.svg" alt="Drive" className="w-8 h-8" />
-            <img src="/icone-calendar.svg" alt="Calendar" className="w-8 h-8" />
-            <img src="/icone-chat2.svg" alt="Meet" className="w-8 h-8" />
-            <img src="/icone-docs.svg" alt="Sheets" className="w-8 h-8" />
-            <img src="/icone-sheets.svg" alt="Docs" className="w-8 h-8" />
-            <img src="/icone-slides.svg" alt="Slides" className="w-8 h-8" />
-            <img src="/icone-form.svg" alt="Forms" className="w-8 h-8" />
-            <img src="/icone-sites.svg" alt="Sites" className="w-8 h-8" />
+            <img src="/icone-gmail.svg" alt="Gmail" className="w-7 h-7" />
+            <img src="/icone-drive.svg" alt="Drive" className="w-7 h-7" />
+            <img src="/icone-calendar.svg" alt="Calendar" className="w-7 h-7" />
+            <img src="/icone-chat2.svg" alt="Meet" className="w-7 h-7" />
+            <img src="/icone-docs.svg" alt="Sheets" className="w-7 h-7" />
+            <img src="/icone-sheets.svg" alt="Docs" className="w-7 h-7" />
+            <img src="/icone-slides.svg" alt="Slides" className="w-7 h-7" />
+            <img src="/icone-form.svg" alt="Forms" className="w-7 h-7" />
+            <img src="/icone-sites.svg" alt="Sites" className="w-7 h-7" />
           </div>
           <hr className="my-3 border-t border-gray-200" />
           <div className=" flex flex-col gap-1 text-[#660099] text-[11px]">

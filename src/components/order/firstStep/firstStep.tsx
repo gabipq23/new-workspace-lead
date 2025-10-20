@@ -37,7 +37,7 @@ export default function FirstStep() {
         />
       </div>
 
-      <div className="flex flex-col flex-1 px-8 pt-4  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
+      <div className="flex flex-col flex-1 px-2 pt-4  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
         <OrderInformation
           confirmedPlans={confirmedPlans}
           setConfirmedPlans={setConfirmedPlans}

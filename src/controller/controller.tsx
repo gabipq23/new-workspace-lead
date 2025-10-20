@@ -81,5 +81,8 @@ export function useOrderById(orderId: number) {
       return orderService.getOrderById(orderId);
     },
     enabled: !!orderId && !isNaN(orderId) && orderId > 0,
+
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }

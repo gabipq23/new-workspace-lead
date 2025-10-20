@@ -35,6 +35,7 @@ export default function OrderInformation({
 
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
+
   const isFormValid = () => {
     const hasAtLeastOnePlan = confirmedPlans.length > 0;
     const cnpjDigits = cnpj.replace(/\D/g, "");

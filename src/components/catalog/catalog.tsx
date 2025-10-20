@@ -9,6 +9,7 @@ import Header from "../header/header";
 import SubHeader from "../subHeader/subHeader";
 import Footer from "../footer/footer";
 import BannerOffers from "./bannerOffers/bannerOffers";
+import { Modal } from "antd";
 
 export default function Catalog() {
   const queryClient = new QueryClient();
@@ -26,6 +27,10 @@ export default function Catalog() {
         <GoogleApps />
         <FAQ />
         <Footer />
+
+        <Modal>
+          <div>Modal Content</div>
+        </Modal>
       </QueryClientProvider>
     </>
   );

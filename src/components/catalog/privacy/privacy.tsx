@@ -1,4 +1,6 @@
 export default function Privacy() {
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
+
   return (
     <div
       id="beneficios"
@@ -6,7 +8,8 @@ export default function Privacy() {
     >
       <div className=" ">
         <h2 className="text-[24px] md:text-[32px] text-[#5f6368] text-start  ">
-          Principais benefícios do Google Workspace para sua empresa:{" "}
+          Por que {hasWorkspace === "true" ? "migrar" : "contratar"} o Google
+          Workspace pela Vivo?
         </h2>
       </div>
 
@@ -20,10 +23,12 @@ export default function Privacy() {
               </div>
             </div>
             <div className="flex-1">
+              <h4 className="text-gray-800 text-[16px] font-medium mb-2">
+                Pagamento direto na fatura Vivo
+              </h4>
               <p className="text-gray-600 text-[14px] leading-relaxed">
-                Use agendas compartilhadas para ver quando outras pessoas estão
-                disponíveis e programe reuniões com convites automáticos por
-                e-mail.
+                Sem necessidade de cartão de crédito. Tudo centralizado na sua
+                conta empresarial.
               </p>
             </div>
           </div>
@@ -35,9 +40,12 @@ export default function Privacy() {
               </div>
             </div>
             <div className="flex-1">
+              <h4 className="text-gray-800 text-[16px] font-medium mb-2">
+                Fatura única e centralizada
+              </h4>
               <p className="text-gray-600 text-[14px] leading-relaxed">
-                Trabalhe com facilidade em documentos, planilhas e apresentações
-                em todos os seus dispositivos, com ou sem internet.
+                Tenha mais controle e praticidade, reunindo todos os serviços da
+                empresa em uma só fatura.
               </p>
             </div>
           </div>
@@ -49,9 +57,12 @@ export default function Privacy() {
               </div>
             </div>
             <div className="flex-1">
+              <h4 className="text-gray-800 text-[16px] font-medium mb-2">
+                Ganhe +2GB de internet móvel
+              </h4>
               <p className="text-gray-600 text-[14px] leading-relaxed">
-                Centralize todo seu trabalho com acesso fácil e seguro, sem
-                precisar usar anexos de e-mail.
+                Para cada conta Google Workspace migrada ou contratada, você
+                recebe +2GB na sua linha Vivo Móvel.
               </p>
             </div>
           </div>
@@ -63,10 +74,13 @@ export default function Privacy() {
               </div>
             </div>
             <div className="flex-1">
+              <h4 className="text-gray-800 text-[16px] font-medium mb-2">
+                Suporte especializado
+              </h4>
               <p className="text-gray-600 text-[14px] leading-relaxed">
-                Proteja os dados da sua empresa com diferentes opções de
-                segurança, e use o gerenciamento de endpoints para manter os
-                dados seguros.
+                Conte com o atendimento corporativo da Vivo, com suporte técnico
+                para ajudar sua empresa na ativação e gestão do Google
+                Workspace.
               </p>
             </div>
           </div>
@@ -83,10 +97,12 @@ export default function Privacy() {
                 />
               </div>
             </div>
+            <h4 className="text-gray-800 md:text-[16px] lg:text-[18px] font-medium mb-3">
+              Pagamento direto na fatura Vivo
+            </h4>
             <p className="text-[#666666] md:text-[14px] lg:text-[16px] leading-relaxed">
-              Use agendas compartilhadas para ver quando outras pessoas estão
-              disponíveis e programe reuniões com convites automáticos por
-              e-mail.
+              Sem necessidade de cartão de crédito. Tudo centralizado na sua
+              conta empresarial.
             </p>
           </div>
 
@@ -99,9 +115,12 @@ export default function Privacy() {
                 />
               </div>
             </div>
+            <h4 className="text-gray-800 md:text-[16px] lg:text-[18px] font-medium mb-3">
+              Fatura única e centralizada
+            </h4>
             <p className="text-[#666666] md:text-[14px] lg:text-[16px] leading-relaxed">
-              Trabalhe com facilidade em documentos, planilhas e apresentações
-              em todos os seus dispositivos, com ou sem internet.
+              Tenha mais controle e praticidade, reunindo todos os serviços da
+              empresa em uma só fatura.
             </p>
           </div>
 
@@ -114,9 +133,12 @@ export default function Privacy() {
                 />
               </div>
             </div>
+            <h4 className="text-gray-800 md:text-[16px] lg:text-[18px] font-medium mb-3">
+              Ganhe +2GB de internet móvel
+            </h4>
             <p className="text-[#666666] md:text-[14px] lg:text-[16px] leading-relaxed">
-              Centralize todo seu trabalho com acesso fácil e seguro, sem
-              precisar usar anexos de e-mail.
+              Para cada conta Google Workspace migrada ou contratada, você
+              recebe +2GB na sua linha Vivo Móvel.
             </p>
           </div>
 
@@ -129,10 +151,12 @@ export default function Privacy() {
                 />
               </div>
             </div>
+            <h4 className="text-gray-800 md:text-[16px] lg:text-[18px] font-medium mb-3">
+              Suporte especializado
+            </h4>
             <p className="text-[#666666] md:text-[14px] lg:text-[16px] leading-relaxed">
-              Proteja os dados da sua empresa com diferentes opções de
-              segurança, e use o gerenciamento de endpoints para manter os dados
-              seguros.
+              Conte com o atendimento corporativo da Vivo, com suporte técnico
+              para ajudar sua empresa na ativação e gestão do Google Workspace.
             </p>
           </div>
         </div>

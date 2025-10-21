@@ -186,8 +186,8 @@ export default function InfoAnchor() {
                 />
               </div>
 
-              <div className="mx-6 lg:flex-1">
-                <h3 className="text-[20px] mb-6">
+              <div className="mx-6 lg:flex-1 mt-4">
+                <h3 className="text-[20px] mb-6 ">
                   Design simples: aumente a produtividade
                 </h3>
 
@@ -249,7 +249,7 @@ export default function InfoAnchor() {
                 />
               </div>
 
-              <div className=" lg:flex-1 lg:pr-8">
+              <div className=" lg:flex-1 lg:pr-8 mt-4">
                 <h3 className="text-[20px] mb-6">
                   Ferramentas úteis: melhorar a colaboração
                 </h3>

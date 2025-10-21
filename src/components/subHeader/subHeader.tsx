@@ -198,7 +198,7 @@ function SubHeader() {
       </div>
 
       <Button
-        style={{ width: "120px", height: "35px" }}
+        style={{ width: "130px", height: "35px" }}
         variant="solid"
         size="middle"
         color="magenta"

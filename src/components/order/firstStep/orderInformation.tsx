@@ -33,7 +33,7 @@ export default function OrderInformation({
   const [managerPhone, setManagerPhone] = useState(basicInfo.managerPhone);
   const [isVivoClient, setIsVivoClient] = useState(basicInfo.isVivoClient);
   const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
-
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
   const { createOrder, isCreatingOrderLoading } = useOrderControler();
@@ -186,7 +186,8 @@ export default function OrderInformation({
           </div>
 
           <h1 className="text-[18px] font-normal text-[#660099] ">
-            Olá! Vamos iniciar sua pedido online :)
+            Olá! Vamos iniciar o seu pedido{" "}
+            {hasWorkspace === "true" ? "de migração" : ""} online :)
           </h1>
 
           <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-4 flex items-center">
@@ -225,7 +226,10 @@ export default function OrderInformation({
 
           <div className="mb-8">
             <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
-              Defina seus planos{" "}
+              {hasWorkspace === "true"
+                ? "Informe os detalhes do plano que você deseja migrar"
+                : "Defina seus planos"}{" "}
+              {}
               <Tooltip title="Você pode escolher 1 ou mais planos.">
                 <span className="text-gray-500 cursor-pointer">
                   <CircleAlert size={14} />

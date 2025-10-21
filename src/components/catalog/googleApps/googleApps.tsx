@@ -35,6 +35,7 @@ export default function GoogleApps() {
       children: <SinergiaContent />,
     },
   ];
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
 
   return (
     <div
@@ -43,12 +44,14 @@ export default function GoogleApps() {
     >
       <div className=" w-full ">
         <h2 className="text-[24px] md:text-[32px] text-[#5f6368] text-start">
-          Acesse os apps do Google pelo computador, smartphone ou tablet
+          {hasWorkspace === "true"
+            ? "Continue acessando os apps do Google pelo computador, smartphone ou tablet"
+            : "Acesse os apps do Google pelo computador, smartphone ou tablet"}
         </h2>
 
         <p style={{ margin: 0 }} className="text-[16px] text-gray-500">
-          Tudo o que você precisa para ter mais eficiência e agilidade na sua
-          equipe
+          Conte com o atendimento corporativo da Vivo, com suporte técnico para
+          ajudar sua empresa na ativação e gestão do Google Workspace.
         </p>
       </div>
       <ConfigProvider theme={{ token: { colorPrimary: "#660099" } }}>

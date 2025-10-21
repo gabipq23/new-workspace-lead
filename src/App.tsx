@@ -15,7 +15,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Catalog />} />
           <Route path="/choose-plan" element={<FirstStep />} />
-          <Route path="/client-information" element={<CompanyInfo />} />
+          <Route
+            path="/client-information/:orderId"
+            element={<CompanyInfo />}
+          />
           <Route path="/order/:id" element={<FinishOrderInfo />} />
         </Routes>
       </QueryClientProvider>

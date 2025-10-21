@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function SubHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const navigate = useNavigate();
   const menuItems = [
     {
@@ -197,13 +198,13 @@ function SubHeader() {
       </div>
 
       <Button
-        style={{ width: "120px", height: "35px" }}
+        style={{ width: "130px", height: "35px" }}
         variant="solid"
         size="middle"
         color="magenta"
         onClick={() => navigate("/choose-plan")}
       >
-        Contrate agora
+        {hasWorkspace === "true" ? "Migrar para a Vivo" : "Contrate agora"}
       </Button>
     </div>
   );

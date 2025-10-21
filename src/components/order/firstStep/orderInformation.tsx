@@ -13,6 +13,7 @@ import { CNPJInput, PhoneInput } from "../../../utils/input";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Plan } from "../../../interfaces/order";
+import { useOrderControler } from "../../../controller/controller";
 const { Option } = Select;
 export default function OrderInformation({
   basicInfo,
@@ -28,13 +29,15 @@ export default function OrderInformation({
   });
   const [cnpj, setCnpj] = useState(basicInfo.cnpj);
   const [email, setEmail] = useState(basicInfo.email);
-  const [managerName, setManagerName] = useState(basicInfo.managerName);
+  const [manager_name, setmanager_name] = useState(basicInfo.manager_name);
   const [managerPhone, setManagerPhone] = useState(basicInfo.managerPhone);
   const [isVivoClient, setIsVivoClient] = useState(basicInfo.isVivoClient);
   const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
-
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
+  const { createOrder, isCreatingOrderLoading, changeOrderStatus } =
+    useOrderControler();
 
   const isFormValid = () => {
     const hasAtLeastOnePlan = confirmedPlans.length > 0;
@@ -42,34 +45,71 @@ export default function OrderInformation({
     const hasValidCnpj = cnpjDigits.length === 14;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const hasValidEmail = emailRegex.test(email);
-    const hasValidManagerName = managerName.trim() !== "";
+    const hasValidmanager_name = manager_name.trim() !== "";
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
     const hasAcceptedContact = acceptContact === true;
     return (
       hasAtLeastOnePlan &&
       hasValidCnpj &&
       hasValidEmail &&
-      hasValidManagerName &&
+      hasValidmanager_name &&
       hasValidManagerPhone &&
       hasAcceptedContact
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setHasTriedSubmit(true);
     if (!isFormValid()) {
       return;
     }
+
+    // Atualiza o contexto com os dados básicos
     updateBasicInfo({
       cnpj: cnpj,
       email: email,
-      managerName: managerName,
+      manager_name: manager_name,
       managerPhone: managerPhone,
       isVivoClient: isVivoClient,
       acceptContact: acceptContact,
     });
-    navigate("/client-information");
-    window.scrollTo(0, 0);
+
+    // Converte hasWorkspace para boolean
+    const alreadyHaveWorkspace = hasWorkspace === "true";
+
+    // Cria pedido com os dados do primeiro step
+    const orderData = {
+      email: email,
+      cnpj: cnpj,
+      manager_name: manager_name,
+      managerPhone: managerPhone,
+      isVivoClient: isVivoClient,
+      acceptContact: acceptContact,
+      plan: confirmedPlans,
+      alreadyHaveWorkspace: alreadyHaveWorkspace,
+
+      domainName: alreadyHaveWorkspace ? "" : "",
+      acceptTerms: alreadyHaveWorkspace ? true : false,
+    };
+
+    try {
+      const response = await createOrder({ data: orderData });
+
+      if (alreadyHaveWorkspace) {
+        await changeOrderStatus({
+          id: Number(response.id),
+          data: { status: "fechado" },
+        });
+
+        navigate(`/order/${response.id}`);
+      } else {
+        navigate(`/client-information/${response.id}`);
+      }
+
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.error("Erro ao processar pedido:", error);
+    }
   };
 
   const addNewPlan = () => {
@@ -158,7 +198,8 @@ export default function OrderInformation({
           </div>
 
           <h1 className="text-[18px] font-normal text-[#660099] ">
-            Olá! Vamos iniciar sua pedido online :)
+            Olá! Vamos iniciar o seu pedido{" "}
+            {hasWorkspace === "true" ? "de migração" : ""} online :)
           </h1>
 
           <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-4 flex items-center">
@@ -197,7 +238,10 @@ export default function OrderInformation({
 
           <div className="mb-8">
             <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
-              Defina seus planos{" "}
+              {hasWorkspace === "true"
+                ? "Informe os detalhes do plano que você deseja migrar"
+                : "Defina seus planos"}{" "}
+              {}
               <Tooltip title="Você pode escolher 1 ou mais planos.">
                 <span className="text-gray-500 cursor-pointer">
                   <CircleAlert size={14} />
@@ -473,7 +517,7 @@ export default function OrderInformation({
             </div>
 
             <div className="flex justify-start max-w-[800px] flex-wrap  gap-2 mb-6">
-              <div className=" w-[150px] ">
+              <div className=" w-[160px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   CNPJ <span className="text-red-500">*</span>
                 </label>
@@ -512,14 +556,14 @@ export default function OrderInformation({
                 <Input
                   size="middle"
                   placeholder="Informe o nome do gestor"
-                  value={managerName}
-                  onChange={(e) => setManagerName(e.target.value)}
+                  value={manager_name}
+                  onChange={(e) => setmanager_name(e.target.value)}
                 />
-                {hasTriedSubmit && managerName.trim() === "" && (
+                {hasTriedSubmit && manager_name.trim() === "" && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className=" w-[130px] ">
+              <div className=" w-[140px] ">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Telefone <span className="text-red-500">*</span>
                 </label>
@@ -571,9 +615,17 @@ export default function OrderInformation({
                 type="primary"
                 size="large"
                 onClick={handleSubmit}
+                loading={isCreatingOrderLoading}
+                disabled={isCreatingOrderLoading}
                 className="self-end"
               >
-                Continuar
+                {isCreatingOrderLoading
+                  ? hasWorkspace === "true"
+                    ? "Concluindo pedido..."
+                    : "Criando pedido..."
+                  : hasWorkspace === "true"
+                  ? "Concluir pedido"
+                  : "Continuar"}
               </Button>
             </ConfigProvider>
           </div>

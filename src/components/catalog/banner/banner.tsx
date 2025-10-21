@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 function Banner() {
   const navigate = useNavigate();
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
 
   const bannerMobile = "/vivo-empresas-google-workspace-mobile.jpg";
   const bannerWeb = "/vivo-empresas-google-workspace.jpg";
@@ -30,7 +31,9 @@ function Banner() {
             style={{ lineHeight: "1.", margin: 0 }}
             className="text-[12px] md:text-[12px] lg:text-[16px] text-[#f7f7f7] "
           >
-            CONTRATE OU MIGRE PARA A VIVO
+            {hasWorkspace === "true"
+              ? "MIGRE PARA A VIVO E GANHE BENEFÍCIOS"
+              : " CONTRATE AGORA"}
           </p>
           <p
             style={{ lineHeight: "1.0", margin: 0 }}
@@ -48,7 +51,7 @@ function Banner() {
             style={{ lineHeight: "1.0", margin: 0 }}
             className="text-[10px] md:text-[12px] lg:text-[14px] text-[#f7f7f7] "
           >
-            PAGUE DIRETO NA SUA FATURA VIVO EMPRESAS
+            INCLUA DIRETO NA SUA FATURA VIVO EMPRESAS
           </p>
         </div>
 
@@ -73,7 +76,7 @@ function Banner() {
             color="magenta"
             onClick={() => navigate("/choose-plan")}
           >
-            CONTRATE OU MIGRE AGORA
+            {hasWorkspace === "true" ? "MIGRE PARA A VIVO" : "CONTRATE AGORA"}
           </Button>
         </div>
       </div>

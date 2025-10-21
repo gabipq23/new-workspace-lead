@@ -10,7 +10,7 @@ export default function CardLayout({ cardData }: any) {
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [selectedPricingType, setSelectedPricingType] =
     useState<string>("monthly");
-
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const toggleDetails = (cardType: string) => {
     setExpandedCard(expandedCard === cardType ? null : cardType);
   };
@@ -161,7 +161,7 @@ export default function CardLayout({ cardData }: any) {
               color="magenta"
               onClick={() => handlePlanSelection(cardData)}
             >
-              Contratar
+              {hasWorkspace === "true" ? "Migrar" : "Contratar"}
             </Button>
             <ConfigProvider
               theme={{

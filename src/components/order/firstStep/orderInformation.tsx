@@ -36,7 +36,8 @@ export default function OrderInformation({
   const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
-  const { createOrder, isCreatingOrderLoading } = useOrderControler();
+  const { createOrder, isCreatingOrderLoading, changeOrderStatus } =
+    useOrderControler();
 
   const isFormValid = () => {
     const hasAtLeastOnePlan = confirmedPlans.length > 0;
@@ -73,8 +74,11 @@ export default function OrderInformation({
       acceptContact: acceptContact,
     });
 
-    // Cria pedido parcial com os dados do primeiro step
-    const partialOrderData = {
+    // Converte hasWorkspace para boolean
+    const alreadyHaveWorkspace = hasWorkspace === "true";
+
+    // Cria pedido com os dados do primeiro step
+    const orderData = {
       email: email,
       cnpj: cnpj,
       manager_name: manager_name,
@@ -82,21 +86,29 @@ export default function OrderInformation({
       isVivoClient: isVivoClient,
       acceptContact: acceptContact,
       plan: confirmedPlans,
-      // Dados do second step como vazios (serão preenchidos depois)
-      domainName: "",
-      alreadyHaveWorkspace: false,
-      acceptTerms: false,
+      alreadyHaveWorkspace: alreadyHaveWorkspace,
+
+      domainName: alreadyHaveWorkspace ? "" : "",
+      acceptTerms: alreadyHaveWorkspace ? true : false,
     };
 
     try {
-      const response = await createOrder({ data: partialOrderData });
-      console.log("Pedido parcial criado com ID:", response.id);
+      const response = await createOrder({ data: orderData });
 
-      // Navega para second step com o ID do pedido
-      navigate(`/client-information/${response.id}`);
+      if (alreadyHaveWorkspace) {
+        await changeOrderStatus({
+          id: Number(response.id),
+          data: { status: "fechado" },
+        });
+
+        navigate(`/order/${response.id}`);
+      } else {
+        navigate(`/client-information/${response.id}`);
+      }
+
       window.scrollTo(0, 0);
     } catch (error) {
-      console.error("Erro ao criar pedido parcial:", error);
+      console.error("Erro ao processar pedido:", error);
     }
   };
 
@@ -607,7 +619,13 @@ export default function OrderInformation({
                 disabled={isCreatingOrderLoading}
                 className="self-end"
               >
-                {isCreatingOrderLoading ? "Criando pedido..." : "Continuar"}
+                {isCreatingOrderLoading
+                  ? hasWorkspace === "true"
+                    ? "Concluindo pedido..."
+                    : "Criando pedido..."
+                  : hasWorkspace === "true"
+                  ? "Concluir pedido"
+                  : "Continuar"}
               </Button>
             </ConfigProvider>
           </div>

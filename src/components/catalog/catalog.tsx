@@ -11,11 +11,13 @@ import Footer from "../footer/footer";
 import BannerOffers from "./bannerOffers/bannerOffers";
 import { Button, ConfigProvider, Modal } from "antd";
 import { useState, useEffect } from "react";
+import Testimonials from "./testimonials/testimonials";
 
 export default function Catalog() {
   const queryClient = new QueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
@@ -32,7 +34,8 @@ export default function Catalog() {
         <SubHeader />
         <Banner />
         <BannerOffers />
-        <Cards />
+        {hasWorkspace === "true" ? <Testimonials /> : <Cards />}
+
         <InfoAnchor />
         <Privacy />
         <GoogleApps />

@@ -21,9 +21,9 @@ export default function BannerOffers() {
           <div className=" flex flex-col py-4 items-center justify-center gap-2 bg-white border border-gray-200 rounded-sm  px-4 text-center shadow-sm">
             <div className="w-full flex flex-col ">
               <img
-                src="/Vivo-Empresas.png"
+                src="/logo_vivo_movel.jpg"
                 alt="Vivo Empresas Logo"
-                className=" w-36 self-center h-8"
+                className=" w-24 self-center h-14"
               />
               <hr className="border-gray-300 mt-4 mb-2" />
             </div>

@@ -96,11 +96,11 @@ export default function FinishOrderInfo() {
               </p>
               <p className="text-[14px] font-semibold w-40 text-center">
                 R$ {parseInt(plan?.price)},00/
-                {plan?.type === "anual" ? "ano" : "mês"}
+                {plan?.type === "anual" ? "mês" : "mês"}
               </p>
               <p className="text-[16px] text-neutral-700 font-semibold w-40 text-center">
                 R$ {parseInt(plan?.price) * plan?.users},00/
-                {plan.type === "anual" ? "ano" : "mês"}
+                {plan.type === "anual" ? "mês" : "mês"}
               </p>
             </div>
             {index < confirmedPlans?.length - 1 && (
@@ -133,14 +133,14 @@ export default function FinishOrderInfo() {
               <span className="font-semibold text-[#666]">Valor Unitário:</span>
               <span>
                 R$ {parseInt(plan.price)},00/
-                {plan.type === "anual" ? "ano" : "mês"}
+                {plan.type === "anual" ? "mês" : "mês"}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="font-semibold text-[#666]">Valor Total:</span>
               <span className="font-bold">
                 R$ {parseInt(plan.price) * plan.users},00/
-                {plan.type === "anual" ? "ano" : "mês"}
+                {plan.type === "anual" ? "mês" : "mês"}
               </span>
             </div>
           </div>

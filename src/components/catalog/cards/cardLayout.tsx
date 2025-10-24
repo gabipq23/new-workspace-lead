@@ -28,7 +28,8 @@ export default function CardLayout({ cardData }: any) {
       planName: cardData?.title,
       price: price,
       users: 1,
-      type: type,
+      type: type as "mensal" | "anual",
+      newPlan: true,
     };
 
     setConfirmedPlans([...confirmedPlans, newPlan]);

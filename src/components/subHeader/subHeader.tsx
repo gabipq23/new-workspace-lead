@@ -113,7 +113,7 @@ function SubHeader() {
           className="border-0"
         >
           <div className="flex items-center gap-2 cursor-pointer border border-gray-400 px-3 py-2 rounded">
-            <span className="text-[12px] md:text-[16px] font-medium">
+            <span className="text-[12px] md:text-[16px] font-bold">
               GOOGLE WORKSPACE
             </span>
             <ChevronDown
@@ -124,11 +124,14 @@ function SubHeader() {
         </Dropdown>
       </div>
 
-      <div className="hidden  md:flex items-center justify-center gap-3">
-        <p style={{ margin: 0 }} className="text-[14px] text-[#575757]">
+      <div className="hidden  md:flex items-center justify-center gap-4 ">
+        <p
+          style={{ margin: 0, fontWeight: "bold" }}
+          className="text-[16px] text-[#575757] "
+        >
           Google Workspace
         </p>
-        <div className="flex   items-end self-end  h-full gap-2 md:text-[10px] lg:text-[11px] text-[#666666] cursor-pointer">
+        <div className="flex  pt-0.5 h-full gap-6 md:text-[10px] lg:text-[14px] text-[#666666] cursor-pointer">
           <a
             onClick={(e) => {
               e.preventDefault();
@@ -196,16 +199,38 @@ function SubHeader() {
           </a>
         </div>
       </div>
-
-      <Button
-        style={{ width: "130px", height: "35px" }}
-        variant="solid"
-        size="middle"
-        color="magenta"
-        onClick={() => navigate("/choose-plan")}
-      >
-        {hasWorkspace === "true" ? "Migrar para a Vivo" : "Contrate agora"}
-      </Button>
+      <div className="block lg:hidden">
+        <Button
+          style={{
+            width: "120px",
+            height: "35px",
+            fontWeight: "bold",
+            borderRadius: "14px",
+          }}
+          variant="solid"
+          size="middle"
+          color="magenta"
+          onClick={() => navigate("/choose-plan")}
+        >
+          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATE AGORA"}
+        </Button>
+      </div>
+      <div className="lg:block hidden">
+        <Button
+          style={{
+            width: "180px",
+            height: "35px",
+            fontWeight: "bold",
+            borderRadius: "14px",
+          }}
+          variant="solid"
+          size="middle"
+          color="magenta"
+          onClick={() => navigate("/choose-plan")}
+        >
+          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATE AGORA"}
+        </Button>
+      </div>
     </div>
   );
 }

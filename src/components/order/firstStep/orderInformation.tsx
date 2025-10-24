@@ -14,30 +14,58 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Plan } from "../../../interfaces/order";
 import { useOrderControler } from "../../../controller/controller";
+import { useOrderStore } from "../../../context/context";
 const { Option } = Select;
+
+interface OrderInformationProps {
+  basicInfo: {
+    cnpj: string;
+    email: string;
+    manager_name: string;
+    managerPhone: string;
+    isVivoClient: boolean;
+    acceptContact: boolean;
+  };
+  updateBasicInfo: (info: Partial<OrderInformationProps["basicInfo"]>) => void;
+}
+
 export default function OrderInformation({
   basicInfo,
   updateBasicInfo,
-  confirmedPlans,
-  setConfirmedPlans,
-}: any) {
-  const [currentPlan, setCurrentPlan] = useState({
+}: OrderInformationProps) {
+  const {
+    confirmedPlans,
+    addCurrentPlanToConfirmed,
+    addNewPlanToConfirmed,
+    removePlanFromConfirmed,
+  } = useOrderStore();
+
+  const [currentPlanInput, setCurrentPlanInput] = useState({
     planName: "",
     price: "",
     users: 1,
     type: "",
   });
+
+  const [newPlanInput, setNewPlanInput] = useState({
+    planName: "",
+    price: "",
+    users: 1,
+    type: "",
+  });
+
   const [cnpj, setCnpj] = useState(basicInfo.cnpj);
   const [email, setEmail] = useState(basicInfo.email);
   const [manager_name, setmanager_name] = useState(basicInfo.manager_name);
   const [managerPhone, setManagerPhone] = useState(basicInfo.managerPhone);
   const [isVivoClient, setIsVivoClient] = useState(basicInfo.isVivoClient);
   const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
-  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
   const { createOrder, isCreatingOrderLoading, changeOrderStatus } =
     useOrderControler();
+
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
 
   const isFormValid = () => {
     const hasAtLeastOnePlan = confirmedPlans.length > 0;
@@ -64,7 +92,6 @@ export default function OrderInformation({
       return;
     }
 
-    // Atualiza o contexto com os dados básicos
     updateBasicInfo({
       cnpj: cnpj,
       email: email,
@@ -73,11 +100,8 @@ export default function OrderInformation({
       isVivoClient: isVivoClient,
       acceptContact: acceptContact,
     });
-
-    // Converte hasWorkspace para boolean
     const alreadyHaveWorkspace = hasWorkspace === "true";
 
-    // Cria pedido com os dados do primeiro step
     const orderData = {
       email: email,
       cnpj: cnpj,
@@ -112,19 +136,26 @@ export default function OrderInformation({
     }
   };
 
-  const addNewPlan = () => {
-    if (currentPlan?.planName && currentPlan?.price && currentPlan?.type) {
-      const newConfirmedPlan = {
+  const removePlan = (planId: string) => {
+    removePlanFromConfirmed(planId);
+  };
+
+  const addCurrentPlan = () => {
+    if (
+      currentPlanInput?.planName &&
+      currentPlanInput?.price &&
+      currentPlanInput?.type
+    ) {
+      const newPlan: Plan = {
         id: Date.now().toString(),
-        planName: currentPlan?.planName,
-        price: currentPlan?.price,
-        users: currentPlan?.users,
-        type: currentPlan?.type,
+        planName: currentPlanInput?.planName,
+        price: currentPlanInput?.price,
+        users: currentPlanInput?.users,
+        type: currentPlanInput?.type as "mensal" | "anual",
       };
 
-      setConfirmedPlans([...confirmedPlans, newConfirmedPlan]);
-
-      setCurrentPlan({
+      addCurrentPlanToConfirmed(newPlan);
+      setCurrentPlanInput({
         planName: "",
         price: "",
         users: 1,
@@ -133,29 +164,66 @@ export default function OrderInformation({
     }
   };
 
-  const removePlan = (planId: string) => {
-    setConfirmedPlans(
-      confirmedPlans.filter((plan: Plan) => plan?.id?.toString() !== planId)
-    );
-  };
-
-  const updateCurrentPlan = (field: string, value: string | number) => {
-    setCurrentPlan((prev) => ({
+  const updateCurrentPlanInput = (field: string, value: string | number) => {
+    setCurrentPlanInput((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
   const handleCurrentUserIncrease = () => {
-    setCurrentPlan((prev) => ({
+    setCurrentPlanInput((prev) => ({
       ...prev,
       users: prev.users + 1,
     }));
   };
 
   const handleCurrentUserDecrease = () => {
-    if (currentPlan.users > 1) {
-      setCurrentPlan((prev) => ({
+    if (currentPlanInput.users > 1) {
+      setCurrentPlanInput((prev) => ({
+        ...prev,
+        users: prev.users - 1,
+      }));
+    }
+  };
+
+  const addNewPlan = () => {
+    if (newPlanInput?.planName && newPlanInput?.price && newPlanInput?.type) {
+      const newPlan: Plan = {
+        id: Date.now().toString(),
+        planName: newPlanInput?.planName,
+        price: newPlanInput?.price,
+        users: newPlanInput?.users,
+        type: newPlanInput?.type as "mensal" | "anual",
+      };
+
+      addNewPlanToConfirmed(newPlan);
+      setNewPlanInput({
+        planName: "",
+        price: "",
+        users: 1,
+        type: "",
+      });
+    }
+  };
+
+  const updateNewPlanInput = (field: string, value: string | number) => {
+    setNewPlanInput((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleNewUserIncrease = () => {
+    setNewPlanInput((prev) => ({
+      ...prev,
+      users: prev.users + 1,
+    }));
+  };
+
+  const handleNewUserDecrease = () => {
+    if (newPlanInput.users > 1) {
+      setNewPlanInput((prev) => ({
         ...prev,
         users: prev.users - 1,
       }));
@@ -179,18 +247,21 @@ export default function OrderInformation({
                 </span>
               </div>
               <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
+              {hasWorkspace !== "true" && (
+                <>
+                  <div className="flex flex-col gap-1 items-center">
+                    <div className="w-6 h-6 bg-[#f7f7f7] border-1 border-gray-400 text-gray-500 rounded-full flex items-center justify-center text-[12px] font-semibold">
+                      2
+                    </div>
+                    <span className="text-[12px] text-gray-400">Dados</span>
+                  </div>
+                  <div className="w-8 h-px bg-gray-300 mt-[-12px]"></div>
+                </>
+              )}
 
               <div className="flex flex-col gap-1 items-center">
                 <div className="w-6 h-6 bg-[#f7f7f7] border-1 border-gray-400 text-gray-500 rounded-full flex items-center justify-center text-[12px] font-semibold">
-                  2
-                </div>
-                <span className="text-[12px] text-gray-400">Dados</span>
-              </div>
-              <div className="w-8 h-px bg-gray-300 mt-[-12px]"></div>
-
-              <div className="flex flex-col gap-1 items-center">
-                <div className="w-6 h-6 bg-[#f7f7f7] border-1 border-gray-400 text-gray-500 rounded-full flex items-center justify-center text-[12px] font-semibold">
-                  3
+                  {hasWorkspace === "true" ? 2 : 3}
                 </div>
                 <span className="text-[12px] text-gray-400">Confirmação</span>
               </div>
@@ -209,37 +280,320 @@ export default function OrderInformation({
               ganham +2GB na contratação de Google Workspace
             </span>
           </div>
-
-          <div className="mb-6 text-[12px]">
-            <h3 className="text-[14px] text-gray-800 mb-4">
-              É cliente Vivo Empresas Móvel?
-            </h3>
-            <ConfigProvider
-              theme={{
-                token: {
-                  colorPrimary: "#f97316",
-                },
-              }}
-            >
-              <Radio.Group
-                value={isVivoClient}
-                onChange={(e) => setIsVivoClient(e.target.value)}
-                className="flex gap-6 text-[14px]"
+          {hasWorkspace !== "true" && (
+            <div className="mb-6 text-[12px]">
+              <h3 className="text-[14px] text-gray-800 mb-4">
+                É cliente Vivo Empresas Móvel?
+              </h3>
+              <ConfigProvider
+                theme={{
+                  token: {
+                    colorPrimary: "#f97316",
+                  },
+                }}
               >
-                <Radio value={true} className="text-gray-700 text-[12px]">
-                  Sim, sou cliente
-                </Radio>
-                <Radio value={false} className="text-gray-700 text-[12px]">
-                  Não sou cliente
-                </Radio>
-              </Radio.Group>
-            </ConfigProvider>
-          </div>
+                <Radio.Group
+                  value={isVivoClient}
+                  onChange={(e) => setIsVivoClient(e.target.value)}
+                  className="flex gap-6 text-[14px]"
+                >
+                  <Radio value={true} className="text-gray-700 text-[12px]">
+                    Sim, sou cliente
+                  </Radio>
+                  <Radio value={false} className="text-gray-700 text-[12px]">
+                    Não sou cliente
+                  </Radio>
+                </Radio.Group>
+              </ConfigProvider>
+            </div>
+          )}
 
           <div className="mb-8">
+            {/* plano antigo */}
+            {hasWorkspace === "true" && (
+              <>
+                <h2>{hasWorkspace === "true" && "Planos Atuais"}</h2>
+                <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
+                  Qual plano você possui atualmente e deseja migrar ?
+                  <Tooltip title="Você pode escolher 1 ou mais planos.">
+                    <span className="text-gray-500 cursor-pointer">
+                      <CircleAlert size={14} />
+                    </span>
+                  </Tooltip>
+                </h3>
+
+                {confirmedPlans
+                  ?.filter((plan) => plan.newPlan === false)
+                  ?.map((plan, index: number) => (
+                    <div
+                      key={plan?.id}
+                      className="flex flex-wrap justify-start gap-2 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
+                    >
+                      <div className="w-[160px]">
+                        <label className="block text-[12px] text-gray-600 mb-2">
+                          Plano {index + 1}
+                        </label>
+                        <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                          <span className="text-gray-700 text-[13px]">
+                            Business {plan?.planName}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="w-[120px]">
+                        <label className="block text-[12px] text-gray-600 mb-2">
+                          Quant. de Usuários
+                        </label>
+                        <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center justify-center">
+                          <span className="text-gray-700 text-[13px]">
+                            {plan?.users}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="w-[100px]">
+                        <label className="block text-[12px] text-gray-600 mb-2">
+                          Modalidade
+                        </label>
+                        <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                          <span className="text-gray-700 text-[13px] capitalize">
+                            {plan?.type}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="w-[260px]">
+                        <label className="block text-[12px] text-gray-600 mb-2">
+                          Valor Total
+                        </label>
+                        <div className="flex gap-2">
+                          <div className="w-[220px] h-8 pl-3 border border-gray-300 rounded-md bg-white flex items-center justify-between">
+                            <span className="text-gray-700 text-[13px] font-bold">
+                              R$ {formatPrice(plan?.price, plan?.users)}/
+                              {plan?.type === "anual" ? "mês" : "mês"}
+                            </span>
+                            {plan?.type === "anual" && (
+                              <span className="bg-green-600 text-white rounded-md p-1.5 text-[14px]">
+                                {" "}
+                                - 33%
+                              </span>
+                            )}
+                          </div>
+                          <Button
+                            size="middle"
+                            onClick={() =>
+                              removePlan(plan?.id?.toString() || "0")
+                            }
+                            style={{
+                              backgroundColor: "#dc2626",
+                              borderColor: "#dc2626",
+                              color: "white",
+                              height: "32px",
+                              fontSize: "11px",
+                              padding: "0 8px",
+                              width: "100px",
+                            }}
+                          >
+                            Remover
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                <div className="flex max-w-[800px] flex-wrap justify-start gap-2 mb-6">
+                  <div className="w-[160px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Plano{" "}
+                      {confirmedPlans.filter((plan) => plan.newPlan === false)
+                        .length + 1}{" "}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <Select
+                      size="middle"
+                      value={currentPlanInput?.planName || undefined}
+                      onChange={(value) => {
+                        const priceMap = {
+                          Starter: { mensal: "49,00", anual: "32,72" },
+                          Standard: { mensal: "98,00", anual: "81,80" },
+                          Plus: { mensal: "154,00", anual: "128,40" },
+                        };
+                        updateCurrentPlanInput("planName", value);
+                        updateCurrentPlanInput("type", "anual");
+                        updateCurrentPlanInput(
+                          "price",
+                          priceMap[value as keyof typeof priceMap].anual
+                        );
+                      }}
+                      className="w-full"
+                    >
+                      <Option value="Starter">Business Starter</Option>
+                      <Option value="Standard">Business Standard</Option>
+                      <Option value="Plus">Business Plus</Option>
+                    </Select>
+                    {hasTriedSubmit && !currentPlanInput?.planName && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Campo obrigatório
+                      </p>
+                    )}
+                  </div>
+                  <div className="w-[120px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Quant. de Usuários <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex items-center">
+                      <Button
+                        size="middle"
+                        onClick={handleCurrentUserDecrease}
+                        disabled={currentPlanInput?.users <= 1}
+                        style={{
+                          backgroundColor:
+                            currentPlanInput?.users > 1 ? "#f97316" : "#e5e7eb",
+                          borderColor: "#d1d5db",
+                          color:
+                            currentPlanInput.users > 1 ? "white" : "#9ca3af",
+                          borderRadius: "6px 0 0 6px",
+                          width: "40px",
+                          height: "32px",
+                        }}
+                      >
+                        −
+                      </Button>
+                      <Input
+                        value={currentPlanInput.users}
+                        readOnly
+                        size="middle"
+                        style={{
+                          textAlign: "center",
+                          borderRadius: "0",
+                          borderLeft: "none",
+                          borderRight: "none",
+                          height: "32px",
+                        }}
+                      />
+                      <Button
+                        size="middle"
+                        onClick={handleCurrentUserIncrease}
+                        style={{
+                          backgroundColor: "#f97316",
+                          borderColor: "#f97316",
+                          color: "white",
+                          borderRadius: "0 6px 6px 0",
+                          width: "40px",
+                          height: "32px",
+                        }}
+                      >
+                        +
+                      </Button>
+                    </div>
+                    {hasTriedSubmit && currentPlanInput.users < 1 && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Selecione pelo menos 1 usuário
+                      </p>
+                    )}
+                  </div>
+                  <div className="w-[100px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Modalidade <span className="text-red-500">*</span>
+                    </label>
+                    <Select
+                      size="middle"
+                      value={currentPlanInput.type || undefined}
+                      onChange={(value) => {
+                        updateCurrentPlanInput("type", value);
+
+                        if (currentPlanInput?.planName) {
+                          const priceMap = {
+                            Starter: { mensal: "49,00", anual: "32,72" },
+                            Standard: { mensal: "98,00", anual: "81,80" },
+                            Plus: { mensal: "154,00", anual: "128,40" },
+                          };
+
+                          const price =
+                            value === "anual"
+                              ? priceMap[
+                                  currentPlanInput?.planName as keyof typeof priceMap
+                                ].anual
+                              : priceMap[
+                                  currentPlanInput?.planName as keyof typeof priceMap
+                                ][value as "mensal" | "anual"];
+
+                          updateCurrentPlanInput("price", price);
+                        }
+                      }}
+                      className="w-[100px]"
+                    >
+                      <Option value="mensal">Mensal</Option>
+                      <Option value="anual">Anual</Option>
+                    </Select>
+                    {hasTriedSubmit && !currentPlanInput.type && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Campo obrigatório
+                      </p>
+                    )}
+                  </div>
+                  <div className="w-[260px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Valor Total
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="w-[220px] h-8 pl-3 border border-gray-300 rounded-md bg-white flex items-center justify-between">
+                        <span
+                          style={{ fontWeight: "bold" }}
+                          className="text-gray-600 text-[13px]"
+                        >
+                          R${" "}
+                          {formatPrice(
+                            currentPlanInput?.price || "0",
+                            currentPlanInput.users
+                          )}
+                          /{currentPlanInput.type === "anual" ? "mês" : "mês"}
+                        </span>
+                        {currentPlanInput?.type === "anual" && (
+                          <span className="bg-green-600 text-white rounded-md p-1.5 text-[14px]">
+                            {" "}
+                            - 33%
+                          </span>
+                        )}
+                      </div>
+                      <Button
+                        size="middle"
+                        onClick={addCurrentPlan}
+                        disabled={
+                          !currentPlanInput?.planName || !currentPlanInput.type
+                        }
+                        style={{
+                          backgroundColor:
+                            currentPlanInput?.planName && currentPlanInput.type
+                              ? "#f97316"
+                              : "#e5e7eb",
+                          borderColor:
+                            currentPlanInput?.planName && currentPlanInput.type
+                              ? "#f97316"
+                              : "#d1d5db",
+                          color:
+                            currentPlanInput?.planName && currentPlanInput.type
+                              ? "white"
+                              : "#9ca3af",
+                          height: "32px",
+                          fontSize: "11px",
+                          padding: "0 8px",
+                          width: "100px",
+                        }}
+                      >
+                        Adicionar plano
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* plano novo */}
+            <h2>{hasWorkspace === "true" && "Novos Planos"}</h2>
             <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
               {hasWorkspace === "true"
-                ? "Informe os detalhes do plano que você deseja migrar"
+                ? "Deseja aproveitar para adicionar novos planos?"
                 : "Defina seus planos"}{" "}
               {}
               <Tooltip title="Você pode escolher 1 ou mais planos.">
@@ -249,135 +603,114 @@ export default function OrderInformation({
               </Tooltip>
             </h3>
 
-            {confirmedPlans?.map((plan: Plan, index: number) => (
-              <div
-                key={plan?.id}
-                className="flex flex-wrap justify-start gap-2 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
-              >
-                <div className="w-[160px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
-                    Plano {index + 1}
-                  </label>
-                  <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
-                    <span className="text-gray-700 text-[13px]">
-                      Business {plan?.planName}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="w-[120px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
-                    Quant. de Usuários
-                  </label>
-                  <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center justify-center">
-                    <span className="text-gray-700 text-[13px]">
-                      {plan?.users}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="w-[100px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
-                    Modalidade
-                  </label>
-                  <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
-                    <span className="text-gray-700 text-[13px] capitalize">
-                      {plan?.type}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="w-[250px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
-                    Valor Total
-                  </label>
-                  <div className="flex gap-2">
-                    <div className="w-[150px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
-                      <span className="text-gray-700 text-[13px] font-bold">
-                        R$ {formatPrice(plan?.price, plan?.users)}/
-                        {plan?.type === "anual" ? "mês" : "mês"}
+            {confirmedPlans
+              ?.filter((plan) => plan.newPlan === true)
+              ?.map((plan, index: number) => (
+                <div
+                  key={plan?.id}
+                  className="flex flex-wrap justify-start gap-2 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
+                >
+                  <div className="w-[160px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Plano {index + 1}
+                    </label>
+                    <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                      <span className="text-gray-700 text-[13px]">
+                        Business {plan?.planName}
                       </span>
                     </div>
-                    <Button
-                      size="middle"
-                      onClick={() => removePlan(plan?.id?.toString() || "0")}
-                      style={{
-                        backgroundColor: "#dc2626",
-                        borderColor: "#dc2626",
-                        color: "white",
-                        height: "32px",
-                        fontSize: "11px",
-                        padding: "0 8px",
-                        width: "100px",
-                      }}
-                    >
-                      Remover
-                    </Button>
+                  </div>
+
+                  <div className="w-[120px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Quant. de Usuários
+                    </label>
+                    <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center justify-center">
+                      <span className="text-gray-700 text-[13px]">
+                        {plan?.users}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="w-[100px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Modalidade
+                    </label>
+                    <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
+                      <span className="text-gray-700 text-[13px] capitalize">
+                        {plan?.type}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="w-[260px]">
+                    <label className="block text-[12px] text-gray-600 mb-2">
+                      Valor Total
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="w-[220px] h-8 pl-3 border border-gray-300 rounded-md bg-white flex items-center justify-between">
+                        <span className="text-gray-700 text-[13px] font-bold">
+                          R$ {formatPrice(plan?.price, plan?.users)}/
+                          {plan?.type === "anual" ? "mês" : "mês"}
+                        </span>{" "}
+                        {plan?.type === "anual" && (
+                          <span className="bg-green-600 text-white rounded-md p-1.5 text-[14px]">
+                            {" "}
+                            - 33%
+                          </span>
+                        )}
+                      </div>
+                      <Button
+                        size="middle"
+                        onClick={() => removePlan(plan?.id?.toString() || "0")}
+                        style={{
+                          backgroundColor: "#dc2626",
+                          borderColor: "#dc2626",
+                          color: "white",
+                          height: "32px",
+                          fontSize: "11px",
+                          padding: "0 8px",
+                          width: "100px",
+                        }}
+                      >
+                        Remover
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
             <div className="flex max-w-[800px] flex-wrap justify-start gap-2 mb-6">
               <div className="w-[160px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
-                  Plano {confirmedPlans.length + 1}{" "}
+                  Plano{" "}
+                  {confirmedPlans.filter((plan) => plan.newPlan === true)
+                    .length + 1}{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <Select
                   size="middle"
-                  value={currentPlan?.planName || undefined}
+                  value={newPlanInput?.planName || undefined}
                   onChange={(value) => {
                     const priceMap = {
                       Starter: { mensal: "49,00", anual: "32,72" },
                       Standard: { mensal: "98,00", anual: "81,80" },
                       Plus: { mensal: "154,00", anual: "128,40" },
                     };
-                    updateCurrentPlan("planName", value);
-                    const type = currentPlan.type as "mensal" | "anual";
-                    if (type) {
-                      updateCurrentPlan(
-                        "price",
-                        priceMap[value as keyof typeof priceMap][type]
-                      );
-                    } else {
-                      updateCurrentPlan(
-                        "price",
-                        priceMap[value as keyof typeof priceMap].mensal
-                      );
-                    }
+                    updateNewPlanInput("planName", value);
+                    updateNewPlanInput("type", "anual");
+                    updateNewPlanInput(
+                      "price",
+                      priceMap[value as keyof typeof priceMap].anual
+                    );
                   }}
                   className="w-full"
                 >
-                  <Option value="Starter">
-                    Business Starter{" "}
-                    {/* <span className="text-[12px] text-gray-500">
-                      R$ 49,00/mês ou{" "}
-                    </span>
-                    <span className="text-[12px] text-gray-500">
-                      R$ 32,72/mês
-                    </span> */}
-                  </Option>
-                  <Option value="Standard">
-                    Business Standard{" "}
-                    {/* <span className="text-[12px] text-gray-500">
-                      R$ 98,00/mês ou{" "}
-                    </span>
-                    <span className="text-[12px] text-gray-500">
-                      R$ 81,80/mês
-                    </span> */}
-                  </Option>
-                  <Option value="Plus">
-                    Business Plus{" "}
-                    {/* <span className="text-[12px] text-gray-500">
-                      R$ 154,00/mês ou{" "}
-                    </span>
-                    <span className="text-[12px] text-gray-500">
-                      R$ 128,40/mês
-                    </span> */}
-                  </Option>
+                  <Option value="Starter">Business Starter</Option>
+                  <Option value="Standard">Business Standard</Option>
+                  <Option value="Plus">Business Plus</Option>
                 </Select>
-                {hasTriedSubmit && !currentPlan?.planName && (
+                {hasTriedSubmit && !newPlanInput?.planName && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
@@ -388,13 +721,13 @@ export default function OrderInformation({
                 <div className="flex items-center">
                   <Button
                     size="middle"
-                    onClick={handleCurrentUserDecrease}
-                    disabled={currentPlan?.users <= 1}
+                    onClick={handleNewUserDecrease}
+                    disabled={newPlanInput?.users <= 1}
                     style={{
                       backgroundColor:
-                        currentPlan?.users > 1 ? "#f97316" : "#e5e7eb",
+                        newPlanInput?.users > 1 ? "#f97316" : "#e5e7eb",
                       borderColor: "#d1d5db",
-                      color: currentPlan.users > 1 ? "white" : "#9ca3af",
+                      color: newPlanInput.users > 1 ? "white" : "#9ca3af",
                       borderRadius: "6px 0 0 6px",
                       width: "40px",
                       height: "32px",
@@ -403,7 +736,7 @@ export default function OrderInformation({
                     −
                   </Button>
                   <Input
-                    value={currentPlan.users}
+                    value={newPlanInput.users}
                     readOnly
                     size="middle"
                     style={{
@@ -416,7 +749,7 @@ export default function OrderInformation({
                   />
                   <Button
                     size="middle"
-                    onClick={handleCurrentUserIncrease}
+                    onClick={handleNewUserIncrease}
                     style={{
                       backgroundColor: "#f97316",
                       borderColor: "#f97316",
@@ -429,7 +762,7 @@ export default function OrderInformation({
                     +
                   </Button>
                 </div>
-                {hasTriedSubmit && currentPlan.users < 1 && (
+                {hasTriedSubmit && newPlanInput.users < 1 && (
                   <p className="text-red-500 text-xs mt-1">
                     Selecione pelo menos 1 usuário
                   </p>
@@ -441,23 +774,27 @@ export default function OrderInformation({
                 </label>
                 <Select
                   size="middle"
-                  value={currentPlan.type || undefined}
+                  value={newPlanInput.type || undefined}
                   onChange={(value) => {
-                    updateCurrentPlan("type", value);
+                    updateNewPlanInput("type", value);
 
-                    if (currentPlan?.planName) {
+                    if (newPlanInput?.planName) {
                       const priceMap = {
                         Starter: { mensal: "49,00", anual: "32,72" },
                         Standard: { mensal: "98,00", anual: "81,80" },
                         Plus: { mensal: "154,00", anual: "128,40" },
                       };
 
-                      updateCurrentPlan(
-                        "price",
-                        priceMap[
-                          currentPlan?.planName as keyof typeof priceMap
-                        ][value as "mensal" | "anual"]
-                      );
+                      const price =
+                        value === "anual"
+                          ? priceMap[
+                              newPlanInput?.planName as keyof typeof priceMap
+                            ].anual
+                          : priceMap[
+                              newPlanInput?.planName as keyof typeof priceMap
+                            ][value as "mensal" | "anual"];
+
+                      updateNewPlanInput("price", price);
                     }
                   }}
                   className="w-[100px]"
@@ -465,43 +802,49 @@ export default function OrderInformation({
                   <Option value="mensal">Mensal</Option>
                   <Option value="anual">Anual</Option>
                 </Select>
-                {hasTriedSubmit && !currentPlan.type && (
+                {hasTriedSubmit && !newPlanInput.type && (
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
               </div>
-              <div className="w-[250px]">
+              <div className="w-[260px]">
                 <label className="block text-[12px] text-gray-600 mb-2">
                   Valor Total
                 </label>
                 <div className="flex gap-2">
-                  <div className="w-[150px] h-8 px-3 py-1 border border-gray-300 rounded-md bg-gray-50 flex items-center">
+                  <div className="w-[220px] h-8 pl-3 border border-gray-300 rounded-md bg-white flex items-center justify-between">
                     <span
                       style={{ fontWeight: "bold" }}
                       className="text-gray-600 text-[13px]"
                     >
                       R${" "}
                       {formatPrice(
-                        currentPlan?.price || "0",
-                        currentPlan.users
+                        newPlanInput?.price || "0",
+                        newPlanInput.users
                       )}
-                      /{currentPlan.type === "anual" ? "mês" : "mês"}
-                    </span>
+                      /{newPlanInput.type === "anual" ? "mês" : "mês"}
+                    </span>{" "}
+                    {newPlanInput?.type === "anual" && (
+                      <span className="bg-green-600 text-white rounded-md p-1.5 text-[14px]">
+                        {" "}
+                        - 33%
+                      </span>
+                    )}
                   </div>
                   <Button
                     size="middle"
                     onClick={addNewPlan}
-                    disabled={!currentPlan?.planName || !currentPlan.type}
+                    disabled={!newPlanInput?.planName || !newPlanInput.type}
                     style={{
                       backgroundColor:
-                        currentPlan?.planName && currentPlan.type
+                        newPlanInput?.planName && newPlanInput.type
                           ? "#f97316"
                           : "#e5e7eb",
                       borderColor:
-                        currentPlan?.planName && currentPlan.type
+                        newPlanInput?.planName && newPlanInput.type
                           ? "#f97316"
                           : "#d1d5db",
                       color:
-                        currentPlan?.planName && currentPlan.type
+                        newPlanInput?.planName && newPlanInput.type
                           ? "white"
                           : "#9ca3af",
                       height: "32px",
@@ -602,7 +945,7 @@ export default function OrderInformation({
           </div>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 md:right-90 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+        <div className="fixed bottom-0 left-0 right-0 md:right-86 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
           <div className="flex justify-end max-w-7xl mx-auto">
             <ConfigProvider
               theme={{

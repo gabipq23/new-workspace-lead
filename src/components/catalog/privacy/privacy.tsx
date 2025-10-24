@@ -85,8 +85,7 @@ export default function Privacy() {
             </div>
           </div>
         </div>
-
-        {/* Layout Desktop - 4 Colunas Horizontais */}
+        {/*  Desktop */}
         <div className="hidden md:grid md:grid-cols-4 md:gap-8 md:py-8">
           <div className="flex flex-col items-start text-start">
             <div className="mb-6">

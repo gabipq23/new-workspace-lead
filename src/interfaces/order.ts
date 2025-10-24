@@ -1,10 +1,11 @@
 export interface Plan {
-  id?: number;
+  id?: string;
   planName: string;
   price: string;
   type?: "mensal" | "anual";
   users?: number;
   priceYear?: string;
+  newPlan?: boolean;
   servicesIncluded?: string[];
 }
 

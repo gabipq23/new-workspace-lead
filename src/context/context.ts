@@ -74,7 +74,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       price: plan.price,
       users: plan.users || 1,
       type: plan.type || "anual",
-      newPlan: true, // Default para novos planos = true
+      newPlan: true,
     };
     set((state) => ({
       confirmedPlans: [...state.confirmedPlans, confirmedPlan],
@@ -88,7 +88,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       price: plan.price,
       users: plan.users || 1,
       type: plan.type || "anual",
-      newPlan: false, // Planos atuais/migração = false
+      newPlan: false,
     };
     set((state) => ({
       confirmedPlans: [...state.confirmedPlans, confirmedPlan],
@@ -102,7 +102,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       price: plan.price,
       users: plan.users || 1,
       type: plan.type || "anual",
-      newPlan: true, // Novos planos = true
+      newPlan: true,
     };
     set((state) => ({
       confirmedPlans: [...state.confirmedPlans, confirmedPlan],
@@ -126,12 +126,11 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       companyInfo: { ...state.companyInfo, ...info },
     }));
   },
-  // junta todas as infos ja preenchidas em um unico objeto para criar o pedido
+
   buildCompleteOrder: (): OrderData | null => {
     const state = get();
     if (state.confirmedPlans.length === 0) return null;
 
-    // Converte os planos confirmados para o formato da API
     const apiPlans: Plan[] = state.confirmedPlans.map((plan) => ({
       planName: `Google Workspace Business ${plan.planName}`,
       price: plan.price,

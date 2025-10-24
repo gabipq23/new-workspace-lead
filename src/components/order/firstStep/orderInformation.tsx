@@ -40,7 +40,6 @@ export default function OrderInformation({
     removePlanFromConfirmed,
   } = useOrderStore();
 
-  // Estados para Planos Atuais (migração)
   const [currentPlanInput, setCurrentPlanInput] = useState({
     planName: "",
     price: "",
@@ -48,7 +47,6 @@ export default function OrderInformation({
     type: "",
   });
 
-  // Estados para Novos Planos
   const [newPlanInput, setNewPlanInput] = useState({
     planName: "",
     price: "",
@@ -56,7 +54,6 @@ export default function OrderInformation({
     type: "",
   });
 
-  // Estados gerais
   const [cnpj, setCnpj] = useState(basicInfo.cnpj);
   const [email, setEmail] = useState(basicInfo.email);
   const [manager_name, setmanager_name] = useState(basicInfo.manager_name);
@@ -71,7 +68,6 @@ export default function OrderInformation({
   const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
 
   const isFormValid = () => {
-    // Agora todos os planos estão em confirmedPlans
     const hasAtLeastOnePlan = confirmedPlans.length > 0;
     const cnpjDigits = cnpj.replace(/\D/g, "");
     const hasValidCnpj = cnpjDigits.length === 14;
@@ -144,7 +140,6 @@ export default function OrderInformation({
     removePlanFromConfirmed(planId);
   };
 
-  // Funções para Planos Atuais (migração)
   const addCurrentPlan = () => {
     if (
       currentPlanInput?.planName &&
@@ -192,7 +187,6 @@ export default function OrderInformation({
     }
   };
 
-  // Funções para Novos Planos
   const addNewPlan = () => {
     if (newPlanInput?.planName && newPlanInput?.price && newPlanInput?.type) {
       const newPlan: Plan = {
@@ -425,7 +419,6 @@ export default function OrderInformation({
                           Plus: { mensal: "154,00", anual: "128,40" },
                         };
                         updateCurrentPlanInput("planName", value);
-                        // Sempre definir como anual e usar o preço anual
                         updateCurrentPlanInput("type", "anual");
                         updateCurrentPlanInput(
                           "price",
@@ -516,7 +509,6 @@ export default function OrderInformation({
                             Plus: { mensal: "154,00", anual: "128,40" },
                           };
 
-                          // Sempre usar preço anual quando modalidade for anual
                           const price =
                             value === "anual"
                               ? priceMap[
@@ -706,7 +698,6 @@ export default function OrderInformation({
                       Plus: { mensal: "154,00", anual: "128,40" },
                     };
                     updateNewPlanInput("planName", value);
-                    // Sempre definir como anual e usar o preço anual
                     updateNewPlanInput("type", "anual");
                     updateNewPlanInput(
                       "price",
@@ -794,7 +785,6 @@ export default function OrderInformation({
                         Plus: { mensal: "154,00", anual: "128,40" },
                       };
 
-                      // Sempre usar preço anual quando modalidade for anual
                       const price =
                         value === "anual"
                           ? priceMap[

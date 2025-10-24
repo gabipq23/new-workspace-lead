@@ -15,8 +15,6 @@ export function useOrderControler() {
       onMutate: async () =>
         await queryClient.cancelQueries({ queryKey: ["order"] }),
       onSuccess: (response) => {
-        // response contém: { success: true, message: "Pedido criado com sucesso", id: 27 }
-
         toast.success(`Pedido criado com sucesso! ID: ${response.id}`);
         queryClient.invalidateQueries({ queryKey: ["order"] });
       },

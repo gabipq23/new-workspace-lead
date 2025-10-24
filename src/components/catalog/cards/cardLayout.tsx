@@ -29,7 +29,7 @@ export default function CardLayout({ cardData }: any) {
       price: price,
       users: 1,
       type: type as "mensal" | "anual",
-      newPlan: true, // Planos selecionados no catálogo são sempre novos planos
+      newPlan: true,
     };
 
     setConfirmedPlans([...confirmedPlans, newPlan]);

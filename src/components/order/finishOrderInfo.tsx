@@ -73,7 +73,7 @@ export default function FinishOrderInfo() {
   };
   const planosDetalhes = (
     <div className="flex flex-col items-center bg-white rounded-[26px] w-full p-4  py-4 ">
-      {/* Desktop Version */}
+      {/* Desktop */}
       <div className="hidden lg:block ">
         <div className="flex items-center font-semibold text-[#666666] text-[15px] mb-4">
           <p className="w-76 text-center">Plano</p>
@@ -110,7 +110,7 @@ export default function FinishOrderInfo() {
         ))}
       </div>
 
-      {/* Mobile Version */}
+      {/* Mobile */}
       <div className="block lg:hidden">
         {confirmedPlans.map((plan: Plan) => (
           <div
@@ -274,7 +274,6 @@ export default function FinishOrderInfo() {
 
   return (
     <div className="min-h-[100vh] flex flex-col flex-1 px-8 pt-8 pb-4 bg-[#f1f1f1]">
-      {/* Header com steps */}
       <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
         <div className="flex items-center gap-4 ">
           <img
@@ -329,7 +328,6 @@ export default function FinishOrderInfo() {
         </div>
       </div>
 
-      {/* Título e código do pedido */}
       <div className="flex flex-col min-h-[617px]">
         <div className="flex w-full justify-between mb-2">
           <h1 className="flex items-center justify-center text-[18px] md:text-[20px] lg:text-[20px] font-semibold">
@@ -355,7 +353,6 @@ export default function FinishOrderInfo() {
           </div>
         </div>
 
-        {/* Instruções de próximos passos */}
         <div className="flex flex-col items-center justify-center mt-4 gap-4 mb-6">
           <div className="flex gap-2 items-start justify-center w-full max-w-[900px]">
             <div className="text-[36px] md:text-[64px] lg:text-[64px] flex text-[#660099] mr-2">
@@ -395,7 +392,6 @@ export default function FinishOrderInfo() {
           </div>
         </div>
 
-        {/* Collapse com informações detalhadas */}
         <Collapse items={items} ghost defaultActiveKey={["1"]} />
       </div>
     </div>

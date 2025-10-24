@@ -7,6 +7,8 @@ import { useOrderById } from "../../controller/controller";
 
 export default function FinishOrderInfo() {
   const { id } = useParams<{ id: string }>();
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
+
   const { data: orderData, isLoading } = useOrderById(Number(id));
   if (isLoading) {
     return (
@@ -306,16 +308,19 @@ export default function FinishOrderInfo() {
             </span>
           </div>
           <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
-
-          <div className="flex flex-col gap-1 items-center">
-            <div className="w-6 h-6 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[12px] font-semibold">
-              <Check size={16} />
-            </div>
-            <span className="text-[12px] text-[#660099] font-medium">
-              Dados
-            </span>
-          </div>
-          <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
+          {hasWorkspace !== "true" && (
+            <>
+              <div className="flex flex-col gap-1 items-center">
+                <div className="w-6 h-6 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[12px] font-semibold">
+                  <Check size={16} />
+                </div>
+                <span className="text-[12px] text-[#660099] font-medium">
+                  Dados
+                </span>
+              </div>
+              <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
+            </>
+          )}
 
           <div className="flex flex-col gap-1 items-center">
             <div className="w-6 h-6 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[12px] font-semibold">

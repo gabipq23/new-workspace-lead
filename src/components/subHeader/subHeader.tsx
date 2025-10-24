@@ -199,21 +199,38 @@ function SubHeader() {
           </a>
         </div>
       </div>
-
-      <Button
-        style={{
-          width: "180px",
-          height: "35px",
-          fontWeight: "bold",
-          borderRadius: "14px",
-        }}
-        variant="solid"
-        size="middle"
-        color="magenta"
-        onClick={() => navigate("/choose-plan")}
-      >
-        {hasWorkspace === "true" ? "QUERO MIGRAR" : "Contrate agora"}
-      </Button>
+      <div className="block lg:hidden">
+        <Button
+          style={{
+            width: "120px",
+            height: "35px",
+            fontWeight: "bold",
+            borderRadius: "14px",
+          }}
+          variant="solid"
+          size="middle"
+          color="magenta"
+          onClick={() => navigate("/choose-plan")}
+        >
+          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATE AGORA"}
+        </Button>
+      </div>
+      <div className="lg:block hidden">
+        <Button
+          style={{
+            width: "180px",
+            height: "35px",
+            fontWeight: "bold",
+            borderRadius: "14px",
+          }}
+          variant="solid"
+          size="middle"
+          color="magenta"
+          onClick={() => navigate("/choose-plan")}
+        >
+          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATE AGORA"}
+        </Button>
+      </div>
     </div>
   );
 }

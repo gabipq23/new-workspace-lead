@@ -7,8 +7,7 @@ import OrderResumeDesktop from "../components/orderResumeDesktop";
 import OrderInformation from "./orderInformation";
 
 export default function FirstStep() {
-  const { basicInfo, updateBasicInfo, confirmedPlans, setConfirmedPlans } =
-    useOrderStore();
+  const { basicInfo, updateBasicInfo, confirmedPlans } = useOrderStore();
 
   const [showServices, setShowServices] = useState(false);
 
@@ -39,8 +38,6 @@ export default function FirstStep() {
 
       <div className="flex flex-col flex-1 px-2 pt-4  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
         <OrderInformation
-          confirmedPlans={confirmedPlans}
-          setConfirmedPlans={setConfirmedPlans}
           basicInfo={basicInfo}
           updateBasicInfo={updateBasicInfo}
         />

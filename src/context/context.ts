@@ -15,7 +15,8 @@ interface ConfirmedPlan {
   planName: string;
   price: string;
   users: number;
-  type: string;
+  type: "mensal" | "anual";
+  newPlan: boolean;
 }
 
 interface CompanyInfo {
@@ -31,6 +32,10 @@ interface OrderFlowStore {
   companyInfo: Partial<CompanyInfo>;
   setSelectedPlan: (plan: Plan) => void;
   setConfirmedPlans: (plans: ConfirmedPlan[]) => void;
+  addPlanToConfirmed: (plan: Plan) => void;
+  addCurrentPlanToConfirmed: (plan: Plan) => void;
+  addNewPlanToConfirmed: (plan: Plan) => void;
+  removePlanFromConfirmed: (planId: string) => void;
   updateBasicInfo: (info: Partial<BasicInfo>) => void;
   updateCompanyInfo: (info: Partial<CompanyInfo>) => void;
   buildCompleteOrder: () => OrderData | null;
@@ -62,6 +67,54 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
     set({ confirmedPlans: plans });
   },
 
+  addPlanToConfirmed: (plan: Plan) => {
+    const confirmedPlan: ConfirmedPlan = {
+      id: plan.id || Date.now().toString(),
+      planName: plan.planName,
+      price: plan.price,
+      users: plan.users || 1,
+      type: plan.type || "anual",
+      newPlan: true, // Default para novos planos = true
+    };
+    set((state) => ({
+      confirmedPlans: [...state.confirmedPlans, confirmedPlan],
+    }));
+  },
+
+  addCurrentPlanToConfirmed: (plan: Plan) => {
+    const confirmedPlan: ConfirmedPlan = {
+      id: plan.id || Date.now().toString(),
+      planName: plan.planName,
+      price: plan.price,
+      users: plan.users || 1,
+      type: plan.type || "anual",
+      newPlan: false, // Planos atuais/migração = false
+    };
+    set((state) => ({
+      confirmedPlans: [...state.confirmedPlans, confirmedPlan],
+    }));
+  },
+
+  addNewPlanToConfirmed: (plan: Plan) => {
+    const confirmedPlan: ConfirmedPlan = {
+      id: plan.id || Date.now().toString(),
+      planName: plan.planName,
+      price: plan.price,
+      users: plan.users || 1,
+      type: plan.type || "anual",
+      newPlan: true, // Novos planos = true
+    };
+    set((state) => ({
+      confirmedPlans: [...state.confirmedPlans, confirmedPlan],
+    }));
+  },
+
+  removePlanFromConfirmed: (planId: string) => {
+    set((state) => ({
+      confirmedPlans: state.confirmedPlans.filter((plan) => plan.id !== planId),
+    }));
+  },
+
   updateBasicInfo: (info: Partial<BasicInfo>) => {
     set((state) => ({
       basicInfo: { ...state.basicInfo, ...info },
@@ -84,6 +137,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       price: plan.price,
       type: plan.type as "mensal" | "anual",
       users: plan.users,
+      newPlan: plan.newPlan,
     }));
 
     return {

@@ -43,7 +43,12 @@ export function PlanCard({ plan, index }: { plan: Plan; index: number }) {
     <div className="border-b border-gray-200 pb-2">
       <div className="flex justify-between gap-2 p-3">
         <div className="text-start">
-          <div className="text-gray-600 text-[10px]">Plano {index}</div>
+          <div className="text-gray-600 text-[10px] h-5 flex items-center  gap-2">
+            Plano {index}{" "}
+            <span className="bg-green-200 p-0.5 px-2 rounded-md">
+              {plan.newPlan ? "Novo" : "Atual"}
+            </span>
+          </div>
           <div
             style={{ fontWeight: "bold" }}
             className="text-[#660099] text-[13px]"
@@ -52,7 +57,7 @@ export function PlanCard({ plan, index }: { plan: Plan; index: number }) {
           </div>
         </div>
         <div className="text-start">
-          <div className="text-gray-600 text-[10px]">Usuários</div>
+          <div className="text-gray-600 text-[10px] h-5">Usuários</div>
           <div
             style={{ fontWeight: "bold" }}
             className="text-[#660099] text-[13px]"
@@ -61,7 +66,7 @@ export function PlanCard({ plan, index }: { plan: Plan; index: number }) {
           </div>
         </div>
         <div className="text-start">
-          <div className="text-gray-600 text-[10px]">Valor Total</div>
+          <div className="text-gray-600 text-[10px] h-5">Valor Total</div>
           <div
             style={{ fontWeight: "bold" }}
             className="text-[#660099] text-[13px]"

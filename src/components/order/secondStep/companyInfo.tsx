@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Input, Checkbox, Radio, ConfigProvider, Tooltip } from "antd";
+import { Button, Input, Checkbox, ConfigProvider, Tooltip } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, CircleAlert } from "lucide-react";
 import { useOrderStore } from "../../../context/context";
@@ -142,7 +142,7 @@ export default function CompanyInfo() {
             Agora, informe os dados abaixo:
           </h1>
 
-          <div className="mb-8 text-[12px]">
+          {/* <div className="mb-8 text-[12px]">
             <h3 className="text-[14px] text-gray-800 mb-4">
               Você possui G-Suite ou Workspace?
             </h3>
@@ -174,7 +174,7 @@ export default function CompanyInfo() {
                 </Radio>
               </Radio.Group>
             </ConfigProvider>
-          </div>
+          </div> */}
           {/* {!hasWorkspace ? (
             <>
               <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-8 flex items-center">
@@ -282,7 +282,7 @@ export default function CompanyInfo() {
           </div>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 md:right-90 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+        <div className="fixed bottom-0 left-0 right-0 md:right-86 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
           <div className="flex justify-end max-w-7xl mx-auto">
             <ConfigProvider
               theme={{

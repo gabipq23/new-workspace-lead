@@ -44,29 +44,7 @@ export default function Catalog() {
 
         <Modal
           centered
-          title={
-            <div className="flex  justify-center items-center gap-2 ">
-              <img
-                src="/Vivo-Empresas.png"
-                className="h-5 md:h-8 hover:cursor-pointer"
-                alt="Vivo Empresas"
-              />
-
-              <div className="h-4 md:h-6 border-l border-gray-400"></div>
-
-              <a
-                href="https://www.goldempresas.com.br/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="/Gold-Logo.png"
-                  className="h-5 md:h-10"
-                  alt="Gold Empresas"
-                />
-              </a>
-            </div>
-          }
+          title=""
           open={isModalOpen}
           footer={null}
           width={700}
@@ -75,7 +53,6 @@ export default function Catalog() {
           keyboard={false}
         >
           <div>
-            <hr className="border-gray-300 mb-4" />
             <div className="flex flex-col gap-4">
               <div>
                 <h1

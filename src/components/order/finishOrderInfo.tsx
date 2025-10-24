@@ -74,7 +74,7 @@ export default function FinishOrderInfo() {
   const planosDetalhes = (
     <div className="flex flex-col items-center bg-white rounded-[26px] w-full p-4  py-4 ">
       {/* Desktop Version */}
-      <div className="hidden md:block ">
+      <div className="hidden lg:block ">
         <div className="flex items-center font-semibold text-[#666666] text-[15px] mb-4">
           <p className="w-76 text-center">Plano</p>
           <p className="w-32 text-center">Usuários</p>
@@ -88,7 +88,7 @@ export default function FinishOrderInfo() {
           <div key={plan?.id}>
             <div className="flex items-center py-4 text-[14px] text-neutral-700">
               <p className="text-[14px] font-semibold w-76 text-center">
-                {plan?.planName}
+                Google Workspace Business {plan?.planName}
               </p>
               <p className="text-[14px] w-32 text-center">{plan?.users}</p>
               <p className="text-[14px] w-32 text-center capitalize">
@@ -111,15 +111,17 @@ export default function FinishOrderInfo() {
       </div>
 
       {/* Mobile Version */}
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         {confirmedPlans.map((plan: Plan) => (
           <div
             key={plan.id}
             className="bg-white rounded-lg shadow p-4 mb-4 flex flex-col gap-2 border"
           >
             <div className="flex justify-between">
-              <span className="font-semibold text-[#666]">Plano:</span>
-              <span>Business {plan?.planName}</span>
+              <span className="font-semibold text-[#666] ">Plano:</span>
+              <span className="text-end">
+                Google Workspace Business {plan?.planName}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="font-semibold text-[#666]">Usuários:</span>
@@ -355,17 +357,16 @@ export default function FinishOrderInfo() {
 
         {/* Instruções de próximos passos */}
         <div className="flex flex-col items-center justify-center mt-4 gap-4 mb-6">
-          <div className="flex gap-2 items-center justify-center w-full max-w-[900px]">
-            <div className="text-[36px] md:text-[64px] lg:text-[64px] text-[#660099] mr-2">
+          <div className="flex gap-2 items-start justify-center w-full max-w-[900px]">
+            <div className="text-[36px] md:text-[64px] lg:text-[64px] flex text-[#660099] mr-2">
               <MailOutlined />
             </div>
             <div className="flex flex-col text-[13px] md:text-[16px] lg:text-[16px]">
               <p>
                 <span className="font-bold">1.</span> Em breve você receberá um
-                e-mail da Vivo através do remetente{" "}
-                <span className="font-bold">noreply@vivo.com.br</span> com as{" "}
-                <span className="font-bold">instruções de configuração</span> do
-                seu Google Workspace.
+                e-mail da VIVO através do remetente{" "}
+                <span className="font-bold">noreply@vivo.com.br</span> para dar
+                o <span className="font-bold">aceite digital.</span>
               </p>
               <p>
                 <span className="text-red-700 font-bold">Importante:</span> Caso
@@ -376,16 +377,19 @@ export default function FinishOrderInfo() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 w-full max-w-[900px]">
-            <div className="text-[36px] md:text-[64px] lg:text-[64px] text-[#660099] mr-2">
+          <div className="flex items-start gap-2 w-full max-w-[900px]">
+            <div className="text-[36px] md:text-[64px] lg:text-[64px] text-[#660099] flex mr-2">
               <SignatureOutlined />
             </div>
             <div className="text-[13px] md:text-[16px] lg:text-[16px]">
               <p>
-                <span className="font-bold">2.</span> Siga as instruções do
-                e-mail para{" "}
-                <span className="font-bold">configurar seus usuários</span> e
-                começar a usar o Google Workspace.
+                <span className="font-bold">2.</span> Uma vez validado, o pedido
+                tramitará e as licenças estarão disponíveis para utilização. Um
+                consultor técnico estará em contato para auxiliá-lo em qualquer
+                dúvida que possa surgir. Caso o seu processo seja de migração,
+                fique tranquilo: nada na sua conta será alterado. Apenas
+                vincularemos a cobrança a Vivo, deixado de utilizá-la com o
+                fornecedor atual.
               </p>
             </div>
           </div>

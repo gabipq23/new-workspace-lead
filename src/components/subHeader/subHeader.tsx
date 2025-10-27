@@ -8,24 +8,29 @@ function SubHeader() {
   const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const navigate = useNavigate();
   const menuItems = [
-    {
-      key: "1",
-      label: (
-        <a
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById("ofertas")?.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }}
-          href="#ofertas"
-          className="text-gray-600 hover:text-[#660099] py-2 px-4 block"
-        >
-          Ofertas
-        </a>
-      ),
-    },
+    // Só mostra "Ofertas" se não tiver workspace
+    ...(hasWorkspace !== "true"
+      ? [
+          {
+            key: "1",
+            label: (
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("ofertas")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+                href="#ofertas"
+                className="text-gray-600 hover:text-[#660099] py-2 px-4 block"
+              >
+                Ofertas
+              </a>
+            ),
+          },
+        ]
+      : []),
     {
       key: "2",
       label: (
@@ -40,7 +45,9 @@ function SubHeader() {
           }}
           className="text-gray-600 hover:text-[#660099] py-2 px-4 block"
         >
-          Porque Escolher Google Workspace
+          {hasWorkspace === "true"
+            ? "Como migrar"
+            : "Porque Escolher Google Workspace"}
         </a>
       ),
     },
@@ -132,19 +139,22 @@ function SubHeader() {
           Google Workspace
         </p>
         <div className="flex  pt-0.5 h-full gap-6 md:text-[10px] lg:text-[14px] text-[#666666] cursor-pointer">
-          <a
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("ofertas")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }}
-            href="#ofertas"
-            className="hover:text-[#660099]"
-          >
-            Ofertas
-          </a>
+          {hasWorkspace !== "true" && (
+            <a
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("ofertas")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
+              href="#ofertas"
+              className="hover:text-[#660099]"
+            >
+              Ofertas
+            </a>
+          )}
+
           <a
             href="#porque-escolher"
             onClick={(e) => {
@@ -156,7 +166,9 @@ function SubHeader() {
             }}
             className="hover:text-[#660099]"
           >
-            Porque Escolher Google Workspace
+            {hasWorkspace === "true"
+              ? "Como migrar"
+              : "Porque Escolher Google Workspace"}
           </a>
           <a
             href="#beneficios"
@@ -212,7 +224,7 @@ function SubHeader() {
           color="magenta"
           onClick={() => navigate("/choose-plan")}
         >
-          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATE AGORA"}
+          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATAR"}
         </Button>
       </div>
       <div className="lg:block hidden">
@@ -228,7 +240,7 @@ function SubHeader() {
           color="magenta"
           onClick={() => navigate("/choose-plan")}
         >
-          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATE AGORA"}
+          {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATAR"}
         </Button>
       </div>
     </div>

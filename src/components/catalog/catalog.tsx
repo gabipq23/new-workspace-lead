@@ -9,18 +9,24 @@ import Header from "../header/header";
 import SubHeader from "../subHeader/subHeader";
 import Footer from "../footer/footer";
 import BannerOffers from "./bannerOffers/bannerOffers";
-import { Button, ConfigProvider, Modal } from "antd";
+import { Button, Checkbox, ConfigProvider, Modal } from "antd";
 import { useState, useEffect } from "react";
 import Testimonials from "./testimonials/testimonials";
 
 export default function Catalog() {
   const queryClient = new QueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVivoClient, setIsVivoClient] = useState<boolean | null>(null);
 
   const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
+
+  const handleIsVivoClientResponse = (isVivoClient: boolean) => {
+    setIsVivoClient(isVivoClient);
+    sessionStorage.setItem("isVivoClient", isVivoClient.toString());
+  };
 
   const handleWorkspaceResponse = (hasWorkspace: boolean) => {
     sessionStorage.setItem("alreadyHaveWorkspace", hasWorkspace.toString());
@@ -101,7 +107,36 @@ export default function Catalog() {
                 />
               </div>
             </div>
-
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: "#660099",
+                },
+              }}
+            >
+              <div className="px-4 flex text-start flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    className=" flex items-center justify-center"
+                    checked={isVivoClient === true}
+                    onChange={(e) =>
+                      handleIsVivoClientResponse(e.target.checked)
+                    }
+                    style={{
+                      color: "#660099",
+                    }}
+                  />
+                  <div className="flex  items-start ">
+                    <p
+                      style={{ margin: 0 }}
+                      className="text-gray-900 text-[18px] ml-2"
+                    >
+                      Sou Cliente Vivo{" "}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </ConfigProvider>
             <div>
               <p
                 style={{ margin: 0 }}

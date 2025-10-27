@@ -2,7 +2,10 @@ import { Quote } from "lucide-react";
 
 export default function Testimonials() {
   return (
-    <div className="flex flex-col text-[#5f6368] bg-[#f7f7f7] px-6 md:px-24 lg:px-32 w-full py-14 justify-center items-center">
+    <div
+      id="depoimentos"
+      className="flex flex-col text-[#5f6368] bg-[#f7f7f7] px-6 md:px-24 lg:px-32 w-full py-14 justify-center items-center"
+    >
       <p
         style={{ margin: 0 }}
         className="text-[18px] font-normal text-gray-600 "

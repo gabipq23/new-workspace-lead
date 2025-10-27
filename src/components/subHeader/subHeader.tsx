@@ -8,7 +8,6 @@ function SubHeader() {
   const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const navigate = useNavigate();
   const menuItems = [
-    // Só mostra "Ofertas" se não tiver workspace
     ...(hasWorkspace !== "true"
       ? [
           {
@@ -26,6 +25,28 @@ function SubHeader() {
                 className="text-gray-600 hover:text-[#660099] py-2 px-4 block"
               >
                 Ofertas
+              </a>
+            ),
+          },
+        ]
+      : []),
+    ...(hasWorkspace === "true"
+      ? [
+          {
+            key: "1",
+            label: (
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("depoimentos")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+                href="#depoimentos"
+                className="text-gray-600 hover:text-[#660099] py-2 px-4 block"
+              >
+                Depoimentos
               </a>
             ),
           },
@@ -154,7 +175,21 @@ function SubHeader() {
               Ofertas
             </a>
           )}
-
+          {hasWorkspace === "true" && (
+            <a
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("depoimentos")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
+              href="#depoimentos"
+              className="hover:text-[#660099] "
+            >
+              Depoimentos
+            </a>
+          )}
           <a
             href="#porque-escolher"
             onClick={(e) => {

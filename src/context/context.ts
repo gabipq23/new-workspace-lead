@@ -50,7 +50,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
     email: "",
     manager_name: "",
     managerPhone: "",
-    isVivoClient: true,
+    isVivoClient: sessionStorage.getItem("isVivoClient") === "true",
     acceptContact: true,
   },
   companyInfo: {

@@ -1,12 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  ConfigProvider,
-  Input,
-  Radio,
-  Select,
-  Tooltip,
-} from "antd";
+import { Button, Checkbox, ConfigProvider, Input, Select, Tooltip } from "antd";
 import { CircleAlert } from "lucide-react";
 import { formatPrice } from "../../../utils/formatPrice";
 import { CNPJInput, PhoneInput } from "../../../utils/input";
@@ -58,7 +50,7 @@ export default function OrderInformation({
   const [email, setEmail] = useState(basicInfo.email);
   const [manager_name, setmanager_name] = useState(basicInfo.manager_name);
   const [managerPhone, setManagerPhone] = useState(basicInfo.managerPhone);
-  const [isVivoClient, setIsVivoClient] = useState(basicInfo.isVivoClient);
+  const isVivoClient = sessionStorage.getItem("isVivoClient") === "true";
   const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
@@ -280,33 +272,6 @@ export default function OrderInformation({
               ganham +2GB na contratação de Google Workspace
             </span>
           </div>
-          {hasWorkspace !== "true" && (
-            <div className="mb-6 text-[12px]">
-              <h3 className="text-[14px] text-gray-800 mb-4">
-                É cliente Vivo Empresas Móvel?
-              </h3>
-              <ConfigProvider
-                theme={{
-                  token: {
-                    colorPrimary: "#f97316",
-                  },
-                }}
-              >
-                <Radio.Group
-                  value={isVivoClient}
-                  onChange={(e) => setIsVivoClient(e.target.value)}
-                  className="flex gap-6 text-[14px]"
-                >
-                  <Radio value={true} className="text-gray-700 text-[12px]">
-                    Sim, sou cliente
-                  </Radio>
-                  <Radio value={false} className="text-gray-700 text-[12px]">
-                    Não sou cliente
-                  </Radio>
-                </Radio.Group>
-              </ConfigProvider>
-            </div>
-          )}
 
           <div className="mb-8">
             {/* plano antigo */}

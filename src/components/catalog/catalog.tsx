@@ -16,22 +16,19 @@ import Testimonials from "./testimonials/testimonials";
 export default function Catalog() {
   const queryClient = new QueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalStep, setModalStep] = useState(1); // 1 = workspace question, 2 = vivo client question
+  const [modalStep, setModalStep] = useState(1);
 
   const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   useEffect(() => {
-    // Modal sempre abre quando o site é carregado
     setIsModalOpen(true);
   }, []);
   const handleIsVivoClientResponse = (isVivoClient: boolean) => {
     sessionStorage.setItem("isVivoClient", isVivoClient.toString());
-    // Fecha o modal após responder a pergunta do Vivo
     setIsModalOpen(false);
   };
 
   const handleWorkspaceResponse = (hasWorkspace: boolean) => {
     sessionStorage.setItem("alreadyHaveWorkspace", hasWorkspace.toString());
-    // Vai para a próxima pergunta (Vivo client)
     setModalStep(2);
   };
 
@@ -62,7 +59,6 @@ export default function Catalog() {
         >
           <div>
             {modalStep === 1 ? (
-              // Primeira pergunta: Já possui workspace?
               <>
                 <div className="flex flex-col gap-4">
                   <div>
@@ -152,7 +148,6 @@ export default function Catalog() {
                 </div>
               </>
             ) : (
-              // Segunda pergunta: É cliente Vivo?
               <>
                 <div className="flex flex-col gap-4">
                   <div>

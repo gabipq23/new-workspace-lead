@@ -1,7 +1,8 @@
-import { Button, Input, Select, Tooltip } from "antd";
+import { Button, Input, Modal, Select, Tooltip } from "antd";
 import { CircleAlert } from "lucide-react";
 import type { Plan } from "../../../interfaces/order";
 import { formatPrice } from "../../../utils/formatPrice";
+import { useState } from "react";
 const { Option } = Select;
 export default function AddOldPlan({
   hasWorkspace,
@@ -32,6 +33,26 @@ export default function AddOldPlan({
   addCurrentPlan: () => void;
   hasTriedSubmit: boolean;
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Variáveis auxiliares para valores dos planos
+  const mensalMap = { Starter: "49,00", Standard: "98,00", Plus: "154,00" };
+  const anualMap = { Starter: "32,72", Standard: "81,80", Plus: "128,40" };
+  const mensalNumMap = { Starter: "49.00", Standard: "98.00", Plus: "154.00" };
+  const anualNumMap = { Starter: "32.72", Standard: "81.80", Plus: "128.40" };
+  const planKey = (currentPlanInput.planName || "") as
+    | "Starter"
+    | "Standard"
+    | "Plus";
+  const mensalValue = mensalMap[planKey] || "0";
+  const anualValue = anualMap[planKey] || "0";
+  const mensalNumValue = mensalNumMap[planKey] || "0";
+  const anualNumValue = anualNumMap[planKey] || "0";
+  const users = currentPlanInput.users;
+  const mensalTotal = Number(mensalNumValue.replace(",", ".")) * users * 12;
+  const anualTotal = Number(anualNumValue.replace(",", ".")) * users * 12;
+  const economia = mensalTotal - anualTotal;
+
   return (
     <>
       {hasWorkspace === "true" && (
@@ -239,6 +260,9 @@ export default function AddOldPlan({
 
                     updateCurrentPlanInput("price", price);
                   }
+                  if (value === "mensal") {
+                    setIsModalOpen(true);
+                  }
                 }}
                 className="w-[100px]"
               >
@@ -303,6 +327,144 @@ export default function AddOldPlan({
               </div>
             </div>
           </div>
+          {isModalOpen && (
+            <Modal
+              open={isModalOpen}
+              onCancel={() => setIsModalOpen(false)}
+              footer={null}
+              centered
+              bodyStyle={{ padding: 32, borderRadius: 24, background: "#fff" }}
+              style={{ borderRadius: 24 }}
+            >
+              <div style={{ textAlign: "center" }}>
+                <h2 className="text-[#660099] text-[24px]">
+                  Quer economizar 33% mudando
+                  <br />
+                  para o plano anual?
+                </h2>
+                <div style={{ marginBottom: 16, textAlign: "left" }}>
+                  <span style={{ fontWeight: 600, fontSize: 16 }}>
+                    Simulação de economia
+                  </span>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: 8,
+                      border: "1px solid #d1d5db",
+                      borderRadius: 8,
+                      overflow: "hidden",
+                      fontSize: 18,
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        padding: 12,
+                        borderRight: "1px solid #d1d5db",
+                        background: "#f9fafb",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div style={{ fontWeight: 700 }}>Usuários</div>
+                      <div>{users}</div>
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        padding: 12,
+                        borderRight: "1px solid #d1d5db",
+                        background: "#f9fafb",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div style={{ fontWeight: 700 }}>Plano Mensal</div>
+                      <div>R${formatPrice(mensalValue, users)}/ mês</div>
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        padding: 12,
+                        background: "#f9fafb",
+                        textAlign: "center",
+                        position: "relative",
+                      }}
+                    >
+                      <div style={{ fontWeight: 700 }}>Plano Anual</div>
+                      <div>R${formatPrice(anualValue, users)}/ mês</div>
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          background: "#22c55e",
+                          color: "#fff",
+                          borderRadius: 6,
+                          padding: "2px 8px",
+                          fontSize: 14,
+                          fontWeight: 700,
+                        }}
+                      >
+                        -33%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style={{ margin: "16px 0", fontSize: 20, fontWeight: 600 }}
+                >
+                  Economize por ano:{" "}
+                  <span style={{ color: "#22c55e", fontWeight: 700 }}>
+                    R$
+                    {economia.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </span>
+                </div>
+                <div
+                  style={{ fontSize: 18, fontWeight: 500, marginBottom: 16 }}
+                >
+                  Aproveitar o desconto e mudar para o plano anual?
+                </div>
+                <div
+                  style={{ display: "flex", justifyContent: "center", gap: 24 }}
+                >
+                  <Button
+                    type="primary"
+                    style={{
+                      background: "#7c3aed",
+                      borderColor: "#7c3aed",
+                      fontWeight: 600,
+                      fontSize: 16,
+                      padding: "8px 24px",
+                      borderRadius: 12,
+                    }}
+                    onClick={() => {
+                      updateCurrentPlanInput("type", "anual");
+                      updateCurrentPlanInput("price", anualValue);
+                      setIsModalOpen(false);
+                    }}
+                  >
+                    Sim, quero o desconto
+                  </Button>
+                  <Button
+                    type="default"
+                    style={{
+                      borderColor: "#7c3aed",
+                      color: "#7c3aed",
+                      fontWeight: 600,
+                      fontSize: 16,
+                      padding: "8px 24px",
+                      borderRadius: 12,
+                    }}
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    Não, manter mensal
+                  </Button>
+                </div>
+              </div>
+            </Modal>
+          )}
         </>
       )}
     </>

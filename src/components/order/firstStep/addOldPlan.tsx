@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Select, Tooltip } from "antd";
+import { Button, ConfigProvider, Input, Modal, Select, Tooltip } from "antd";
 import { CircleAlert } from "lucide-react";
 import type { Plan } from "../../../interfaces/order";
 import { formatPrice } from "../../../utils/formatPrice";
@@ -330,90 +330,47 @@ export default function AddOldPlan({
           {isModalOpen && (
             <Modal
               open={isModalOpen}
-              onCancel={() => setIsModalOpen(false)}
+              closable={false}
               footer={null}
               centered
+              width={700}
               bodyStyle={{ padding: 32, borderRadius: 24, background: "#fff" }}
               style={{ borderRadius: 24 }}
             >
-              <div style={{ textAlign: "center" }}>
-                <h2 className="text-[#660099] text-[24px]">
+              <div className="text-center">
+                <h2 className="text-[#660099] text-2xl font-bold mb-4">
                   Quer economizar 33% mudando
                   <br />
                   para o plano anual?
                 </h2>
-                <div style={{ marginBottom: 16, textAlign: "left" }}>
-                  <span style={{ fontWeight: 600, fontSize: 16 }}>
+                <div className="mb-4 text-left">
+                  <span className="font-semibold text-base">
                     Simulação de economia
                   </span>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginTop: 8,
-                      border: "1px solid #d1d5db",
-                      borderRadius: 8,
-                      overflow: "hidden",
-                      fontSize: 18,
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: 1,
-                        padding: 12,
-                        borderRight: "1px solid #d1d5db",
-                        background: "#f9fafb",
-                        textAlign: "center",
-                      }}
-                    >
-                      <div style={{ fontWeight: 700 }}>Usuários</div>
+                  <div className="flex mt-2 border border-gray-300 rounded-lg overflow-hidden text-lg">
+                    <div className="flex-1 p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
+                      <div className="font-bold">Usuários</div>
                       <div>{users}</div>
                     </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        padding: 12,
-                        borderRight: "1px solid #d1d5db",
-                        background: "#f9fafb",
-                        textAlign: "center",
-                      }}
-                    >
-                      <div style={{ fontWeight: 700 }}>Plano Mensal</div>
+                    <div className="flex-1 p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
+                      <div className="font-bold">Plano Mensal</div>
                       <div>R${formatPrice(mensalValue, users)}/ mês</div>
                     </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        padding: 12,
-                        background: "#f9fafb",
-                        textAlign: "center",
-                        position: "relative",
-                      }}
-                    >
-                      <div style={{ fontWeight: 700 }}>Plano Anual</div>
+                    <div className="flex-1 p-3 px-6 bg-gray-50 text-center relative">
+                      <div className="font-bold">Plano Anual</div>
                       <div>R${formatPrice(anualValue, users)}/ mês</div>
                       <span
-                        style={{
-                          position: "absolute",
-                          top: 8,
-                          right: 8,
-                          background: "#22c55e",
-                          color: "#fff",
-                          borderRadius: 6,
-                          padding: "2px 8px",
-                          fontSize: 14,
-                          fontWeight: 700,
-                        }}
+                        className="absolute bottom-15 left-37 bg-green-600 text-white rounded-md px-2 py-0.5 text-sm font-bold"
+                        style={{ fontSize: 13 }}
                       >
                         -33%
                       </span>
                     </div>
                   </div>
                 </div>
-                <div
-                  style={{ margin: "16px 0", fontSize: 20, fontWeight: 600 }}
-                >
+                <div className="my-4 text-xl font-semibold">
                   Economize por ano:{" "}
-                  <span style={{ color: "#22c55e", fontWeight: 700 }}>
+                  <span className="text-green-600 font-bold">
                     R$
                     {economia.toLocaleString("pt-BR", {
                       minimumFractionDigits: 2,
@@ -421,46 +378,38 @@ export default function AddOldPlan({
                     })}
                   </span>
                 </div>
-                <div
-                  style={{ fontSize: 18, fontWeight: 500, marginBottom: 16 }}
-                >
+                <div className="text-lg font-medium mb-4">
                   Aproveitar o desconto e mudar para o plano anual?
                 </div>
-                <div
-                  style={{ display: "flex", justifyContent: "center", gap: 24 }}
-                >
-                  <Button
-                    type="primary"
-                    style={{
-                      background: "#7c3aed",
-                      borderColor: "#7c3aed",
-                      fontWeight: 600,
-                      fontSize: 16,
-                      padding: "8px 24px",
-                      borderRadius: 12,
-                    }}
-                    onClick={() => {
-                      updateCurrentPlanInput("type", "anual");
-                      updateCurrentPlanInput("price", anualValue);
-                      setIsModalOpen(false);
+                <div className="flex justify-center gap-6">
+                  <ConfigProvider
+                    theme={{
+                      token: {
+                        colorPrimary: "#660099",
+                        colorText: "#660099",
+                        colorBorder: "#660099",
+                        fontSize: 16,
+                        colorPrimaryHover: "#9933cc",
+                      },
                     }}
                   >
-                    Sim, quero o desconto
-                  </Button>
-                  <Button
-                    type="default"
-                    style={{
-                      borderColor: "#7c3aed",
-                      color: "#7c3aed",
-                      fontWeight: 600,
-                      fontSize: 16,
-                      padding: "8px 24px",
-                      borderRadius: 12,
-                    }}
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    Não, manter mensal
-                  </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        updateCurrentPlanInput("type", "anual");
+                        updateCurrentPlanInput("price", anualValue);
+                        setIsModalOpen(false);
+                      }}
+                    >
+                      Sim, quero o desconto
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      Não, manter mensal
+                    </Button>
+                  </ConfigProvider>
                 </div>
               </div>
             </Modal>

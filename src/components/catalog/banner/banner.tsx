@@ -27,12 +27,6 @@ function Banner() {
         className="absolute inset-0 flex flex-col justify-evenly px-6 md:px-24 lg:px-32   "
       >
         <div className="text-start flex gap-2 flex-col px-6 md:py-4 lg:py-6  md:px-24 lg:px-32  ">
-          <p
-            style={{ lineHeight: "1.", margin: 0 }}
-            className="text-[12px] md:text-[12px] lg:text-[16px] text-[#f7f7f7] "
-          >
-            {hasWorkspace === "true" ? "" : " CONTRATE AGORA"}
-          </p>
           {hasWorkspace === "true" ? (
             <>
               <p
@@ -54,13 +48,13 @@ function Banner() {
                 style={{ lineHeight: "1.0", margin: 0 }}
                 className="text-[23px] md:text-[28px] lg:text-[38px] text-[#f7f7f7] "
               >
-                Google Workspace:
+                Contrate Google Workspace
               </p>
               <p
                 style={{ lineHeight: "1.0", margin: 0 }}
                 className="text-[23px] mdtext-[28px] lg:text-[38px] text-[#f7f7f7] "
               >
-                Gmail, Meet e mais
+                através da Vivo e ganhe benefícios
               </p>
             </>
           )}
@@ -77,9 +71,9 @@ function Banner() {
             <>
               <p
                 style={{ lineHeight: "1.0", margin: 0 }}
-                className="text-[10px] md:text-[12px] lg:text-[14px] text-[#f7f7f7] "
+                className="text-[10px] md:text-[14px] lg:text-[18px] text-[#f7f7f7] "
               >
-                INCLUA DIRETO NA SUA FATURA VIVO EMPRESAS
+                A partir de R$32,72/ mês
               </p>
             </>
           )}

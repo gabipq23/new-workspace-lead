@@ -4,8 +4,8 @@ import "./index.css";
 import { Routes, Route } from "react-router-dom";
 import Catalog from "./components/catalog/catalog";
 import CompanyInfo from "./components/order/secondStep/companyInfo";
-import FinishOrderInfo from "./components/order/finishOrderInfo";
 import FirstStep from "./components/order/firstStep/firstStep";
+import FinishOrderInfo from "./components/order/finishOrder/finishOrderInfo";
 
 function App() {
   const queryClient = new QueryClient();

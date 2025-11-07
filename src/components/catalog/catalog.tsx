@@ -155,7 +155,7 @@ export default function Catalog() {
                       style={{ margin: 0 }}
                       className="text-[24px] text-center text-gray-800"
                     >
-                      É cliente Vivo?
+                      É cliente Vivo Móvel?
                     </h1>
                   </div>
 
@@ -163,8 +163,8 @@ export default function Catalog() {
                     style={{ margin: 0 }}
                     className="text-[14px] text-center text-gray-600"
                   >
-                    Clientes Vivo têm benefícios especiais e ganham +2GB de
-                    internet por conta contratada.
+                    Clientes Vivo Móvel têm benefícios especiais e ganham +2GB de
+                    internet por licença contratada.
                   </p>
                 </div>
 

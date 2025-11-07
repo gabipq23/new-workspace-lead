@@ -63,7 +63,7 @@ import { useOrderStore } from "../../../context/context";
 import OrderResumeMobile from "../components/orderResumeMobile";
 import OrderResumeDesktop from "../components/orderResumeDesktop";
 import OrderInformation from "./orderInformation";
-import Header from "../../header/header";
+import Header from "../components/header";
 
 export default function FirstStep() {
   const { confirmedPlans } = useOrderStore();
@@ -82,9 +82,9 @@ export default function FirstStep() {
   };
 
   return (
-    <div className="flex flex-col min-h-[100vh]">
+    <div className="flex flex-col min-h-[100vh] overflow-y-auto scrollbar-thin">
       <Header />
-      <div className="flex flex-col md:flex-row min-h-[100vh]">
+      <div className="flex flex-col md:flex-row min-h-[100vh] overflow-y-auto scrollbar-thin">
         {/* mobile */}
         <div className="md:hidden flex">
           <OrderResumeMobile
@@ -96,7 +96,7 @@ export default function FirstStep() {
           />
         </div>
 
-        <div className="flex flex-col flex-1 px-2 pt-4 justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin">
+        <div className="flex flex-col flex-1 px-2 pt-4 justify-between bg-[#f7f7f7] min-h-[100vh] overflow-y-auto scrollbar-thin">
           <OrderInformation />
         </div>
 

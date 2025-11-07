@@ -336,15 +336,15 @@ export default function OrderInformation() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAddNewPlan, setShowAddNewPlan] = useState(false);
-
+  const [modalAlreadyShown, setModalAlreadyShown] = useState(false);
   return (
     <>
-      <div className="flex flex-col flex-1 px-8 pt-2 justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin">
+      <div className="flex flex-col flex-1 px-8 pt-2 justify-between bg-[#f7f7f7] h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin">
         <div>
-          <div className="flex flex-col gap-4 lg:flex-row items-center justify-center mb-8">
+          <div className="flex flex-col gap-4 lg:flex-row items-center justify-center mb-4">
             <div className="flex items-center gap-2">
               <div className="flex flex-col gap-1 items-center">
-                <div className="w-10 h-10 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
+                <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
                   1
                 </div>
                 <span className="text-[16px] text-[#660099] font-medium">
@@ -352,20 +352,20 @@ export default function OrderInformation() {
                 </span>
               </div>
 
-              <div className="w-10 h-px bg-[#660099] mt-[-12px]"></div>
+              <div className="w-60 h-px bg-[#660099] mt-[-12px]"></div>
 
               <>
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="w-10 h-10 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
+                  <div className="w-8 h-8 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
                     2
                   </div>
                   <span className="text-[16px] text-[#660099]">Dados</span>
                 </div>
-                <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
+                <div className="w-60 h-px bg-[#660099] mt-[-12px]"></div>
               </>
 
               <div className="flex flex-col gap-1 items-center">
-                <div className="w-10 h-10 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
+                <div className="w-8 h-8 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
                   3
                 </div>
                 <span className="text-[16px] text-[#660099]">Verificação</span>
@@ -388,37 +388,31 @@ export default function OrderInformation() {
 
           <div className="mb-8">
             {alreadyHaveWorkspace && (
-              <>
-                {/* Planos Atuais */}
-                <AddOldPlan
-                  hasWorkspace="true"
-                  confirmedPlans={confirmedPlans}
-                  removePlan={removePlan}
-                  currentPlanInput={currentPlanInput}
-                  updateCurrentPlanInput={updateCurrentPlanInput}
-                  handleCurrentUserIncrease={handleCurrentUserIncrease}
-                  handleCurrentUserDecrease={handleCurrentUserDecrease}
-                  addCurrentPlan={addCurrentPlan}
-                  hasTriedSubmit={hasTriedSubmit}
-                />
-              </>
+              <AddOldPlan
+                hasWorkspace="true"
+                confirmedPlans={confirmedPlans}
+                removePlan={removePlan}
+                currentPlanInput={currentPlanInput}
+                updateCurrentPlanInput={updateCurrentPlanInput}
+                handleCurrentUserIncrease={handleCurrentUserIncrease}
+                handleCurrentUserDecrease={handleCurrentUserDecrease}
+                addCurrentPlan={addCurrentPlan}
+                hasTriedSubmit={hasTriedSubmit}
+              />
             )}
 
             {showAddNewPlan && (
-              <>
-                {/* Novos Planos */}
-                <AddNewPlan
-                  hasWorkspace={alreadyHaveWorkspace ? "true" : "false"}
-                  confirmedPlans={confirmedPlans}
-                  newPlanInput={newPlanInput}
-                  updateNewPlanInput={updateNewPlanInput}
-                  handleNewUserDecrease={handleNewUserDecrease}
-                  handleNewUserIncrease={handleNewUserIncrease}
-                  addNewPlan={addNewPlan}
-                  removePlan={removePlan}
-                  hasTriedSubmit={hasTriedSubmit}
-                />
-              </>
+              <AddNewPlan
+                hasWorkspace={alreadyHaveWorkspace ? "true" : "false"}
+                confirmedPlans={confirmedPlans}
+                newPlanInput={newPlanInput}
+                updateNewPlanInput={updateNewPlanInput}
+                handleNewUserDecrease={handleNewUserDecrease}
+                handleNewUserIncrease={handleNewUserIncrease}
+                addNewPlan={addNewPlan}
+                removePlan={removePlan}
+                hasTriedSubmit={hasTriedSubmit}
+              />
             )}
           </div>
         </div>
@@ -436,7 +430,16 @@ export default function OrderInformation() {
                 type="primary"
                 size="large"
                 onClick={() => {
-                  setIsModalOpen(true);
+                  if (
+                    !modalAlreadyShown &&
+                    alreadyHaveWorkspace &&
+                    !showAddNewPlan
+                  ) {
+                    setIsModalOpen(true);
+                    setModalAlreadyShown(true);
+                  } else {
+                    handleSubmit();
+                  }
                 }}
                 className="self-end"
               >
@@ -489,8 +492,8 @@ export default function OrderInformation() {
                   variant="outlined"
                   size="large"
                   onClick={() => {
-                    handleSubmit();
                     setIsModalOpen(false);
+                    handleSubmit();
                   }}
                   loading={isCreatingOrderLoading}
                   disabled={isCreatingOrderLoading}

@@ -1,10 +1,27 @@
-import type { Plan } from "../../../interfaces/order";
-
+interface Plan {
+  id: string;
+  planName: string;
+  price: string;
+  users: number;
+  type: string;
+}
 export default function OrderTable({
   confirmedPlans,
 }: {
   confirmedPlans: Plan[];
 }) {
+  const getTotalPrice = () => {
+    return confirmedPlans.reduce((total: number, plan: Plan) => {
+      return total + parseFloat(plan.price.replace(",", ".")) * plan?.users;
+    }, 0);
+  };
+
+  const getTotalUsers = () => {
+    return confirmedPlans.reduce(
+      (total: number, plan: Plan) => total + plan?.users,
+      0
+    );
+  };
   return (
     <>
       <div className="flex flex-col items-center bg-white rounded-[26px] w-full p-4  py-4 ">
@@ -18,7 +35,6 @@ export default function OrderTable({
             <p className="w-40 text-center">Valor Total</p>
           </div>
           <hr className="border-t border-neutral-300 mx-2 mb-4" />
-
           {confirmedPlans?.map((plan: Plan, index: number) => (
             <div key={plan?.id}>
               <div className="flex items-center py-4 text-[14px] text-neutral-700">
@@ -48,7 +64,16 @@ export default function OrderTable({
                 <hr className="border-t border-neutral-300 mx-2" />
               )}
             </div>
-          ))}
+          ))}{" "}
+          <hr className="border-t border-neutral-300 mx-2 mb-4" />
+          {/* Total row */}
+          <div className="flex items-center py-4 text-[15px] font-bold text-neutral-900">
+            <p className="w-76 text-center pt-2">Total</p>
+            <p className="w-32 text-center pt-2">{getTotalUsers()}</p>
+            <p className="w-32 text-center pt-2"></p>
+            <p className="w-40 text-center pt-2"></p>
+            <p className="w-40 text-center pt-2">R$ {getTotalPrice()},00/mês</p>
+          </div>
         </div>
 
         {/* Mobile */}

@@ -333,7 +333,7 @@ export default function OrderInformation() {
     isCreatingOrderLoading,
     alreadyHaveWorkspace,
   } = useOrderInformation();
-
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAddNewPlan, setShowAddNewPlan] = useState(false);
   const [modalAlreadyShown, setModalAlreadyShown] = useState(false);
@@ -375,7 +375,7 @@ export default function OrderInformation() {
 
           <h1 className="text-[18px] font-normal text-[#660099]">
             Olá! Vamos iniciar o seu pedido{" "}
-            {alreadyHaveWorkspace ? "de migração" : ""} online :)
+            {hasWorkspace === "true" ? "de migração" : ""} online :)
           </h1>
 
           <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-4 flex items-center">
@@ -387,7 +387,7 @@ export default function OrderInformation() {
           </div>
 
           <div className="mb-8">
-            {alreadyHaveWorkspace && (
+            {hasWorkspace === "true" && (
               <AddOldPlan
                 hasWorkspace="true"
                 confirmedPlans={confirmedPlans}
@@ -432,7 +432,7 @@ export default function OrderInformation() {
                 onClick={() => {
                   if (
                     !modalAlreadyShown &&
-                    alreadyHaveWorkspace &&
+                    hasWorkspace === "true" &&
                     !showAddNewPlan
                   ) {
                     setIsModalOpen(true);

@@ -15,7 +15,7 @@ export default function OrderResumeMobile({
       <div className=" w-full flex flex-col bg-[#660099] text-white  pt-2">
         <div className=" flex items-end justify-end text-[12px] gap-2 px-3">
           <span className="text-white">🛒</span>
-          <span className="">Seu plano</span>
+          <span className="">Planos</span>
         </div>
 
         <h3

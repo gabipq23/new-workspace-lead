@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Input, Checkbox, ConfigProvider, Tooltip } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, CircleAlert } from "lucide-react";
@@ -8,26 +8,18 @@ import OrderResumeMobile from "../components/orderResumeMobile";
 import OrderResumeDesktop from "../components/orderResumeDesktop";
 
 export default function CompanyInfo() {
-  const { companyInfo, updateCompanyInfo, confirmedPlans, clearOrder } =
+  const { secondStepData, updateSecondStepData, confirmedPlans, clearOrder } =
     useOrderStore();
-
-  const [domainName, setDomainName] = useState(companyInfo.domainName || "");
-  const [hasWorkspace, setHasWorkspace] = useState(
-    companyInfo.alreadyHaveWorkspace || false
-  );
-  const [acceptTerms, setAcceptTerms] = useState(
-    companyInfo.acceptTerms || false
-  );
-  const [showServices, setShowServices] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
-  useEffect(() => {
-    const savedWorkspaceValue = sessionStorage.getItem("alreadyHaveWorkspace");
-    if (savedWorkspaceValue !== null) {
-      const boolValue = savedWorkspaceValue === "true";
-      setHasWorkspace(boolValue);
-    }
-  }, []);
+  const cnpj = secondStepData.cnpj || "";
+  const email = secondStepData.email || "";
+  const managerName = secondStepData.manager_name || "";
+  const managerPhone = secondStepData.managerPhone || "";
+  const domainName = secondStepData.domainName || "";
+  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
+  const acceptTerms = secondStepData.acceptTerms || false;
+  const [showServices, setShowServices] = useState(false);
 
   const getTotalPrice = () => {
     const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
@@ -50,8 +42,20 @@ export default function CompanyInfo() {
   const isFormValid = () => {
     const hasAcceptedTerms = acceptTerms === true;
     const hasDomainName = domainName.trim() !== "";
-
-    return hasAcceptedTerms && hasDomainName;
+    const cnpjDigits = cnpj.replace(/\D/g, "");
+    const hasValidCnpj = cnpjDigits.length === 14;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const hasValidEmail = emailRegex.test(email);
+    const hasValidManagerName = managerName.trim() !== "";
+    const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
+    return (
+      hasAcceptedTerms &&
+      hasDomainName &&
+      hasValidCnpj &&
+      hasValidEmail &&
+      hasValidManagerName &&
+      hasValidManagerPhone
+    );
   };
 
   const handleSubmit = async () => {
@@ -60,16 +64,24 @@ export default function CompanyInfo() {
       return;
     }
 
-    updateCompanyInfo({
-      domainName: domainName,
-      alreadyHaveWorkspace: hasWorkspace,
-      acceptTerms: acceptTerms,
+    updateSecondStepData({
+      domainName,
+
+      acceptTerms,
+      cnpj,
+      email,
+      manager_name: managerName,
+      managerPhone,
     });
 
     const updateData = {
-      domainName: domainName,
+      domainName,
       alreadyHaveWorkspace: hasWorkspace,
-      acceptTerms: acceptTerms,
+      acceptTerms,
+      cnpj,
+      email,
+      manager_name: managerName,
+      managerPhone,
     };
 
     try {
@@ -141,6 +153,71 @@ export default function CompanyInfo() {
           <h1 className="text-[18px] font-normal text-[#660099] ">
             Agora, informe os dados abaixo:
           </h1>
+          <div className="flex flex-wrap gap-4 mb-4">
+            <div className="w-[160px]">
+              <label className="block text-[12px] text-gray-600 mb-2">
+                CNPJ <span className="text-red-500">*</span>
+              </label>
+              <Input
+                value={cnpj}
+                onChange={(e) => updateSecondStepData({ cnpj: e.target.value })}
+                size="middle"
+                placeholder="Digite o CNPJ"
+              />
+              {hasTriedSubmit && cnpj.replace(/\D/g, "").length !== 14 && (
+                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+              )}
+            </div>
+            <div className="w-[200px]">
+              <label className="block text-[12px] text-gray-600 mb-2">
+                E-mail <span className="text-red-500">*</span>
+              </label>
+              <Input
+                value={email}
+                onChange={(e) =>
+                  updateSecondStepData({ email: e.target.value })
+                }
+                size="middle"
+                placeholder="Digite o e-mail"
+              />
+              {hasTriedSubmit && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
+                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+              )}
+            </div>
+            <div className="w-[150px]">
+              <label className="block text-[12px] text-gray-600 mb-2">
+                Nome do Gestor <span className="text-red-500">*</span>
+              </label>
+              <Input
+                value={managerName}
+                onChange={(e) =>
+                  updateSecondStepData({ manager_name: e.target.value })
+                }
+                size="middle"
+                placeholder="Nome do gestor"
+              />
+              {hasTriedSubmit && managerName.trim() === "" && (
+                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+              )}
+            </div>
+            <div className="w-[140px]">
+              <label className="block text-[12px] text-gray-600 mb-2">
+                Telefone <span className="text-red-500">*</span>
+              </label>
+              <Input
+                value={managerPhone}
+                onChange={(e) =>
+                  updateSecondStepData({ managerPhone: e.target.value })
+                }
+                size="middle"
+                placeholder="Telefone"
+              />
+              {hasTriedSubmit &&
+                managerPhone.replace(/\D/g, "").length !== 11 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
+            </div>
+          </div>
 
           {/* <div className="mb-8 text-[12px]">
             <h3 className="text-[14px] text-gray-800 mb-4">
@@ -244,7 +321,9 @@ export default function CompanyInfo() {
 
               <Input
                 value={domainName}
-                onChange={(e) => setDomainName(e.target.value)}
+                onChange={(e) =>
+                  updateSecondStepData({ domainName: e.target.value })
+                }
                 size="middle"
                 placeholder="dominio@gmail.com"
                 className="max-w-[300px]"
@@ -266,7 +345,9 @@ export default function CompanyInfo() {
               >
                 <Checkbox
                   checked={acceptTerms}
-                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  onChange={(e) =>
+                    updateSecondStepData({ acceptTerms: e.target.checked })
+                  }
                   className="text-gray-600"
                 >
                   <span className="text-red-500">*</span> Aceito e concordo com

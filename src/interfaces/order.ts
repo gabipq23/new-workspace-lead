@@ -11,10 +11,10 @@ export interface Plan {
 
 export interface OrderData {
   id?: number;
-  email: string;
-  domainName: string;
-  cnpj: string;
-  managerPhone: string;
+  email?: string;
+  domainName?: string;
+  cnpj?: string;
+  managerPhone?: string;
   status?: string | null;
   status_pos_venda?: string | null;
   id_vivo_corp?: string | null;
@@ -27,7 +27,7 @@ export interface OrderData {
   ordernumber?: string;
   isVivoClient: boolean;
   alreadyHaveWorkspace: boolean;
-  acceptContact: boolean;
-  acceptTerms: boolean;
+  acceptContact?: boolean;
+  acceptTerms?: boolean;
   plan: Plan[];
 }

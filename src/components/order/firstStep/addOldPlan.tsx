@@ -149,8 +149,9 @@ export default function AddOldPlan({
               <label className="block text-[12px] text-gray-600 mb-2">
                 Plano{" "}
                 {confirmedPlans.filter((plan) => plan.newPlan === false)
-                  .length + 1}{" "}
-                <span className="text-red-500">*</span>
+                  .length + 1}
+                {confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && <span className="text-red-500">*</span>}
               </label>
               <Select
                 size="middle"
@@ -174,13 +175,18 @@ export default function AddOldPlan({
                 <Option value="Standard">Business Standard</Option>
                 <Option value="Plus">Business Plus</Option>
               </Select>
-              {hasTriedSubmit && !currentPlanInput?.planName && (
-                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-              )}
+              {hasTriedSubmit &&
+                !currentPlanInput?.planName &&
+                confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
             </div>
             <div className="w-[120px]">
               <label className="block text-[12px] text-gray-600 mb-2">
-                Quant. de Usuários <span className="text-red-500">*</span>
+                Quant. de Usuários
+                {confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && <span className="text-red-500">*</span>}
               </label>
               <div className="flex items-center">
                 <Button
@@ -226,15 +232,20 @@ export default function AddOldPlan({
                   +
                 </Button>
               </div>
-              {hasTriedSubmit && currentPlanInput.users < 1 && (
-                <p className="text-red-500 text-xs mt-1">
-                  Selecione pelo menos 1 usuário
-                </p>
-              )}
+              {hasTriedSubmit &&
+                currentPlanInput.users < 1 &&
+                confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && (
+                  <p className="text-red-500 text-xs mt-1">
+                    Selecione pelo menos 1 usuário
+                  </p>
+                )}
             </div>
             <div className="w-[100px]">
               <label className="block text-[12px] text-gray-600 mb-2">
-                Modalidade <span className="text-red-500">*</span>
+                Modalidade
+                {confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && <span className="text-red-500">*</span>}
               </label>
               <Select
                 size="middle"
@@ -269,9 +280,12 @@ export default function AddOldPlan({
                 <Option value="mensal">Mensal</Option>
                 <Option value="anual">Anual</Option>
               </Select>
-              {hasTriedSubmit && !currentPlanInput.type && (
-                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-              )}
+              {hasTriedSubmit &&
+                !currentPlanInput.type &&
+                confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
             </div>
             <div className="w-[260px]">
               <label className="block text-[12px] text-gray-600 mb-2">

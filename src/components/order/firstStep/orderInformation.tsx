@@ -55,36 +55,36 @@ export default function OrderInformation({
     <>
       <div className="flex flex-col flex-1 px-8 pt-2  justify-between bg-[#f7f7f7] h-[calc(100vh-60px)] overflow-y-auto scrollbar-thin ">
         <div>
-          <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
-            <img src="/Vivo-Empresas.png" alt="Vivo Empresas" className="h-7" />
+          <div className="flex flex-col gap-4 lg:flex-row items-center justify-center mb-8">
+            {/* <img src="/Vivo-Empresas.png" alt="Vivo Empresas" className="h-7" /> */}
 
             <div className="flex items-center gap-2">
               <div className="flex flex-col gap-1 items-center">
-                <div className="w-6 h-6 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[12px] font-semibold">
+                <div className="w-10 h-10 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
                   1
                 </div>
-                <span className="text-[12px] text-[#660099] font-medium">
-                  Produto
+                <span className="text-[16px] text-[#660099] font-medium">
+                  Planos
                 </span>
               </div>
-              <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
-              {hasWorkspace !== "true" && (
-                <>
-                  <div className="flex flex-col gap-1 items-center">
-                    <div className="w-6 h-6 bg-[#f7f7f7] border-1 border-gray-400 text-gray-500 rounded-full flex items-center justify-center text-[12px] font-semibold">
-                      2
-                    </div>
-                    <span className="text-[12px] text-gray-400">Dados</span>
+
+              <div className="w-10  h-px bg-[#660099] mt-[-12px]"></div>
+
+              <>
+                <div className="flex flex-col gap-1 items-center">
+                  <div className="w-10 h-10 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
+                    2
                   </div>
-                  <div className="w-8 h-px bg-gray-300 mt-[-12px]"></div>
-                </>
-              )}
+                  <span className="text-[16px] text-[#660099]">Dados</span>
+                </div>
+                <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
+              </>
 
               <div className="flex flex-col gap-1 items-center">
-                <div className="w-6 h-6 bg-[#f7f7f7] border-1 border-gray-400 text-gray-500 rounded-full flex items-center justify-center text-[12px] font-semibold">
-                  {hasWorkspace === "true" ? 2 : 3}
+                <div className="w-10 h-10 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
+                  3
                 </div>
-                <span className="text-[12px] text-gray-400">Confirmação</span>
+                <span className="text-[16px] text-[#660099]">Verificação</span>
               </div>
             </div>
           </div>
@@ -103,18 +103,22 @@ export default function OrderInformation({
           </div>
 
           <div className="mb-8">
-            {/* plano antigo */}
-            <AddOldPlan
-              hasWorkspace={hasWorkspace}
-              confirmedPlans={confirmedPlans}
-              removePlan={removePlan}
-              currentPlanInput={currentPlanInput}
-              updateCurrentPlanInput={updateCurrentPlanInput}
-              handleCurrentUserIncrease={handleCurrentUserIncrease}
-              handleCurrentUserDecrease={handleCurrentUserDecrease}
-              addCurrentPlan={addCurrentPlan}
-              hasTriedSubmit={hasTriedSubmit}
-            />
+            {hasWorkspace === "true" && (
+              <>
+                {/* plano antigo */}
+                <AddOldPlan
+                  hasWorkspace={hasWorkspace}
+                  confirmedPlans={confirmedPlans}
+                  removePlan={removePlan}
+                  currentPlanInput={currentPlanInput}
+                  updateCurrentPlanInput={updateCurrentPlanInput}
+                  handleCurrentUserIncrease={handleCurrentUserIncrease}
+                  handleCurrentUserDecrease={handleCurrentUserDecrease}
+                  addCurrentPlan={addCurrentPlan}
+                  hasTriedSubmit={hasTriedSubmit}
+                />
+              </>
+            )}
 
             {/* plano novo */}
             <AddNewPlan

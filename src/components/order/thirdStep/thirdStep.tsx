@@ -7,35 +7,40 @@ import { useState } from "react";
 import { Button, Checkbox, ConfigProvider } from "antd";
 import { PhoneInput } from "../../../utils/input";
 import { useNavigate, useParams } from "react-router-dom";
-import { useOrderControler } from "../../../controller/controller";
+import {
+  useOrderControler,
+  useOrderById,
+} from "../../../controller/controller";
 
 export default function ThirdStep() {
   const { thirdStepData, updateThirdStepData, confirmedPlans, clearOrder } =
     useOrderStore();
-
   const [showServices, setShowServices] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
-  const managerPhone = thirdStepData.managerPhone || "";
-  const secondaryPhone = thirdStepData.secondaryPhone || "";
+  const buyers_phone = thirdStepData.buyers_phone || "";
   const acceptContact = thirdStepData.acceptContact || false;
   const acceptTerms = thirdStepData.acceptTerms || false;
 
   const { orderId } = useParams<{ orderId: string }>();
   const { updateOrder, changeOrderStatus, isUpdateOrderFetching } =
     useOrderControler();
+  const { data: orderData } = useOrderById(Number(orderId));
   const navigate = useNavigate();
 
+  const plans =
+    orderData?.data?.plans || orderData?.data?.plan || confirmedPlans || [];
+
   const getTotalPrice = () => {
-    const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
+    const total = plans.reduce((sum: number, plan: any) => {
       const numericPrice = parseFloat(plan.price.replace(",", "."));
-      return total + numericPrice * plan.users;
+      return sum + numericPrice * (plan.users ?? 0);
     }, 0);
-    return confirmedPlansTotal.toFixed(2).replace(".", ",");
+    return total.toFixed(2).replace(".", ",");
   };
 
   const getTotalUsers = () => {
-    return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
+    return plans.reduce((sum: number, plan: any) => sum + (plan.users ?? 0), 0);
   };
 
   const isFormValid = () => {
@@ -47,32 +52,25 @@ export default function ThirdStep() {
 
   const handleSubmit = async () => {
     setHasTriedSubmit(true);
-
     if (!isFormValid()) {
       return;
     }
-
     const updateData = {
       managerPhone,
-      secondaryPhone: secondaryPhone || undefined,
+      buyers_phone: buyers_phone || undefined,
       acceptContact,
       acceptTerms,
     };
-
-    console.log("Dados enviados no ThirdStep:", updateData);
 
     try {
       await updateOrder({
         id: Number(orderId),
         data: updateData,
       });
-
-      // Muda o status do pedido para "fechado"
       await changeOrderStatus({
         id: Number(orderId),
         data: { status: "fechado" },
       });
-
       clearOrder();
       navigate(`/order/${orderId}`);
       window.scrollTo(0, 0);
@@ -80,6 +78,12 @@ export default function ThirdStep() {
       console.error("Erro ao finalizar pedido:", error);
     }
   };
+  // Pre-fill with phone from order if available, fallback to store
+  const managerPhone =
+    orderData?.data?.managerPhone ||
+    orderData?.data?.manager_phone ||
+    thirdStepData.managerPhone ||
+    "";
 
   return (
     <>
@@ -89,7 +93,7 @@ export default function ThirdStep() {
           {/* mobile */}
           <div className="md:hidden flex ">
             <OrderResumeMobile
-              confirmedPlans={confirmedPlans}
+              confirmedPlans={plans}
               getTotalUsers={getTotalUsers}
               getTotalPrice={getTotalPrice}
               setShowServices={setShowServices}
@@ -99,88 +103,92 @@ export default function ThirdStep() {
 
           <div className="flex flex-col flex-1 px-8 pt-8 pb-4 justify-between bg-[#f7f7f7] ">
             <div>
-              <div className="flex flex-col gap-4 lg:flex-row items-center justify-center mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col gap-1 items-center">
-                    <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
-                      <Check />
-                    </div>
-                    <span className="text-[16px] text-[#660099] font-medium">
-                      Planos
-                    </span>
+              <div
+                className="flex items-center justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
+                style={{ minWidth: 0 }}
+              >
+                <div className="flex flex-col gap-1 items-center min-w-0">
+                  <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
+                    <Check />
                   </div>
+                  <span className="text-[16px] text-[#660099] font-medium">
+                    Planos
+                  </span>
+                </div>
 
-                  <div className="w-60 h-px bg-[#660099] mt-[-12px]"></div>
+                <div className="h-px bg-[#660099] mt-[-12px] flex-1 max-w-[80px] md:max-w-[120px] lg:max-w-[160px]"></div>
 
-                  <>
-                    <div className="flex flex-col gap-1 items-center">
-                      <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
-                        <Check />
-                      </div>
-                      <span className="text-[16px] text-[#660099]">Dados</span>
-                    </div>
-                    <div className="w-60 h-px bg-[#660099] mt-[-12px]"></div>
-                  </>
-
-                  <div className="flex flex-col gap-1 items-center">
-                    <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
-                      3
-                    </div>
-                    <span className="text-[16px] text-[#660099]">
-                      Verificação
-                    </span>
+                <div className="flex flex-col gap-1 items-center min-w-0">
+                  <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
+                    <Check />
                   </div>
+                  <span className="text-[16px] text-[#660099]">Dados</span>
+                </div>
+                <div className="h-px bg-[#660099] mt-[-12px] flex-1 max-w-[80px] md:max-w-[120px] lg:max-w-[160px]"></div>
+
+                <div className="flex flex-col gap-1 items-center min-w-0">
+                  <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
+                    3
+                  </div>
+                  <span className="text-[16px] text-[#660099]">
+                    Verificação
+                  </span>
                 </div>
               </div>
 
               {/* Confirmação via SMS */}
-              <div className="flex flex-col gap-1 mb-4">
+              <div className="flex flex-col gap-2 mb-4 mt-4">
                 <h1
                   style={{ margin: 0 }}
                   className="text-[18px] font-normal text-neutral-800 "
                 >
                   Confirmação via SMS
                 </h1>
-                <p style={{ margin: 0 }} className="text-[12px]">
+                <p style={{ margin: 0 }} className="text-[14px]">
                   <strong className="text-red-500">IMPORTANTE:</strong> O SMS
                   para realização da biometria será enviado ao número informado
                   abaixo
                 </p>
               </div>
 
-              <div className="mb-8">
-                <label className="block text-[13px] text-gray-700 mb-1">
-                  Telefone Principal <span className="text-red-500">*</span>
-                </label>
-                <PhoneInput
-                  format="(##) #####-####"
-                  value={managerPhone}
-                  onValueChange={(values) =>
-                    updateThirdStepData({ managerPhone: values.value })
-                  }
-                  placeholder="Digite o telefone principal"
-                />
-                {hasTriedSubmit &&
-                  managerPhone.replace(/\D/g, "").length !== 11 && (
-                    <p className="text-red-500 text-xs mt-1">
-                      Campo obrigatório
-                    </p>
-                  )}
-
-                <label className="block text-[13px] text-gray-700 mb-1 mt-4">
-                  Segundo número de contato (Opcional)
-                </label>
-                <PhoneInput
-                  format="(##) #####-####"
-                  value={secondaryPhone}
-                  onValueChange={(values) =>
-                    updateThirdStepData({ secondaryPhone: values.value })
-                  }
-                  placeholder="Digite o segundo número de contato"
-                />
+              <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="">
+                  {" "}
+                  <label className="block text-[13px] text-gray-700 mb-1">
+                    Telefone Principal <span className="text-red-500">*</span>
+                  </label>
+                  <PhoneInput
+                    format="(##) #####-####"
+                    value={managerPhone}
+                    onValueChange={(values) =>
+                      updateThirdStepData({ managerPhone: values.value })
+                    }
+                    placeholder="Digite o telefone principal"
+                  />
+                  {hasTriedSubmit &&
+                    managerPhone.replace(/\D/g, "").length !== 11 && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Campo obrigatório
+                      </p>
+                    )}
+                </div>
+                <div className="">
+                  <label className="block text-[13px] text-gray-700 mb-1">
+                    Segundo número de contato (Opcional)
+                  </label>
+                  <PhoneInput
+                    format="(##) #####-####"
+                    value={buyers_phone}
+                    onValueChange={(values) =>
+                      updateThirdStepData({ buyers_phone: values.value })
+                    }
+                    placeholder="Digite o segundo número de contato"
+                  />
+                  <p className="text-red-500 text-xs mt-1"></p>
+                </div>
               </div>
 
-              <div className="flex flex-col gap-3 mb-20 md:mb-10">
+              <div className="flex flex-col items-start gap-3 mb-20 md:mb-10">
                 <ConfigProvider
                   theme={{
                     token: {
@@ -188,36 +196,41 @@ export default function ThirdStep() {
                     },
                   }}
                 >
-                  <Checkbox
-                    checked={acceptContact}
-                    onChange={(e) =>
-                      updateThirdStepData({ acceptContact: e.target.checked })
-                    }
-                  >
-                    <span className="text-red-500">*</span> Autorizo ser
-                    contatado pelo telefone e e-mail preenchidos, para receber
-                    informações sobre o meu pedido.
-                  </Checkbox>
-                  {hasTriedSubmit && !acceptContact && (
-                    <p className="text-red-500 text-xs mt-1">
-                      Você deve autorizar o contato para continuar
+                  <div className="flex items-start justify-start  self-start gap-3">
+                    <Checkbox
+                      checked={acceptContact}
+                      onChange={(e) =>
+                        updateThirdStepData({ acceptContact: e.target.checked })
+                      }
+                    />
+                    <p
+                      style={{ margin: 0 }}
+                      className="text-[14px] text-gray-500"
+                    >
+                      Autorizo ser contatado pelo telefone e e-mail preenchidos,
+                      para receber informações sobre o meu pedido.
                     </p>
-                  )}
-
-                  <Checkbox
-                    checked={acceptTerms}
-                    onChange={(e) =>
-                      updateThirdStepData({ acceptTerms: e.target.checked })
-                    }
-                  >
-                    <span className="text-red-500">*</span> Aceito e concordo
-                    com os termos e contratos.
-                  </Checkbox>
-                  {hasTriedSubmit && !acceptTerms && (
-                    <p className="text-red-500 text-xs mt-1">
-                      Você deve aceitar os termos para continuar
+                  </div>
+                  <div className="flex items-start justify-start self-start gap-1">
+                    <Checkbox
+                      checked={acceptTerms}
+                      onChange={(e) =>
+                        updateThirdStepData({ acceptTerms: e.target.checked })
+                      }
+                    />
+                    <p
+                      style={{ margin: 0 }}
+                      className="text-[14px] text-gray-500"
+                    >
+                      <span className="text-red-500">*</span> Aceito e concordo
+                      com os termos e contratos.
                     </p>
-                  )}
+                    {hasTriedSubmit && !acceptTerms && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Você deve aceitar os termos para continuar
+                      </p>
+                    )}
+                  </div>
                 </ConfigProvider>
               </div>
             </div>
@@ -251,7 +264,7 @@ export default function ThirdStep() {
           {/* desktop */}
           <div className="hidden md:flex">
             <OrderResumeDesktop
-              confirmedPlans={confirmedPlans}
+              confirmedPlans={plans}
               getTotalPrice={getTotalPrice}
             />
           </div>

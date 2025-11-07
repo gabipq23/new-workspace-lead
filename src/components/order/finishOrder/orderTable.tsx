@@ -27,14 +27,14 @@ export default function OrderTable({
       <div className="flex flex-col items-center bg-white rounded-[26px] w-full p-4  py-4 ">
         {/* Desktop */}
         <div className="hidden lg:block ">
-          <div className="flex items-center font-semibold text-[#666666] text-[15px] mb-4">
+          <div className="flex items-center font-semibold text-[#666666] text-[15px] mb-1">
             <p className="w-76 text-center">Plano</p>
             <p className="w-32 text-center">Usuários</p>
             <p className="w-32 text-center">Modalidade</p>
             <p className="w-40 text-center">Valor Unitário</p>
             <p className="w-40 text-center">Valor Total</p>
           </div>
-          <hr className="border-t border-neutral-300 mx-2 mb-4" />
+          <hr className="border-t border-neutral-300 mx-2 mb-1" />
           {confirmedPlans?.map((plan: Plan, index: number) => (
             <div key={plan?.id}>
               <div className="flex items-center py-4 text-[14px] text-neutral-700">
@@ -67,12 +67,12 @@ export default function OrderTable({
           ))}{" "}
           <hr className="border-t border-neutral-300 mx-2 mb-4" />
           {/* Total row */}
-          <div className="flex items-center py-4 text-[15px] font-bold text-neutral-900">
-            <p className="w-76 text-center pt-2">Total</p>
-            <p className="w-32 text-center pt-2">{getTotalUsers()}</p>
-            <p className="w-32 text-center pt-2"></p>
-            <p className="w-40 text-center pt-2"></p>
-            <p className="w-40 text-center pt-2">R$ {getTotalPrice()},00/mês</p>
+          <div className="flex items-center py-2 text-[15px]  text-neutral-900">
+            <p className="w-76 text-center ">Total</p>
+            <p className="w-32 text-center ">{getTotalUsers()}</p>
+            <p className="w-32 text-center "></p>
+            <p className="w-40 text-center "></p>
+            <p className="w-40 text-center ">R$ {getTotalPrice()},00/mês</p>
           </div>
         </div>
 

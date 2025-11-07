@@ -421,13 +421,15 @@ import { useOrderControler } from "../../../controller/controller";
 import OrderResumeMobile from "../components/orderResumeMobile";
 import OrderResumeDesktop from "../components/orderResumeDesktop";
 import Header from "../components/header";
-import { CNPJInput, PhoneInput } from "../../../utils/input";
+import { CNPJInput, CPFInput, PhoneInput } from "../../../utils/input";
 
 export default function CompanyInfo() {
   const { secondStepData, updateSecondStepData, confirmedPlans, clearOrder } =
     useOrderStore();
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
+  const company_name = secondStepData.company_name || "";
+  const cpf = secondStepData.cpf || "";
   const cnpj = secondStepData.cnpj || "";
   const email = secondStepData.email || "";
   const managerName = secondStepData.manager_name || "";
@@ -460,12 +462,18 @@ export default function CompanyInfo() {
     const hasValidEmail = emailRegex.test(email);
     const hasValidManagerName = managerName.trim() !== "";
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
+    const hasValidSecondPhone = managerPhone.replace(/\D/g, "").length === 11;
+
+    const hasValidCpf = cpf.replace(/\D/g, "").length === 11;
+
     return (
       hasDomainName &&
       hasValidCnpj &&
       hasValidEmail &&
       hasValidManagerName &&
-      hasValidManagerPhone
+      hasValidManagerPhone &&
+      hasValidCpf &&
+      hasValidSecondPhone
     );
   };
 
@@ -482,6 +490,8 @@ export default function CompanyInfo() {
       email,
       manager_name: managerName,
       managerPhone,
+      company_name,
+      cpf,
     };
 
     console.log("Dados enviados no formulário:", updateData);
@@ -492,6 +502,8 @@ export default function CompanyInfo() {
       email,
       manager_name: managerName,
       managerPhone,
+      company_name,
+      cpf,
     });
 
     try {
@@ -604,8 +616,15 @@ export default function CompanyInfo() {
                     <span className="text-red-500">*</span>{" "}
                   </label>
 
-                  <Input size="middle" placeholder="Razão Social" />
-                  {hasTriedSubmit && domainName.trim() === "" && (
+                  <Input
+                    value={company_name}
+                    onChange={(e) =>
+                      updateSecondStepData({ company_name: e.target.value })
+                    }
+                    size="middle"
+                    placeholder="Razão Social"
+                  />
+                  {hasTriedSubmit && company_name.trim() === "" && (
                     <p
                       style={{ margin: 0 }}
                       className="text-red-500 text-xs mt-1"
@@ -678,8 +697,15 @@ export default function CompanyInfo() {
                   <label className="block text-[13px] text-gray-700 mb-1">
                     CPF <span className="text-red-500">*</span>
                   </label>
-                  <Input size="middle" placeholder="CPF" />
-                  {hasTriedSubmit && managerName.trim() === "" && (
+                  <CPFInput
+                    format="###.###.###-##"
+                    value={cpf}
+                    onValueChange={(values) =>
+                      updateSecondStepData({ cpf: values.value })
+                    }
+                  />
+
+                  {hasTriedSubmit && cpf.trim() === "" && (
                     <p
                       style={{ margin: 0 }}
                       className="text-red-500 text-xs mt-1"

@@ -25,9 +25,21 @@ export interface OrderData {
   manager_name?: string | null;
   created_at?: string;
   ordernumber?: string;
-  isVivoClient: boolean;
-  alreadyHaveWorkspace: boolean;
+  isVivoClient?: boolean;
+  alreadyHaveWorkspace?: boolean;
   acceptContact?: boolean;
   acceptTerms?: boolean;
-  plan: Plan[];
+  plan?: Plan[];
+
+  // New fields from backend
+
+  buyers_phone?: string | null;
+  client_ip?: string | null;
+  company_name?: string | null;
+  cpf?: string | null;
+  credito_servicos?: string | null;
+  finger_print?: string | null;
+  is_vivo_client?: number;
+  plans?: Plan[];
+  url?: string | null;
 }

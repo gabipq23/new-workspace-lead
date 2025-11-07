@@ -374,11 +374,13 @@ export interface SecondStepData {
   email: string;
   manager_name: string;
   managerPhone: string;
+  company_name: string;
+  cpf: string;
 }
 
 export interface ThirdStepData {
   managerPhone: string;
-  secondaryPhone: string;
+  buyers_phone: string;
   acceptContact: boolean;
   acceptTerms: boolean;
 }
@@ -416,10 +418,12 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
     email: "",
     manager_name: "",
     managerPhone: "",
+    company_name: "",
+    cpf: "",
   },
   thirdStepData: {
     managerPhone: "",
-    secondaryPhone: "",
+    buyers_phone: "",
     acceptContact: false,
     acceptTerms: false,
   },
@@ -524,6 +528,8 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       acceptContact: state.thirdStepData.acceptContact || false,
       acceptTerms: state.thirdStepData.acceptTerms || false,
       plan: apiPlans,
+      company_name: state.secondStepData.company_name || "",
+      cpf: state.secondStepData.cpf || "",
     };
   },
 
@@ -541,10 +547,12 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
         email: "",
         manager_name: "",
         managerPhone: "",
+        company_name: "",
+        cpf: "",
       },
       thirdStepData: {
         managerPhone: "",
-        secondaryPhone: "",
+        buyers_phone: "",
         acceptContact: false,
         acceptTerms: false,
       },

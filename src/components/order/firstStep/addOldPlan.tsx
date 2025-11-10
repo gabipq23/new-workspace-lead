@@ -348,7 +348,6 @@ export default function AddOldPlan({
               footer={null}
               centered
               width={700}
-              bodyStyle={{ padding: 32, borderRadius: 24, background: "#fff" }}
               style={{ borderRadius: 24 }}
             >
               <div className="text-center">
@@ -361,7 +360,7 @@ export default function AddOldPlan({
                   <span className="font-semibold text-base">
                     Simulação de economia
                   </span>
-                  <div className="flex mt-2 border border-gray-300 rounded-lg overflow-hidden text-lg">
+                  <div className=" hidden md:flex mt-2 border border-gray-300 rounded-lg overflow-hidden text-lg">
                     <div className="flex-1 p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
                       <div className="font-bold">Usuários</div>
                       <div>{users}</div>
@@ -374,11 +373,35 @@ export default function AddOldPlan({
                       <div className="font-bold">Plano Anual</div>
                       <div>R${formatPrice(anualValue, users)}/ mês</div>
                       <span
-                        className="absolute bottom-15 left-37 bg-green-600 text-white rounded-md px-2 py-0.5 text-sm font-bold"
+                        className="absolute bottom-15 left-40 bg-green-600 text-white rounded-md px-2 py-0.5 text-sm font-bold"
                         style={{ fontSize: 13 }}
                       >
                         -33%
                       </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:hidden mt-2 border border-gray-300 rounded-lg overflow-hidden text-lg">
+                    <div className=" p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
+                      <div className="font-bold">Usuários</div>
+                      <div>{users}</div>
+                    </div>
+                    <hr className="border-t border-gray-300" />
+                    <div className=" p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
+                      <div className="font-bold">Plano Mensal</div>
+                      <div>R${formatPrice(mensalValue, users)}/ mês</div>
+                    </div>
+                    <hr className="border-t border-gray-300" />
+                    <div className="p-3 px-6 bg-gray-50 text-center relative">
+                      <div className="font-bold ">
+                        Plano Anual{" "}
+                        <span
+                          className="  bg-green-600 text-white rounded-md px-2 py-0.5 text-sm font-bold"
+                          style={{ fontSize: 13 }}
+                        >
+                          -33%
+                        </span>
+                      </div>
+                      <div>R${formatPrice(anualValue, users)}/ mês</div>
                     </div>
                   </div>
                 </div>
@@ -395,7 +418,7 @@ export default function AddOldPlan({
                 <div className="text-lg font-medium mb-4">
                   Aproveitar o desconto e mudar para o plano anual?
                 </div>
-                <div className="flex justify-center gap-6">
+                <div className="flex flex-col md:flex-row justify-center gap-6">
                   <ConfigProvider
                     theme={{
                       token: {

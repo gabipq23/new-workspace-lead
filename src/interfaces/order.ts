@@ -13,8 +13,11 @@ export interface OrderData {
   id?: number;
   email?: string;
   domainName?: string;
+  domain_name?: string;
+
   cnpj?: string;
   managerPhone?: string;
+  manager_phone?: string;
   status?: string | null;
   status_pos_venda?: string | null;
   id_vivo_corp?: string | null;
@@ -27,6 +30,8 @@ export interface OrderData {
   ordernumber?: string;
   isVivoClient?: boolean;
   alreadyHaveWorkspace?: boolean;
+  already_have_workspace?: number;
+
   acceptContact?: boolean;
   acceptTerms?: boolean;
   plan?: Plan[];

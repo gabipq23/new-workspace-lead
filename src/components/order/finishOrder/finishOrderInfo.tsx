@@ -12,6 +12,7 @@ import {
   MessageSquareMore,
 } from "lucide-react";
 import InfoComprador from "./buyersInfo";
+import { generatePDF } from "./exportPDF";
 
 export default function FinishOrderInfo() {
   const { id } = useParams<{ id: string }>();
@@ -73,7 +74,14 @@ export default function FinishOrderInfo() {
                 },
               }}
             >
-              <Button type="default" variant="solid" disabled>
+              <Button
+                type="default"
+                variant="solid"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  generatePDF(orderData?.data);
+                }}
+              >
                 Gerar PDF
               </Button>
             </ConfigProvider>

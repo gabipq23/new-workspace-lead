@@ -80,35 +80,34 @@ export default function OrderInformation() {
     <>
       <div className="flex flex-col flex-1 px-8 pt-2 justify-between bg-[#f7f7f7] h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin">
         <div>
-          <div className="flex flex-col gap-4 lg:flex-row items-center justify-center mb-4">
-            <div className="flex items-center gap-2">
-              <div className="flex flex-col gap-1 items-center">
-                <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
-                  1
-                </div>
-                <span className="text-[16px] text-[#660099] font-medium">
-                  Planos
-                </span>
+          <div
+            className="flex items-center mb-2 justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
+            style={{ minWidth: 0 }}
+          >
+            <div className="flex flex-col gap-1 items-center min-w-0">
+              <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
+                1
               </div>
+              <span className="text-[16px] text-[#660099] font-medium">
+                Planos
+              </span>
+            </div>
 
-              <div className="w-60 h-px bg-[#660099] mt-[-12px]"></div>
+            <div className="h-px bg-[#660099] mt-[-12px] flex-1 max-w-[80px] md:max-w-[120px] lg:max-w-[160px]"></div>
 
-              <>
-                <div className="flex flex-col gap-1 items-center">
-                  <div className="w-8 h-8 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
-                    2
-                  </div>
-                  <span className="text-[16px] text-[#660099]">Dados</span>
-                </div>
-                <div className="w-60 h-px bg-[#660099] mt-[-12px]"></div>
-              </>
-
-              <div className="flex flex-col gap-1 items-center">
-                <div className="w-8 h-8 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
-                  3
-                </div>
-                <span className="text-[16px] text-[#660099]">Verificação</span>
+            <div className="flex flex-col gap-1 items-center min-w-0">
+              <div className="w-8 h-8 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[16px] font-semibold">
+                2
               </div>
+              <span className="text-[16px] text-[#660099]">Dados</span>
+            </div>
+            <div className="h-px bg-[#660099] mt-[-12px] flex-1 max-w-[80px] md:max-w-[120px] lg:max-w-[160px]"></div>
+
+            <div className="flex flex-col gap-1 items-center min-w-0">
+              <div className="w-8 h-8 bg-[#f7f7f7] border-1 border-[#660099] text-[#660099] rounded-full flex items-center justify-center text-[16px] font-semibold">
+                3
+              </div>
+              <span className="text-[16px] text-[#660099]">Verificação</span>
             </div>
           </div>
 

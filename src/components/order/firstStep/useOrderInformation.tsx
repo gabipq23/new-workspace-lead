@@ -308,6 +308,7 @@ export function useOrderInformation() {
 
       // Navega para o SecondStep com o ID do pedido
       navigate(`/client-information/${response.id}`);
+      sessionStorage.setItem("status", "aberto");
       window.scrollTo(0, 0);
     } catch (error) {
       console.error("Erro ao criar pedido parcial:", error);

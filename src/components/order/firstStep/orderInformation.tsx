@@ -34,7 +34,7 @@ export default function OrderInformation() {
   const [showAddNewPlan, setShowAddNewPlan] = useState(false);
   const [modalAlreadyShown, setModalAlreadyShown] = useState(false);
   const [activeCollapseKeys, setActiveCollapseKeys] = useState<string[]>(
-    hasWorkspace === "true" ? ["old"] : []
+    hasWorkspace === "true" ? ["old"] : ["new"]
   );
 
   const collapseItems: CollapseProps["items"] = [];
@@ -125,18 +125,37 @@ export default function OrderInformation() {
           </div>
 
           <div className="mb-8 ">
-            <Collapse
-              items={collapseItems}
-              ghost
-              activeKey={activeCollapseKeys}
-              onChange={(keys) => {
-                if (Array.isArray(keys)) {
-                  setActiveCollapseKeys(keys as string[]);
-                } else if (typeof keys === "string") {
-                  setActiveCollapseKeys([keys]);
-                }
-              }}
-            />
+            {hasWorkspace === "true" ? (
+              <>
+                {" "}
+                <Collapse
+                  items={collapseItems}
+                  ghost
+                  activeKey={activeCollapseKeys}
+                  onChange={(keys) => {
+                    if (Array.isArray(keys)) {
+                      setActiveCollapseKeys(keys as string[]);
+                    } else if (typeof keys === "string") {
+                      setActiveCollapseKeys([keys]);
+                    }
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                <AddNewPlan
+                  hasWorkspace={alreadyHaveWorkspace ? "true" : "false"}
+                  confirmedPlans={confirmedPlans}
+                  newPlanInput={newPlanInput}
+                  updateNewPlanInput={updateNewPlanInput}
+                  handleNewUserDecrease={handleNewUserDecrease}
+                  handleNewUserIncrease={handleNewUserIncrease}
+                  addNewPlan={addNewPlan}
+                  removePlan={removePlan}
+                  hasTriedSubmit={hasTriedSubmit}
+                />
+              </>
+            )}
           </div>
         </div>
 

@@ -301,12 +301,12 @@ export function useOrderInformation() {
       acceptContact: false,
       acceptTerms: false,
       plan: confirmedPlans,
+      url: sessionStorage.getItem("currentUrl") || "",
     };
 
     try {
       const response = await createOrder({ data: orderData });
 
-      // Navega para o SecondStep com o ID do pedido
       navigate(`/client-information/${response.id}`);
       sessionStorage.setItem("status", "aberto");
       window.scrollTo(0, 0);

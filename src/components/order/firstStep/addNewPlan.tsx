@@ -119,7 +119,7 @@ export default function AddNewPlan({
             value={newPlanInput?.planName || undefined}
             onChange={(value) => {
               const priceMap = {
-                Starter: { mensal: "49,00", anual: "32,72" },
+                Starter: { mensal: "49,00", anual: "32,70" },
                 Standard: { mensal: "98,00", anual: "81,80" },
                 Plus: { mensal: "154,00", anual: "128,40" },
               };
@@ -220,7 +220,7 @@ export default function AddNewPlan({
 
               if (newPlanInput?.planName) {
                 const priceMap = {
-                  Starter: { mensal: "49,00", anual: "32,72" },
+                  Starter: { mensal: "49,00", anual: "32,70" },
                   Standard: { mensal: "98,00", anual: "81,80" },
                   Plus: { mensal: "154,00", anual: "128,40" },
                 };

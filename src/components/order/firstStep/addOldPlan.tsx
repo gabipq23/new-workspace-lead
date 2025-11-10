@@ -37,9 +37,9 @@ export default function AddOldPlan({
 
   // Variáveis auxiliares para valores dos planos
   const mensalMap = { Starter: "49,00", Standard: "98,00", Plus: "154,00" };
-  const anualMap = { Starter: "32,72", Standard: "81,80", Plus: "128,40" };
+  const anualMap = { Starter: "32,70", Standard: "81,80", Plus: "128,40" };
   const mensalNumMap = { Starter: "49.00", Standard: "98.00", Plus: "154.00" };
-  const anualNumMap = { Starter: "32.72", Standard: "81.80", Plus: "128.40" };
+  const anualNumMap = { Starter: "32.70", Standard: "81.80", Plus: "128.40" };
   const planKey = (currentPlanInput.planName || "") as
     | "Starter"
     | "Standard"
@@ -158,7 +158,7 @@ export default function AddOldPlan({
                 value={currentPlanInput?.planName || undefined}
                 onChange={(value) => {
                   const priceMap = {
-                    Starter: { mensal: "49,00", anual: "32,72" },
+                    Starter: { mensal: "49,00", anual: "32,70" },
                     Standard: { mensal: "98,00", anual: "81,80" },
                     Plus: { mensal: "154,00", anual: "128,40" },
                   };
@@ -255,7 +255,7 @@ export default function AddOldPlan({
 
                   if (currentPlanInput?.planName) {
                     const priceMap = {
-                      Starter: { mensal: "49,00", anual: "32,72" },
+                      Starter: { mensal: "49,00", anual: "32,70" },
                       Standard: { mensal: "98,00", anual: "81,80" },
                       Plus: { mensal: "154,00", anual: "128,40" },
                     };

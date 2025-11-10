@@ -57,8 +57,8 @@ export default function AddOldPlan({
     <>
       {hasWorkspace === "true" && (
         <>
-          <h2>{hasWorkspace === "true" && "Planos Atuais"}</h2>
-          <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
+          {/* <h2>{hasWorkspace === "true" && "Planos Atuais"}</h2> */}
+          <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4 ">
             Qual plano você possui atualmente e deseja migrar ?
             <Tooltip title="Você pode escolher 1 ou mais planos.">
               <span className="text-gray-500 cursor-pointer">

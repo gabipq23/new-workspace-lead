@@ -15,8 +15,8 @@ export default function AddNewPlan({
   hasTriedSubmit,
 }: any) {
   return (
-    <>
-      <h2>{hasWorkspace === "true" && "Novos Planos"}</h2>
+    <div className=" mb-16">
+      {/* <h2>{hasWorkspace === "true" && "Novos Planos"}</h2> */}
       <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
         {hasWorkspace === "true"
           ? "Deseja aproveitar para adicionar novos planos?"
@@ -297,6 +297,6 @@ export default function AddNewPlan({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

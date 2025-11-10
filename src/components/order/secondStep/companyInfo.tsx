@@ -218,11 +218,13 @@ export default function CompanyInfo() {
                         CNPJ <span className="text-red-500">*</span>
                       </label>
                       <CNPJInput
+                        name="cnpj"
                         format="##.###.###/####-##"
                         value={cnpj}
                         onValueChange={(values) =>
                           updateSecondStepData({ cnpj: values.value })
                         }
+                        autoComplete="on"
                       />
                       {hasTriedSubmit &&
                         cnpj.replace(/\D/g, "").length !== 14 && (
@@ -242,6 +244,8 @@ export default function CompanyInfo() {
                       </label>
 
                       <Input
+                        name="company_name"
+                        autoComplete="on"
                         value={company_name}
                         onChange={(e) =>
                           updateSecondStepData({ company_name: e.target.value })
@@ -271,6 +275,8 @@ export default function CompanyInfo() {
                       </label>
 
                       <Input
+                        name="domain_name"
+                        autoComplete="on"
                         value={domainName}
                         onChange={(e) =>
                           updateSecondStepData({ domainName: e.target.value })
@@ -301,6 +307,8 @@ export default function CompanyInfo() {
                         Nome Completo <span className="text-red-500">*</span>
                       </label>
                       <Input
+                        name="managerName"
+                        autoComplete="on"
                         value={managerName}
                         onChange={(e) =>
                           updateSecondStepData({ manager_name: e.target.value })
@@ -323,6 +331,8 @@ export default function CompanyInfo() {
                         CPF <span className="text-red-500">*</span>
                       </label>
                       <CPFInput
+                        name="cpf"
+                        autoComplete="on"
                         format="###.###.###-##"
                         value={cpf}
                         onValueChange={(values) =>
@@ -344,6 +354,8 @@ export default function CompanyInfo() {
                         E-mail <span className="text-red-500">*</span>
                       </label>
                       <Input
+                        name="email"
+                        autoComplete="on"
                         value={email}
                         onChange={(e) =>
                           updateSecondStepData({ email: e.target.value })
@@ -370,6 +382,8 @@ export default function CompanyInfo() {
                       </label>
 
                       <PhoneInput
+                        name="manager_phone"
+                        autoComplete="on"
                         format="(##) #####-####"
                         value={managerPhone}
                         onValueChange={(values) =>

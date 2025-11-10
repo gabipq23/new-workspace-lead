@@ -217,6 +217,8 @@ export default function ThirdStep() {
                         Segundo número de contato (Opcional)
                       </label>
                       <PhoneInput
+                        name="buyers_phone"
+                        autoComplete="on"
                         format="(##) #####-####"
                         value={buyers_phone}
                         onValueChange={(values) =>

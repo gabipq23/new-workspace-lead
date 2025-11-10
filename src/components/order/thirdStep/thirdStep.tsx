@@ -102,7 +102,7 @@ export default function ThirdStep() {
           </div>
 
           <div className="flex flex-col flex-1 px-8 pt-8 pb-4 justify-between bg-[#f7f7f7] ">
-            <div>
+            <div className="mb-10">
               <div
                 className="flex items-center justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
                 style={{ minWidth: 0 }}

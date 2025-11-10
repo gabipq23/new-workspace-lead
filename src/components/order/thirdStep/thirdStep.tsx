@@ -184,7 +184,10 @@ export default function ThirdStep() {
                     }
                     placeholder="Digite o segundo número de contato"
                   />
-                  <p className="text-red-500 text-xs mt-1"></p>
+                  <span className="text-[11px] text-gray-500">
+                    Se desejar, adicione um segundo número de contato para
+                    garantir o recebimento da mensagem.
+                  </span>
                 </div>
               </div>
 

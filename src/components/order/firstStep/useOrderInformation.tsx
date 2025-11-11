@@ -51,13 +51,7 @@ export function useOrderInformation() {
         sessionStorage.getItem("alreadyHaveWorkspace") === "true"
           ? true
           : false,
-      email: "a@email.com",
-      cnpj: "12345678945632",
-      domainName: "a",
-      managerPhone: "21996542233",
-      manager_name: "a",
-      acceptContact: false,
-      acceptTerms: false,
+
       plan: confirmedPlans,
       url: sessionStorage.getItem("currentUrl") || "",
     };

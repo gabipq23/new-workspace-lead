@@ -163,7 +163,7 @@ export default function CompanyInfo() {
               />
             </div>
 
-            <div className="flex flex-col flex-1 px-8 pt-8 pb-4 justify-between bg-[#f7f7f7] ">
+            <div className="flex flex-col flex-1 px-8 pt-6 pb-4 justify-between bg-[#f7f7f7] ">
               <div className="mb-12">
                 <div
                   className="flex items-center mb-2 justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
@@ -198,12 +198,9 @@ export default function CompanyInfo() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1 mb-4">
-                  <h1
-                    style={{ margin: 0 }}
-                    className="text-[18px] font-normal text-neutral-800 "
-                  >
-                    Olá, vamos completar seu pedido!
+                <div className="flex flex-col mb-4">
+                  <h1 className="text-[20px] font-normal text-[#660099]">
+                    Vamos completar seu pedido!
                   </h1>
                   <p style={{ margin: 0 }} className="text-[12px]">
                     Mais alguns passos para você aproveitar os serviços da Vivo
@@ -213,12 +210,20 @@ export default function CompanyInfo() {
 
                 {/* 1. Dados da Empresa */}
                 <div className="mb-8">
-                  <h2 className="text-[16px] font-semibold text-neutral-800 mb-2">
+                  <h2
+                    style={{
+                      margin: 0,
+                      padding: 0,
+                      fontWeight: "bold",
+                      marginBottom: 4,
+                    }}
+                    className="  text-neutral-700 "
+                  >
                     1. Dados da Empresa
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[13px] text-gray-700 mb-1">
+                  <div className="flex  gap-4 flex-wrap">
+                    <div className=" max-w-[200px] w-full">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         CNPJ <span className="text-red-500">*</span>
                       </label>
                       <CNPJInput
@@ -233,7 +238,7 @@ export default function CompanyInfo() {
                       {hasTriedSubmit &&
                         cnpj.replace(/\D/g, "").length !== 14 && (
                           <p
-                            style={{ margin: 0 }}
+                            style={{ margin: 0, marginTop: 4 }}
                             className="text-red-500 text-xs mt-1"
                           >
                             Campo obrigatório
@@ -241,7 +246,7 @@ export default function CompanyInfo() {
                         )}
                     </div>
 
-                    <div className="">
+                    <div className=" max-w-[200px] w-full">
                       <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Razão Social
                         <span className="text-red-500">*</span>{" "}
@@ -259,7 +264,7 @@ export default function CompanyInfo() {
                       />
                       {hasTriedSubmit && company_name.trim() === "" && (
                         <p
-                          style={{ margin: 0 }}
+                          style={{ margin: 0, marginTop: 4 }}
                           className="text-red-500 text-xs mt-1"
                         >
                           Campo obrigatório
@@ -267,7 +272,7 @@ export default function CompanyInfo() {
                       )}
                     </div>
 
-                    <div className="">
+                    <div className=" max-w-[200px] w-full">
                       <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Domínio
                         <span className="text-red-500">*</span>{" "}
@@ -290,7 +295,7 @@ export default function CompanyInfo() {
                       />
                       {hasTriedSubmit && domainName.trim() === "" && (
                         <p
-                          style={{ margin: 0 }}
+                          style={{ margin: 0, marginTop: 4 }}
                           className="text-red-500 text-xs mt-1"
                         >
                           Campo obrigatório
@@ -302,12 +307,20 @@ export default function CompanyInfo() {
 
                 {/* 2. Dados do Gestor */}
                 <div className="mb-8">
-                  <h2 className="text-[16px] font-semibold text-neutral-800 mb-2">
+                  <h2
+                    style={{
+                      margin: 0,
+                      padding: 0,
+                      fontWeight: "bold",
+                      marginBottom: 4,
+                    }}
+                    className="  text-neutral-700 "
+                  >
                     2. Dados do Gestor
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[13px] text-gray-700 mb-1">
+                  <div className="flex  gap-4 flex-wrap">
+                    <div className=" max-w-[200px] w-full">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Nome Completo <span className="text-red-500">*</span>
                       </label>
                       <Input
@@ -322,7 +335,7 @@ export default function CompanyInfo() {
                       />
                       {hasTriedSubmit && managerName.trim() === "" && (
                         <p
-                          style={{ margin: 0 }}
+                          style={{ margin: 0, marginTop: 4 }}
                           className="text-red-500 text-xs mt-1"
                         >
                           Campo obrigatório
@@ -330,31 +343,8 @@ export default function CompanyInfo() {
                       )}
                     </div>
 
-                    <div>
-                      <label className="block text-[13px] text-gray-700 mb-1">
-                        CPF <span className="text-red-500">*</span>
-                      </label>
-                      <CPFInput
-                        name="cpf"
-                        autoComplete="on"
-                        format="###.###.###-##"
-                        value={cpf}
-                        onValueChange={(values) =>
-                          updateSecondStepData({ cpf: values.value })
-                        }
-                      />
-
-                      {hasTriedSubmit && cpf.trim() === "" && (
-                        <p
-                          style={{ margin: 0 }}
-                          className="text-red-500 text-xs mt-1"
-                        >
-                          Campo obrigatório
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-[13px] text-gray-700 mb-1">
+                    <div className=" max-w-[200px] w-full">
+                      <label className="flex items-center gap-1 text-[14px] text-gray-600 mb-2">
                         E-mail <span className="text-red-500">*</span>
                       </label>
                       <Input
@@ -365,23 +355,27 @@ export default function CompanyInfo() {
                           updateSecondStepData({ email: e.target.value })
                         }
                         size="middle"
-                        placeholder="E-mail"
+                        placeholder="Informe seu e-mail"
                       />{" "}
                       {hasTriedSubmit &&
                         !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
                           <p
-                            style={{ margin: 0 }}
+                            style={{ margin: 0, marginTop: 4 }}
                             className="text-red-500 text-xs mt-1"
                           >
                             Campo obrigatório
                           </p>
                         )}
-                      <span className="text-[11px] text-gray-500">
+                      <p
+                        style={{ margin: 0, marginTop: 8 }}
+                        className="text-[11px] text-gray-500"
+                      >
                         Sua assinatura digital será enviada nesse e-mail.
-                      </span>
+                      </p>
                     </div>
-                    <div>
-                      <label className="block text-[13px] text-gray-700 mb-1">
+
+                    <div className=" max-w-[200px] w-full">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Celular <span className="text-red-500">*</span>
                       </label>
 
@@ -397,12 +391,43 @@ export default function CompanyInfo() {
                       {hasTriedSubmit &&
                         managerPhone.replace(/\D/g, "").length !== 11 && (
                           <p
-                            style={{ margin: 0 }}
-                            className="text-red-500 text-xs mt-1"
+                            style={{ margin: 0, marginTop: 4 }}
+                            className="text-red-500 text-xs "
                           >
                             Campo obrigatório
                           </p>
                         )}
+                    </div>
+                    <div className=" max-w-[200px] w-full">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                        CPF do representante legal{" "}
+                        <span className="text-red-500">*</span>{" "}
+                        <Tooltip title="CPF do administrador que possui responsabilidade integral sobre todos os atos da empresa.">
+                          <span className="text-gray-500 cursor-pointer">
+                            <CircleAlert size={14} />
+                          </span>
+                        </Tooltip>
+                      </label>
+
+                      <CPFInput
+                        name="cpf"
+                        autoComplete="on"
+                        format="###.###.###-##"
+                        value={cpf}
+                        onValueChange={(values) =>
+                          updateSecondStepData({ cpf: values.value })
+                        }
+                      />
+
+                      {hasTriedSubmit && cpf.trim() === "" && (
+                        <p
+                          style={{ margin: 0, marginTop: 4 }}
+                          className="text-red-500 text-xs mt-1"
+                        >
+                          Campo obrigatório
+                        </p>
+                      )}
+
                       <ConfigProvider
                         theme={{
                           token: {
@@ -410,22 +435,23 @@ export default function CompanyInfo() {
                           },
                         }}
                       >
-                        <Checkbox
-                          checked={i_have_authorization}
-                          onChange={(e) =>
-                            updateSecondStepData({
-                              i_have_authorization: e.target.checked,
-                            })
-                          }
-                        >
+                        <div className="flex  items-start justify-start self-start gap-1 mt-2">
+                          <Checkbox
+                            checked={i_have_authorization}
+                            onChange={(e) =>
+                              updateSecondStepData({
+                                i_have_authorization: e.target.checked,
+                              })
+                            }
+                          />
                           <p
-                            style={{ margin: 0 }}
+                            style={{ margin: 0, marginTop: 4 }}
                             className="text-[11px] text-gray-500"
                           >
                             Tenho autorização legal para contratar em nome da
                             empresa.
                           </p>{" "}
-                        </Checkbox>
+                        </div>
                       </ConfigProvider>
                     </div>
                   </div>
@@ -444,6 +470,12 @@ export default function CompanyInfo() {
                     <Button
                       type="primary"
                       size="large"
+                      style={{
+                        borderRadius: 20,
+                        width: 140,
+                        height: 44,
+                        fontSize: "20px",
+                      }}
                       onClick={handleSubmit}
                       loading={isUpdateOrderFetching}
                       disabled={isUpdateOrderFetching}

@@ -45,16 +45,10 @@ export default function ThirdStep() {
 
   const isFormValid = () => {
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
-    const hasAcceptedContact = acceptContact === true;
+
     const hasAcceptedTerms = acceptTerms === true;
-    const hasValidSecondManagerPhone =
-      second_manager_phone.replace(/\D/g, "").length === 11;
-    return (
-      hasValidManagerPhone &&
-      hasAcceptedContact &&
-      hasAcceptedTerms &&
-      hasValidSecondManagerPhone
-    );
+
+    return hasValidManagerPhone && hasAcceptedTerms;
   };
 
   const handleSubmit = async () => {
@@ -64,7 +58,7 @@ export default function ThirdStep() {
     }
     const updateData = {
       managerPhone,
-      second_manager_phone: second_manager_phone || undefined,
+      second_manager_phone,
       acceptContact,
       acceptTerms,
     };
@@ -183,11 +177,8 @@ export default function ThirdStep() {
                   </div>
 
                   {/* Confirmação via SMS */}
-                  <div className="flex flex-col gap-2 mb-4 mt-4">
-                    <h1
-                      style={{ margin: 0 }}
-                      className="text-[18px] font-normal text-neutral-800 "
-                    >
+                  <div className="flex flex-col mb-4 mt-4">
+                    <h1 className="text-[20px] font-normal text-[#660099]">
                       Confirmação via SMS
                     </h1>
                     <p style={{ margin: 0 }} className="text-[14px]">
@@ -197,10 +188,10 @@ export default function ThirdStep() {
                     </p>
                   </div>
 
-                  <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="">
+                  <div className="flex  gap-4 flex-wrap">
+                    <div className="min-w-[140px] max-w-[180px] ">
                       {" "}
-                      <label className="block text-[13px] text-gray-700 mb-1">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Telefone Principal{" "}
                         <span className="text-red-500">*</span>
                       </label>
@@ -219,8 +210,8 @@ export default function ThirdStep() {
                           </p>
                         )}
                     </div>
-                    <div className="">
-                      <label className="block text-[13px] text-gray-700 mb-1">
+                    <div className="min-w-[260px] max-w-[260px]  w-full">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Segundo número de contato (Opcional)
                       </label>
                       <PhoneInput
@@ -235,14 +226,17 @@ export default function ThirdStep() {
                         }
                         placeholder="Digite o segundo número de contato"
                       />
-                      <span className="text-[11px] text-gray-500">
+                      <p
+                        style={{ margin: 0, marginTop: 8 }}
+                        className="text-[11px] text-gray-500"
+                      >
                         Se desejar, adicione um segundo número de contato para
                         garantir o recebimento da mensagem.
-                      </span>
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-start gap-3 mb-20 md:mb-10">
+                  <div className="flex flex-col items-start gap-3 mb-20 md:mb-10 mt-4">
                     <ConfigProvider
                       theme={{
                         token: {
@@ -250,7 +244,7 @@ export default function ThirdStep() {
                         },
                       }}
                     >
-                      <div className="flex items-start justify-start  self-start gap-3">
+                      <div className="flex items-start justify-start  self-start gap-2">
                         <Checkbox
                           checked={acceptContact}
                           onChange={(e) =>
@@ -268,7 +262,7 @@ export default function ThirdStep() {
                           pedido.
                         </p>
                       </div>
-                      <div className="flex items-start justify-start self-start gap-1">
+                      <div className="flex items-start justify-start self-start gap-0.5">
                         <Checkbox
                           checked={acceptTerms}
                           onChange={(e) =>
@@ -305,6 +299,12 @@ export default function ThirdStep() {
                     >
                       <Button
                         type="primary"
+                        style={{
+                          borderRadius: 20,
+                          width: 200,
+                          height: 44,
+                          fontSize: "20px",
+                        }}
                         size="large"
                         onClick={handleSubmit}
                         loading={isUpdateOrderFetching}

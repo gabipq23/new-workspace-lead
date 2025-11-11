@@ -74,7 +74,7 @@ export default function ThirdStep() {
       sessionStorage.setItem("status", "fechado");
       sessionStorage.setItem("id", orderId || "");
 
-      clearOrder();
+      // clearOrder();
       navigate(`/order/${orderId}`);
       window.scrollTo(0, 0);
     } catch (error) {

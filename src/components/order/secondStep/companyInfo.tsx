@@ -99,7 +99,7 @@ export default function CompanyInfo() {
         data: updateData,
       });
 
-      clearOrder();
+      // clearOrder();
       navigate(`/verify-information/${orderId}`);
       window.scrollTo(0, 0);
     } catch (error) {

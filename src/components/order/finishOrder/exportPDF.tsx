@@ -158,8 +158,12 @@ export const generatePDF = async (workspace: OrderData) => {
       {
         type: "circle",
         ul: [
-          `Nome do Gestor: ${workspace.manager_name || "-"}`,
-          `Telefone do Gestor: ${formatPhone(workspace.manager_phone || "")}`,
+          `Nome: ${workspace.manager_name || "-"}`,
+          `Telefone: ${formatPhone(workspace.manager_phone || "")}`,
+          `Segundo Telefone : ${formatPhone(
+            workspace.second_manager_phone || ""
+          )}`,
+
           `Email: ${workspace?.email || "-"}`,
           `CPF: ${formatCPF(workspace?.cpf || "") || "-"}`,
         ],

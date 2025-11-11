@@ -4,7 +4,7 @@ import Header from "../components/header";
 import OrderResumeDesktop from "../components/orderResumeDesktop";
 import { useOrderStore } from "../../../context/context";
 import { useState } from "react";
-import { Button, Checkbox, ConfigProvider } from "antd";
+import { Button, Checkbox, ConfigProvider, Modal } from "antd";
 import { PhoneInput } from "../../../utils/input";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -17,7 +17,7 @@ export default function ThirdStep() {
     useOrderStore();
   const [showServices, setShowServices] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const second_manager_phone = thirdStepData.second_manager_phone || "";
   const acceptContact = thirdStepData.acceptContact || false;
   const acceptTerms = thirdStepData.acceptTerms || false;
@@ -276,7 +276,15 @@ export default function ThirdStep() {
                           className="text-[14px] text-gray-500"
                         >
                           <span className="text-red-500">*</span> Aceito e
-                          concordo com os termos e contratos.
+                          concordo com os{" "}
+                          <button
+                            style={{ color: "#660099" }}
+                            className="underline  cursor-pointer"
+                            onClick={() => setIsModalOpen(true)}
+                          >
+                            termos e contratos
+                          </button>
+                          .
                         </p>
                         {hasTriedSubmit && !acceptTerms && (
                           <p className="text-red-500 text-xs mt-1">
@@ -331,6 +339,66 @@ export default function ThirdStep() {
           </>
         )}
       </div>
+      {isModalOpen && (
+        <Modal
+          open={isModalOpen}
+          onCancel={() => {
+            setIsModalOpen(false);
+          }}
+          footer={null}
+          title="Termos e Contratos"
+          centered
+          width={560}
+        >
+          <div className="text-center flex flex-col gap-4">
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged. It was
+              popularised in the 1960s with the release of Letraset sheets
+              containing Lorem Ipsum passages, and more recently with desktop
+              publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum.
+            </p>
+            {/* <div className="flex justify-center gap-6">
+              <ConfigProvider
+                theme={{
+                  token: {
+                    colorPrimary: "#660099",
+                    colorText: "#660099",
+                    colorBorder: "#660099",
+                    fontSize: 14,
+                    colorPrimaryHover: "#9933cc",
+                  },
+                }}
+              >
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                  }}
+                >
+                 Aceito
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                  }}
+                  className="self-end"
+                >
+                  Não
+                </Button>
+              </ConfigProvider>
+            </div> */}
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

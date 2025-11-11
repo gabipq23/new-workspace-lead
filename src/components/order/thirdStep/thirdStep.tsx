@@ -4,7 +4,7 @@ import Header from "../components/header";
 import OrderResumeDesktop from "../components/orderResumeDesktop";
 import { useOrderStore } from "../../../context/context";
 import { useState } from "react";
-import { Button, Checkbox, ConfigProvider } from "antd";
+import { Button, Checkbox, ConfigProvider, Modal } from "antd";
 import { PhoneInput } from "../../../utils/input";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -17,7 +17,7 @@ export default function ThirdStep() {
     useOrderStore();
   const [showServices, setShowServices] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const second_manager_phone = thirdStepData.second_manager_phone || "";
   const acceptContact = thirdStepData.acceptContact || false;
   const acceptTerms = thirdStepData.acceptTerms || false;
@@ -45,16 +45,10 @@ export default function ThirdStep() {
 
   const isFormValid = () => {
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
-    const hasAcceptedContact = acceptContact === true;
+
     const hasAcceptedTerms = acceptTerms === true;
-    const hasValidSecondManagerPhone =
-      second_manager_phone.replace(/\D/g, "").length === 11;
-    return (
-      hasValidManagerPhone &&
-      hasAcceptedContact &&
-      hasAcceptedTerms &&
-      hasValidSecondManagerPhone
-    );
+
+    return hasValidManagerPhone && hasAcceptedTerms;
   };
 
   const handleSubmit = async () => {
@@ -64,7 +58,7 @@ export default function ThirdStep() {
     }
     const updateData = {
       managerPhone,
-      second_manager_phone: second_manager_phone || undefined,
+      second_manager_phone,
       acceptContact,
       acceptTerms,
     };
@@ -183,11 +177,8 @@ export default function ThirdStep() {
                   </div>
 
                   {/* Confirmação via SMS */}
-                  <div className="flex flex-col gap-2 mb-4 mt-4">
-                    <h1
-                      style={{ margin: 0 }}
-                      className="text-[18px] font-normal text-neutral-800 "
-                    >
+                  <div className="flex flex-col mb-4 mt-4">
+                    <h1 className="text-[20px] font-normal text-[#660099]">
                       Confirmação via SMS
                     </h1>
                     <p style={{ margin: 0 }} className="text-[14px]">
@@ -197,10 +188,10 @@ export default function ThirdStep() {
                     </p>
                   </div>
 
-                  <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="">
+                  <div className="flex  gap-4 flex-wrap">
+                    <div className="min-w-[140px] max-w-[180px] ">
                       {" "}
-                      <label className="block text-[13px] text-gray-700 mb-1">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Telefone Principal{" "}
                         <span className="text-red-500">*</span>
                       </label>
@@ -219,8 +210,8 @@ export default function ThirdStep() {
                           </p>
                         )}
                     </div>
-                    <div className="">
-                      <label className="block text-[13px] text-gray-700 mb-1">
+                    <div className="min-w-[260px] max-w-[260px]  w-full">
+                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
                         Segundo número de contato (Opcional)
                       </label>
                       <PhoneInput
@@ -235,14 +226,17 @@ export default function ThirdStep() {
                         }
                         placeholder="Digite o segundo número de contato"
                       />
-                      <span className="text-[11px] text-gray-500">
+                      <p
+                        style={{ margin: 0, marginTop: 8 }}
+                        className="text-[11px] text-gray-500"
+                      >
                         Se desejar, adicione um segundo número de contato para
                         garantir o recebimento da mensagem.
-                      </span>
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-start gap-3 mb-20 md:mb-10">
+                  <div className="flex flex-col items-start gap-3 mb-20 md:mb-10 mt-4">
                     <ConfigProvider
                       theme={{
                         token: {
@@ -250,7 +244,7 @@ export default function ThirdStep() {
                         },
                       }}
                     >
-                      <div className="flex items-start justify-start  self-start gap-3">
+                      <div className="flex items-start justify-start  self-start gap-2">
                         <Checkbox
                           checked={acceptContact}
                           onChange={(e) =>
@@ -268,7 +262,7 @@ export default function ThirdStep() {
                           pedido.
                         </p>
                       </div>
-                      <div className="flex items-start justify-start self-start gap-1">
+                      <div className="flex items-start justify-start self-start gap-0.5">
                         <Checkbox
                           checked={acceptTerms}
                           onChange={(e) =>
@@ -282,7 +276,15 @@ export default function ThirdStep() {
                           className="text-[14px] text-gray-500"
                         >
                           <span className="text-red-500">*</span> Aceito e
-                          concordo com os termos e contratos.
+                          concordo com os{" "}
+                          <button
+                            style={{ color: "#660099" }}
+                            className="underline  cursor-pointer"
+                            onClick={() => setIsModalOpen(true)}
+                          >
+                            termos e contratos
+                          </button>
+                          .
                         </p>
                         {hasTriedSubmit && !acceptTerms && (
                           <p className="text-red-500 text-xs mt-1">
@@ -305,6 +307,12 @@ export default function ThirdStep() {
                     >
                       <Button
                         type="primary"
+                        style={{
+                          borderRadius: 20,
+                          width: 200,
+                          height: 44,
+                          fontSize: "20px",
+                        }}
                         size="large"
                         onClick={handleSubmit}
                         loading={isUpdateOrderFetching}
@@ -331,6 +339,66 @@ export default function ThirdStep() {
           </>
         )}
       </div>
+      {isModalOpen && (
+        <Modal
+          open={isModalOpen}
+          onCancel={() => {
+            setIsModalOpen(false);
+          }}
+          footer={null}
+          title="Termos e Contratos"
+          centered
+          width={560}
+        >
+          <div className="text-center flex flex-col gap-4">
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged. It was
+              popularised in the 1960s with the release of Letraset sheets
+              containing Lorem Ipsum passages, and more recently with desktop
+              publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum.
+            </p>
+            {/* <div className="flex justify-center gap-6">
+              <ConfigProvider
+                theme={{
+                  token: {
+                    colorPrimary: "#660099",
+                    colorText: "#660099",
+                    colorBorder: "#660099",
+                    fontSize: 14,
+                    colorPrimaryHover: "#9933cc",
+                  },
+                }}
+              >
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                  }}
+                >
+                 Aceito
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                  }}
+                  className="self-end"
+                >
+                  Não
+                </Button>
+              </ConfigProvider>
+            </div> */}
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

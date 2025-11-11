@@ -5,7 +5,7 @@ import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";
 export default function InfoComprador(basicInfo: any) {
   console.log(basicInfo);
   return (
-    <div className="flex flex-col items-start rounded-[26px] w-full p-4 gap-8 ">
+    <div className="flex flex-col items-start rounded-[26px] w-full p-4 pt-0 gap-8 ">
       <div className="flex flex-col bg-white text-neutral-800 gap-2 w-full  rounded-lg min-h-[120px] p-4">
         {/* CNPJ e Nome do Gestor */}
         <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">

@@ -71,7 +71,7 @@ function Banner() {
             <>
               <p
                 style={{ lineHeight: "1.0", margin: 0 }}
-                className="text-[10px] md:text-[14px] lg:text-[18px] text-[#f7f7f7] "
+                className="text-[10px] md:text-[16px] lg:text-[22px] text-[#f7f7f7] "
               >
                 A partir de R$32,70/ mês
               </p>

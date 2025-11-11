@@ -58,7 +58,7 @@ export default function AddOldPlan({
       {hasWorkspace === "true" && (
         <>
           {/* <h2>{hasWorkspace === "true" && "Planos Atuais"}</h2> */}
-          <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4 ">
+          <h3 className="flex  items-center gap-2 text-[15px] text-gray-800 mb-4 ">
             Qual plano você possui atualmente e deseja migrar ?
             <Tooltip title="Você pode escolher 1 ou mais planos.">
               <span className="text-gray-500 cursor-pointer">
@@ -75,7 +75,7 @@ export default function AddOldPlan({
                 className="flex flex-wrap justify-start gap-2 mb-1 max-w-[800px] bg-green-50 py-2 rounded-r-md"
               >
                 <div className="w-[160px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
+                  <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                     Plano {index + 1}
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
@@ -85,8 +85,8 @@ export default function AddOldPlan({
                   </div>
                 </div>
 
-                <div className="w-[120px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
+                <div className="w-[140px]">
+                  <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                     Quant. de Usuários
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center justify-center">
@@ -97,7 +97,7 @@ export default function AddOldPlan({
                 </div>
 
                 <div className="w-[100px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
+                  <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                     Modalidade
                   </label>
                   <div className="h-8 px-3 py-1 border border-gray-300 rounded-md bg-white flex items-center">
@@ -108,7 +108,7 @@ export default function AddOldPlan({
                 </div>
 
                 <div className="w-[260px]">
-                  <label className="block text-[12px] text-gray-600 mb-2">
+                  <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                     Valor Total
                   </label>
                   <div className="flex gap-2">
@@ -144,9 +144,9 @@ export default function AddOldPlan({
               </div>
             ))}
 
-          <div className="flex max-w-[800px] flex-wrap justify-start gap-2 mb-6">
+          <div className="flex max-w-[800px] flex-wrap justify-start gap-2 mb-1">
             <div className="w-[160px]">
-              <label className="block text-[12px] text-gray-600 mb-2">
+              <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                 Plano{" "}
                 {confirmedPlans.filter((plan) => plan.newPlan === false)
                   .length + 1}
@@ -182,8 +182,8 @@ export default function AddOldPlan({
                   <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
                 )}
             </div>
-            <div className="w-[120px]">
-              <label className="block text-[12px] text-gray-600 mb-2">
+            <div className="w-[140px]">
+              <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                 Quant. de Usuários
                 {confirmedPlans.filter((plan) => plan.newPlan === false)
                   .length === 0 && <span className="text-red-500">*</span>}
@@ -242,7 +242,7 @@ export default function AddOldPlan({
                 )}
             </div>
             <div className="w-[100px]">
-              <label className="block text-[12px] text-gray-600 mb-2">
+              <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                 Modalidade
                 {confirmedPlans.filter((plan) => plan.newPlan === false)
                   .length === 0 && <span className="text-red-500">*</span>}
@@ -288,7 +288,7 @@ export default function AddOldPlan({
                 )}
             </div>
             <div className="w-[260px]">
-              <label className="block text-[12px] text-gray-600 mb-2">
+              <label className="flex items-center gap-1  text-[13px] text-gray-600 mb-2">
                 Valor Total
               </label>
               <div className="flex gap-2">

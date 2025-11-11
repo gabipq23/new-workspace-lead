@@ -41,7 +41,14 @@ export default function OrderInformation() {
   if (hasWorkspace === "true") {
     collapseItems.push({
       key: "old",
-      label: <h2>Planos Atuais</h2>,
+      label: (
+        <h2
+          style={{ margin: 0, padding: 0, fontWeight: "bold" }}
+          className="  text-neutral-700 "
+        >
+          Planos Atuais
+        </h2>
+      ),
       children: (
         <AddOldPlan
           hasWorkspace="true"
@@ -60,7 +67,14 @@ export default function OrderInformation() {
   if (showAddNewPlan) {
     collapseItems.push({
       key: "new",
-      label: <h2>Novos Planos</h2>,
+      label: (
+        <h2
+          style={{ margin: 0, padding: 0, fontWeight: "bold" }}
+          className="  text-neutral-700 "
+        >
+          Novos Planos
+        </h2>
+      ),
       children: (
         <AddNewPlan
           hasWorkspace={alreadyHaveWorkspace ? "true" : "false"}
@@ -78,10 +92,10 @@ export default function OrderInformation() {
   }
   return (
     <>
-      <div className="flex flex-col flex-1 px-8 pt-2 justify-between bg-[#f7f7f7] h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin">
+      <div className="flex flex-col flex-1 pb-4 pt-2 justify-between bg-[#f7f7f7] h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin">
         <div className="mb-10">
           <div
-            className="flex items-center mb-2 justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
+            className="flex items-center px-8 mb-2 justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
             style={{ minWidth: 0 }}
           >
             <div className="flex flex-col gap-1 items-center min-w-0">
@@ -111,12 +125,15 @@ export default function OrderInformation() {
             </div>
           </div>
 
-          <h1 className="text-[18px] font-normal text-[#660099]">
+          <h1
+            style={{ paddingInline: 32 }}
+            className="text-[20px] px-8 font-normal text-[#660099]"
+          >
             Olá! Vamos iniciar o seu pedido{" "}
             {hasWorkspace === "true" ? "de migração" : ""} online :)
           </h1>
 
-          <div className="bg-orange-100 border border-orange-100 rounded-lg p-2 mb-4 flex items-center">
+          <div className="bg-orange-100 mx-8 border border-orange-100 rounded-lg p-2  flex items-center">
             <span className="text-orange-600 text-[12px] mr-2">🎁</span>
             <span className="text-orange-600 text-[12px]">
               <strong>Aproveite agora!</strong> Clientes Móvel Vivo Empresas
@@ -124,11 +141,15 @@ export default function OrderInformation() {
             </span>
           </div>
 
-          <div className="mb-8 ">
+          <div
+            style={{ margin: 0, padding: 0, marginInline: 16 }}
+            className="mb-8 "
+          >
             {hasWorkspace === "true" ? (
               <>
                 {" "}
                 <Collapse
+                  size="large"
                   items={collapseItems}
                   ghost
                   activeKey={activeCollapseKeys}
@@ -142,7 +163,7 @@ export default function OrderInformation() {
                 />
               </>
             ) : (
-              <>
+              <div className="px-4 pt-4">
                 <AddNewPlan
                   hasWorkspace={alreadyHaveWorkspace ? "true" : "false"}
                   confirmedPlans={confirmedPlans}
@@ -154,7 +175,7 @@ export default function OrderInformation() {
                   removePlan={removePlan}
                   hasTriedSubmit={hasTriedSubmit}
                 />
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -171,6 +192,12 @@ export default function OrderInformation() {
               <Button
                 type="primary"
                 size="large"
+                style={{
+                  borderRadius: 20,
+                  width: 140,
+                  height: 44,
+                  fontSize: "20px",
+                }}
                 onClick={() => {
                   if (
                     !modalAlreadyShown &&

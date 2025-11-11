@@ -63,7 +63,8 @@ export default function InfoComprador(basicInfo: any) {
         <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
           <p>
             <strong>Telefone Secundário:</strong>{" "}
-            {formatPhoneNumber(basicInfo.basicInfo?.buyers_phone) || "-"}
+            {formatPhoneNumber(basicInfo.basicInfo?.second_manager_phone) ||
+              "-"}
           </p>
           <p>
             <strong>Cliente Vivo:</strong>{" "}
@@ -95,7 +96,8 @@ export default function InfoComprador(basicInfo: any) {
         <div className="flex flex-col gap-2 md:hidden text-[14px]  text-neutral-700">
           <p>
             <strong>Telefone Secundário:</strong>{" "}
-            {formatPhoneNumber(basicInfo.basicInfo?.buyers_phone) || "-"}
+            {formatPhoneNumber(basicInfo.basicInfo?.second_manager_phone) ||
+              "-"}
           </p>
           <p>
             <strong>Cliente Vivo:</strong>{" "}

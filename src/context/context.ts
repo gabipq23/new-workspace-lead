@@ -23,6 +23,7 @@ export interface SecondStepData {
   managerPhone: string;
   company_name: string;
   cpf: string;
+  i_have_authorization: boolean;
 }
 
 export interface ThirdStepData {
@@ -30,6 +31,7 @@ export interface ThirdStepData {
   buyers_phone: string;
   acceptContact: boolean;
   acceptTerms: boolean;
+  second_manager_phone?: string;
 }
 
 interface OrderFlowStore {
@@ -67,12 +69,14 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
     managerPhone: "",
     company_name: "",
     cpf: "",
+    i_have_authorization: false,
   },
   thirdStepData: {
     managerPhone: "",
     buyers_phone: "",
     acceptContact: false,
     acceptTerms: false,
+    second_manager_phone: "",
   },
 
   setSelectedPlan: (plan: Plan) => {
@@ -177,6 +181,8 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       plan: apiPlans,
       company_name: state.secondStepData.company_name || "",
       cpf: state.secondStepData.cpf || "",
+      i_have_authorization: state.secondStepData.i_have_authorization || false,
+      second_manager_phone: state.thirdStepData.second_manager_phone || "",
     };
   },
 
@@ -185,7 +191,7 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
       selectedPlan: null,
       confirmedPlans: [],
       firstStepData: {
-        isVivoClient: true,
+        isVivoClient: false,
         alreadyHaveWorkspace: false,
       },
       secondStepData: {
@@ -196,12 +202,14 @@ export const useOrderStore = create<OrderFlowStore>((set, get) => ({
         managerPhone: "",
         company_name: "",
         cpf: "",
+        i_have_authorization: false,
       },
       thirdStepData: {
         managerPhone: "",
         buyers_phone: "",
         acceptContact: false,
         acceptTerms: false,
+        second_manager_phone: "",
       },
     });
   },

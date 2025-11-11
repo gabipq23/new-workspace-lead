@@ -13,12 +13,12 @@ import {
 } from "../../../controller/controller";
 
 export default function ThirdStep() {
-  const { thirdStepData, updateThirdStepData, confirmedPlans, clearOrder } =
+  const { thirdStepData, updateThirdStepData, confirmedPlans } =
     useOrderStore();
   const [showServices, setShowServices] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
-  const buyers_phone = thirdStepData.buyers_phone || "";
+  const second_manager_phone = thirdStepData.second_manager_phone || "";
   const acceptContact = thirdStepData.acceptContact || false;
   const acceptTerms = thirdStepData.acceptTerms || false;
 
@@ -47,7 +47,14 @@ export default function ThirdStep() {
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
     const hasAcceptedContact = acceptContact === true;
     const hasAcceptedTerms = acceptTerms === true;
-    return hasValidManagerPhone && hasAcceptedContact && hasAcceptedTerms;
+    const hasValidSecondManagerPhone =
+      second_manager_phone.replace(/\D/g, "").length === 11;
+    return (
+      hasValidManagerPhone &&
+      hasAcceptedContact &&
+      hasAcceptedTerms &&
+      hasValidSecondManagerPhone
+    );
   };
 
   const handleSubmit = async () => {
@@ -57,7 +64,7 @@ export default function ThirdStep() {
     }
     const updateData = {
       managerPhone,
-      buyers_phone: buyers_phone || undefined,
+      second_manager_phone: second_manager_phone || undefined,
       acceptContact,
       acceptTerms,
     };
@@ -217,12 +224,14 @@ export default function ThirdStep() {
                         Segundo número de contato (Opcional)
                       </label>
                       <PhoneInput
-                        name="buyers_phone"
+                        name="second_manager_phone"
                         autoComplete="on"
                         format="(##) #####-####"
-                        value={buyers_phone}
+                        value={second_manager_phone}
                         onValueChange={(values) =>
-                          updateThirdStepData({ buyers_phone: values.value })
+                          updateThirdStepData({
+                            second_manager_phone: values.value,
+                          })
                         }
                         placeholder="Digite o segundo número de contato"
                       />

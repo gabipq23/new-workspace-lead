@@ -13,7 +13,7 @@ import Header from "../components/header";
 import { CNPJInput, CPFInput, PhoneInput } from "../../../utils/input";
 
 export default function CompanyInfo() {
-  const { secondStepData, updateSecondStepData, confirmedPlans, clearOrder } =
+  const { secondStepData, updateSecondStepData, confirmedPlans } =
     useOrderStore();
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
@@ -24,6 +24,7 @@ export default function CompanyInfo() {
   const managerName = secondStepData.manager_name || "";
   const managerPhone = secondStepData.managerPhone || "";
   const domainName = secondStepData.domainName || "";
+  const i_have_authorization = secondStepData.i_have_authorization || false;
   const [showServices, setShowServices] = useState(false);
 
   const getTotalPrice = () => {
@@ -52,7 +53,7 @@ export default function CompanyInfo() {
     const hasValidManagerName = managerName.trim() !== "";
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
     const hasValidSecondPhone = managerPhone.replace(/\D/g, "").length === 11;
-
+    const hasAuthorization = i_have_authorization === true;
     const hasValidCpf = cpf.replace(/\D/g, "").length === 11;
 
     return (
@@ -62,7 +63,8 @@ export default function CompanyInfo() {
       hasValidManagerName &&
       hasValidManagerPhone &&
       hasValidCpf &&
-      hasValidSecondPhone
+      hasValidSecondPhone &&
+      hasAuthorization
     );
   };
 
@@ -81,6 +83,7 @@ export default function CompanyInfo() {
       managerPhone,
       company_name,
       cpf,
+      i_have_authorization,
     };
 
     updateSecondStepData({
@@ -91,6 +94,7 @@ export default function CompanyInfo() {
       managerPhone,
       company_name,
       cpf,
+      i_have_authorization,
     });
 
     try {
@@ -406,7 +410,14 @@ export default function CompanyInfo() {
                           },
                         }}
                       >
-                        <Checkbox>
+                        <Checkbox
+                          checked={i_have_authorization}
+                          onChange={(e) =>
+                            updateSecondStepData({
+                              i_have_authorization: e.target.checked,
+                            })
+                          }
+                        >
                           <p
                             style={{ margin: 0 }}
                             className="text-[11px] text-gray-500"

@@ -47,7 +47,9 @@ export default function FinishOrderInfo() {
           orderDetails.acceptContact || orderDetails.accept_contact,
         company_name: orderDetails.company_name || orderDetails.company_name,
         cpf: orderDetails.cpf || orderDetails.cpf,
-        buyers_phone: orderDetails.buyers_phone || orderDetails.buyers_phone,
+        second_manager_phone:
+          orderDetails.second_manager_phone ||
+          orderDetails.second_manager_phone,
         domain: orderDetails.domain_name,
         alreadyHaveWorkspace:
           orderDetails.alreadyHaveWorkspace ||

@@ -103,20 +103,20 @@ export default function FinishOrderInfo() {
     <div className="min-h-[100vh] ">
       <Header />
 
-      <div className="flex gap-4  items-center  mb-8 flex-col px-6 pt-4 pb-4 ">
+      <div className="flex flex-col items-center mb-8 px-6 pt-4 pb-4 w-full overflow-x-hidden">
         {/* Main Content */}
-        <div className="flex flex-col min-h-[617px]">
+        <div className="flex flex-col min-h-[617px] w-full">
           {/* Top Section: Title and Alert */}
-          <div className="flex flex-col lg:flex-row w-full gap-1 mb-1">
-            <div className="flex flex-col gap-2 py-2 pb-4  lg:w-4/6">
-              <div className="flex items-center gap-2">
+          <div className="flex flex-col lg:flex-row flex-wrap w-full gap-2 mb-1">
+            <div className="flex flex-col gap-6 mx-0 py-2 pb-4 w-full lg:max-w-[66%]">
+              <div className="flex items-center gap-2 ">
                 <div className="text-[#660099] ">
                   <CheckCircle2 size={36} />
                 </div>
                 <div>
                   <h2
                     style={{ margin: 0 }}
-                    className="text-[20px] flex  items-center gap-2  text-[#222] "
+                    className="text-[30px] flex  items-center gap-2  text-neutral-700 "
                   >
                     Seu pedido está quase concluído!
                   </h2>
@@ -154,10 +154,31 @@ export default function FinishOrderInfo() {
                   </div>
                 </div>
               </div>
+              {/* Alert Box para md e menores */}
+              <div className="block lg:hidden">
+                <div className="flex flex-col justify-center items-center bg-[#fffbe6] border border-[#ffe58f] rounded-[16px] p-6 mb-4 md:mb-2 py-4 min-h-[100px] shadow-sm w-full ">
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-[#faad14] ">
+                      <AlertTriangle size={28} />
+                    </span>
+                    <span className="text-[#660099] font-bold text-[16px]">
+                      FIQUE ATENTO:
+                    </span>
+                  </div>
+
+                  <p className="text-[14px]">
+                    A Vivo nunca entra em contato solicitando dados bancários ou
+                    de cartão de crédito. Para sua segurança, nunca forneça
+                    estes dados.
+                  </p>
+                </div>
+              </div>
+              {/* Collapse for Detalhes dos Planos and Informações do Comprador */}
+              <Collapse items={items} ghost defaultActiveKey={["1"]} />
             </div>
 
-            {/* Alert Box */}
-            <div className="flex flex-2 lg:w-2/6 gap-4 flex-col justify-center items-center bg-[#fffbe6] border border-[#ffe58f] rounded-[16px] p-6 mb-4 md:mb-2 py-4 min-h-[140px] shadow-sm">
+            {/* Alert Box para lg+ */}
+            <div className="hidden lg:flex flex-col justify-center items-center bg-[#fffbe6] border border-[#ffe58f] rounded-[16px] p-6 mb-4 md:mb-2 py-4 min-h-[140px] shadow-sm w-full lg:max-w-[32%] h-[230px]">
               <div className="flex items-center justify-center gap-2">
                 <span className="text-[#faad14] ">
                   <AlertTriangle size={28} />
@@ -174,9 +195,6 @@ export default function FinishOrderInfo() {
               </p>
             </div>
           </div>
-
-          {/* Collapse for Detalhes dos Planos and Informações do Comprador */}
-          <Collapse items={items} ghost defaultActiveKey={["1"]} />
         </div>
       </div>
     </div>

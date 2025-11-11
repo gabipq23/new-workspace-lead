@@ -24,28 +24,28 @@ export default function OrderTable({
   };
   return (
     <>
-      <div className="flex flex-col items-center bg-white rounded-[26px] w-full p-4  py-4 ">
+      <div className="flex flex-col items-center bg-white rounded-[26px] w-full p-4 py-4 ">
         {/* Desktop */}
-        <div className="hidden lg:block ">
+        <div className="hidden lg:flex flex-col w-full ">
           <div className="flex items-center font-semibold text-[#666666] text-[15px] mb-1">
-            <p className="w-76 text-center">Plano</p>
-            <p className="w-32 text-center">Usuários</p>
-            <p className="w-32 text-center">Modalidade</p>
-            <p className="w-40 text-center">Valor Unitário</p>
+            <p className="w-64 text-center">Plano</p>
+            <p className="w-28 text-center">Usuários</p>
+            <p className="w-28 text-center">Modalidade</p>
+            <p className="w-32 text-center">Valor Unitário</p>
             <p className="w-40 text-center">Valor Total</p>
           </div>
           <hr className="border-t border-neutral-300 mx-2 mb-1" />
           {confirmedPlans?.map((plan: Plan, index: number) => (
             <div key={plan?.id}>
               <div className="flex items-center py-4 text-[14px] text-neutral-700">
-                <p className="text-[14px] font-semibold w-76 text-center">
+                <p className="text-[14px] font-semibold w-64 text-center">
                   Google Workspace Business {plan?.planName}
                 </p>
-                <p className="text-[14px] w-32 text-center">{plan?.users}</p>
-                <p className="text-[14px] w-32 text-center capitalize">
+                <p className="text-[14px] w-28 text-center">{plan?.users}</p>
+                <p className="text-[14px] w-28 text-center capitalize">
                   {plan?.type}
                 </p>
-                <p className="text-[14px] font-semibold w-40 text-center">
+                <p className="text-[14px] font-semibold w-32 text-center">
                   R${" "}
                   {Number(plan.price.replace(",", "."))
                     .toFixed(2)
@@ -77,7 +77,7 @@ export default function OrderTable({
         </div>
 
         {/* Mobile */}
-        <div className="block lg:hidden">
+        <div className="flex flex-wrap gap-4 lg:hidden">
           {confirmedPlans.map((plan: Plan) => (
             <div
               key={plan.id}

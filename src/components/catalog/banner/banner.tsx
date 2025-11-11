@@ -73,7 +73,7 @@ function Banner() {
                 style={{ lineHeight: "1.0", margin: 0 }}
                 className="text-[10px] md:text-[14px] lg:text-[18px] text-[#f7f7f7] "
               >
-                A partir de R$32,72/ mês
+                A partir de R$32,70/ mês
               </p>
             </>
           )}
@@ -98,7 +98,10 @@ function Banner() {
             variant="solid"
             size="large"
             color="magenta"
-            onClick={() => navigate("/choose-plan")}
+            onClick={() => {
+              sessionStorage.setItem("currentUrl", window.location.href);
+              navigate("/choose-plan");
+            }}
           >
             {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATE AGORA"}
           </Button>

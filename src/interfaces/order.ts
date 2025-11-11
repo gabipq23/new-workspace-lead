@@ -10,24 +10,39 @@ export interface Plan {
 }
 
 export interface OrderData {
+  acceptContact?: boolean;
+  acceptTerms?: boolean;
+  alreadyHaveWorkspace?: boolean;
+  already_have_workspace?: number;
+  buyers_phone?: string | null;
+  client_ip?: string | null;
+  company_name?: string | null;
+  cnpj?: string;
+  consultor_responsavel?: string | null;
+  cpf?: string | null;
+  credito_servicos?: string | null;
+  created_at?: string;
+  domainName?: string;
+  domain_name?: string;
+  email?: string;
+  equipe?: string | null;
+  finger_print?: string | null;
   id?: number;
-  email: string;
-  domainName: string;
-  cnpj: string;
-  managerPhone: string;
+  id_crm?: string | null;
+  id_vivo_corp?: string | null;
+  i_have_authorization?: boolean;
+  isVivoClient?: boolean;
+  is_vivo_client?: number;
+  managerPhone?: string;
+  manager_name?: string | null;
+  manager_phone?: string;
+  obs_consultor?: string | null;
+  observacao_consultor?: string;
+  ordernumber?: string;
+  plan?: Plan[];
+  plans?: Plan[];
+  second_manager_phone?: string;
   status?: string | null;
   status_pos_venda?: string | null;
-  id_vivo_corp?: string | null;
-  consultor_responsavel?: string | null;
-  equipe?: string | null;
-  id_crm?: string | null;
-  obs_consultor?: string | null;
-  manager_name?: string | null;
-  created_at?: string;
-  ordernumber?: string;
-  isVivoClient: boolean;
-  alreadyHaveWorkspace: boolean;
-  acceptContact: boolean;
-  acceptTerms: boolean;
-  plan: Plan[];
+  url?: string | null;
 }

@@ -46,7 +46,7 @@ export function PlanCard({ plan, index }: { plan: Plan; index: number }) {
           <div className="text-gray-600 text-[10px] h-5 flex items-center  gap-2">
             Plano {index}{" "}
             <span className="bg-green-200 p-0.5 px-2 rounded-md">
-              {plan.newPlan ? "Novo" : "Atual"}
+              {plan.newPlan ? "Novo" : "Migração"}
             </span>
           </div>
           <div

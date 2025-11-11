@@ -1,26 +1,18 @@
 import { useState } from "react";
-import { useOrderStore } from "../../../context/context";
+
 import { useNavigate } from "react-router-dom";
 import { useOrderControler } from "../../../controller/controller";
 import type { Plan } from "../../../interfaces/order";
+import { useOrderStore } from "../../../context/context";
 
-interface BasicInfo {
-  cnpj: string;
-  email: string;
-  manager_name: string;
-  managerPhone: string;
-  isVivoClient: boolean;
-  acceptContact: boolean;
-}
-export function useOrderInformation(
-  basicInfo: BasicInfo,
-  updateBasicInfo: (info: Partial<BasicInfo>) => void
-) {
+export function useOrderInformation() {
   const {
     confirmedPlans,
     addCurrentPlanToConfirmed,
     addNewPlanToConfirmed,
     removePlanFromConfirmed,
+    firstStepData,
+    updateFirstStepData,
   } = useOrderStore();
 
   const [currentPlanInput, setCurrentPlanInput] = useState({
@@ -37,36 +29,13 @@ export function useOrderInformation(
     type: "",
   });
 
-  const [cnpj, setCnpj] = useState(basicInfo.cnpj);
-  const [email, setEmail] = useState(basicInfo.email);
-  const [manager_name, setmanager_name] = useState(basicInfo.manager_name);
-  const [managerPhone, setManagerPhone] = useState(basicInfo.managerPhone);
-  const isVivoClient = sessionStorage.getItem("isVivoClient") === "true";
-  const [acceptContact, setAcceptContact] = useState(basicInfo.acceptContact);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const navigate = useNavigate();
-  const { createOrder, isCreatingOrderLoading, changeOrderStatus } =
-    useOrderControler();
-
-  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
+  const { createOrder, isCreatingOrderLoading } = useOrderControler();
 
   const isFormValid = () => {
     const hasAtLeastOnePlan = confirmedPlans.length > 0;
-    const cnpjDigits = cnpj.replace(/\D/g, "");
-    const hasValidCnpj = cnpjDigits.length === 14;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const hasValidEmail = emailRegex.test(email);
-    const hasValidmanager_name = manager_name.trim() !== "";
-    const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
-    const hasAcceptedContact = acceptContact === true;
-    return (
-      hasAtLeastOnePlan &&
-      hasValidCnpj &&
-      hasValidEmail &&
-      hasValidmanager_name &&
-      hasValidManagerPhone &&
-      hasAcceptedContact
-    );
+    return hasAtLeastOnePlan;
   };
 
   const handleSubmit = async () => {
@@ -75,47 +44,32 @@ export function useOrderInformation(
       return;
     }
 
-    updateBasicInfo({
-      cnpj: cnpj,
-      email: email,
-      manager_name: manager_name,
-      managerPhone: managerPhone,
-      isVivoClient: isVivoClient,
-      acceptContact: acceptContact,
-    });
-    const alreadyHaveWorkspace = hasWorkspace === "true";
-
     const orderData = {
-      email: email,
-      cnpj: cnpj,
-      manager_name: manager_name,
-      managerPhone: managerPhone,
-      isVivoClient: isVivoClient,
-      acceptContact: acceptContact,
+      isVivoClient:
+        sessionStorage.getItem("isVivoClient") === "true" ? true : false,
+      alreadyHaveWorkspace:
+        sessionStorage.getItem("alreadyHaveWorkspace") === "true"
+          ? true
+          : false,
+      email: "a@email.com",
+      cnpj: "12345678945632",
+      domainName: "a",
+      managerPhone: "21996542233",
+      manager_name: "a",
+      acceptContact: false,
+      acceptTerms: false,
       plan: confirmedPlans,
-      alreadyHaveWorkspace: alreadyHaveWorkspace,
-
-      domainName: alreadyHaveWorkspace ? "" : "",
-      acceptTerms: alreadyHaveWorkspace ? true : false,
+      url: sessionStorage.getItem("currentUrl") || "",
     };
 
     try {
       const response = await createOrder({ data: orderData });
 
-      if (alreadyHaveWorkspace) {
-        await changeOrderStatus({
-          id: Number(response.id),
-          data: { status: "fechado" },
-        });
-
-        navigate(`/order/${response.id}`);
-      } else {
-        navigate(`/client-information/${response.id}`);
-      }
-
+      navigate(`/client-information/${response.id}`);
+      sessionStorage.setItem("status", "aberto");
       window.scrollTo(0, 0);
     } catch (error) {
-      console.error("Erro ao processar pedido:", error);
+      console.error("Erro ao criar pedido parcial:", error);
     }
   };
 
@@ -213,25 +167,18 @@ export function useOrderInformation(
     }
   };
 
+  const handleAlreadyHaveWorkspaceChange = (value: boolean) => {
+    updateFirstStepData({ alreadyHaveWorkspace: value });
+    sessionStorage.setItem("alreadyHaveWorkspace", value.toString());
+  };
+
   return {
-    cnpj,
-    setCnpj,
-    email,
-    setEmail,
-    manager_name,
-    setmanager_name,
-    managerPhone,
-    setManagerPhone,
-    isVivoClient,
-    acceptContact,
-    setAcceptContact,
     hasTriedSubmit,
     handleSubmit,
     confirmedPlans,
     removePlan,
     currentPlanInput,
     updateCurrentPlanInput,
-    hasWorkspace,
     handleCurrentUserIncrease,
     handleCurrentUserDecrease,
     addCurrentPlan,
@@ -241,5 +188,7 @@ export function useOrderInformation(
     handleNewUserDecrease,
     addNewPlan,
     isCreatingOrderLoading,
+    alreadyHaveWorkspace: firstStepData.alreadyHaveWorkspace,
+    handleAlreadyHaveWorkspaceChange,
   };
 }

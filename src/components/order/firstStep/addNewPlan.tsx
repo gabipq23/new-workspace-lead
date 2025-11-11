@@ -15,8 +15,8 @@ export default function AddNewPlan({
   hasTriedSubmit,
 }: any) {
   return (
-    <>
-      <h2>{hasWorkspace === "true" && "Novos Planos"}</h2>
+    <div className=" mb-16">
+      {/* <h2>{hasWorkspace === "true" && "Novos Planos"}</h2> */}
       <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
         {hasWorkspace === "true"
           ? "Deseja aproveitar para adicionar novos planos?"
@@ -109,15 +109,17 @@ export default function AddNewPlan({
           <label className="block text-[12px] text-gray-600 mb-2">
             Plano{" "}
             {confirmedPlans.filter((plan: Plan) => plan.newPlan === true)
-              .length + 1}{" "}
-            <span className="text-red-500">*</span>
+              .length + 1}
+            {hasWorkspace === "false" &&
+              confirmedPlans.filter((plan: Plan) => plan.newPlan === true)
+                .length === 0 && <span className="text-red-500">*</span>}
           </label>
           <Select
             size="middle"
             value={newPlanInput?.planName || undefined}
             onChange={(value) => {
               const priceMap = {
-                Starter: { mensal: "49,00", anual: "32,72" },
+                Starter: { mensal: "49,00", anual: "32,70" },
                 Standard: { mensal: "98,00", anual: "81,80" },
                 Plus: { mensal: "154,00", anual: "128,40" },
               };
@@ -134,13 +136,20 @@ export default function AddNewPlan({
             <Option value="Standard">Business Standard</Option>
             <Option value="Plus">Business Plus</Option>
           </Select>
-          {hasTriedSubmit && !newPlanInput?.planName && (
-            <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-          )}
+          {hasTriedSubmit &&
+            !newPlanInput?.planName &&
+            hasWorkspace === "false" &&
+            confirmedPlans.filter((plan: Plan) => plan.newPlan === true)
+              .length === 0 && (
+              <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+            )}
         </div>
         <div className="w-[120px]">
           <label className="block text-[12px] text-gray-600 mb-2">
-            Quant. de Usuários <span className="text-red-500">*</span>
+            Quant. de Usuários
+            {hasWorkspace === "false" &&
+              confirmedPlans.filter((plan: Plan) => plan.newPlan === true)
+                .length === 0 && <span className="text-red-500">*</span>}
           </label>
           <div className="flex items-center">
             <Button
@@ -186,15 +195,22 @@ export default function AddNewPlan({
               +
             </Button>
           </div>
-          {hasTriedSubmit && newPlanInput.users < 1 && (
-            <p className="text-red-500 text-xs mt-1">
-              Selecione pelo menos 1 usuário
-            </p>
-          )}
+          {hasTriedSubmit &&
+            newPlanInput.users < 1 &&
+            hasWorkspace === "false" &&
+            confirmedPlans.filter((plan: Plan) => plan.newPlan === true)
+              .length === 0 && (
+              <p className="text-red-500 text-xs mt-1">
+                Selecione pelo menos 1 usuário
+              </p>
+            )}
         </div>
         <div className="w-[100px]">
           <label className="block text-[12px] text-gray-600 mb-2">
-            Modalidade <span className="text-red-500">*</span>
+            Modalidade
+            {hasWorkspace === "false" &&
+              confirmedPlans.filter((plan: Plan) => plan.newPlan === true)
+                .length === 0 && <span className="text-red-500">*</span>}
           </label>
           <Select
             size="middle"
@@ -204,7 +220,7 @@ export default function AddNewPlan({
 
               if (newPlanInput?.planName) {
                 const priceMap = {
-                  Starter: { mensal: "49,00", anual: "32,72" },
+                  Starter: { mensal: "49,00", anual: "32,70" },
                   Standard: { mensal: "98,00", anual: "81,80" },
                   Plus: { mensal: "154,00", anual: "128,40" },
                 };
@@ -225,9 +241,13 @@ export default function AddNewPlan({
             <Option value="mensal">Mensal</Option>
             <Option value="anual">Anual</Option>
           </Select>
-          {hasTriedSubmit && !newPlanInput.type && (
-            <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-          )}
+          {hasTriedSubmit &&
+            !newPlanInput.type &&
+            hasWorkspace === "false" &&
+            confirmedPlans.filter((plan: Plan) => plan.newPlan === true)
+              .length === 0 && (
+              <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+            )}
         </div>
         <div className="w-[260px]">
           <label className="block text-[12px] text-gray-600 mb-2">
@@ -277,6 +297,6 @@ export default function AddNewPlan({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

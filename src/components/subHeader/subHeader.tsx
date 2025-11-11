@@ -257,7 +257,11 @@ function SubHeader() {
           variant="solid"
           size="middle"
           color="magenta"
-          onClick={() => navigate("/choose-plan")}
+          onClick={() => {
+            sessionStorage.setItem("currentUrl", window.location.href);
+
+            navigate("/choose-plan");
+          }}
         >
           {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATAR"}
         </Button>
@@ -273,7 +277,11 @@ function SubHeader() {
           variant="solid"
           size="middle"
           color="magenta"
-          onClick={() => navigate("/choose-plan")}
+          onClick={() => {
+            sessionStorage.setItem("currentUrl", window.location.href);
+
+            navigate("/choose-plan");
+          }}
         >
           {hasWorkspace === "true" ? "QUERO MIGRAR" : "CONTRATAR"}
         </Button>

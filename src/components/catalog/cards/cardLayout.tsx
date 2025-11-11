@@ -160,7 +160,10 @@ export default function CardLayout({ cardData }: any) {
               variant="solid"
               size="large"
               color="magenta"
-              onClick={() => handlePlanSelection(cardData)}
+              onClick={() => {
+                sessionStorage.setItem("currentUrl", window.location.href);
+                handlePlanSelection(cardData);
+              }}
             >
               {hasWorkspace === "true" ? "Migrar" : "Contratar"}
             </Button>

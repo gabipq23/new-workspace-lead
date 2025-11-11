@@ -10,7 +10,7 @@ export default function OrderResumeDesktop({
       <div className="hidden md:flex flex-col w-86 bg-[#660099] text-white p-6">
         <div className="flex items-center gap-2 mb-6">
           <span className="text-white">🛒</span>
-          <span className="font-medium">Seu plano</span>
+          <span className="font-medium">Planos</span>
         </div>
 
         <div className="bg-white text-gray-800 rounded-lg relative">

@@ -1,14 +1,21 @@
 import { Button, ConfigProvider, Collapse, Spin } from "antd";
 import type { CollapseProps } from "antd";
-import { Check } from "lucide-react";
-import { MailOutlined, SignatureOutlined } from "@ant-design/icons";
+
 import { useParams } from "react-router-dom";
 import { useOrderById } from "../../../controller/controller";
 import OrderTable from "./orderTable";
+import Header from "../components/header";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  MessageCircle,
+  MessageSquareMore,
+} from "lucide-react";
+import InfoComprador from "./buyersInfo";
+import { generatePDF } from "./exportPDF";
 
 export default function FinishOrderInfo() {
   const { id } = useParams<{ id: string }>();
-  const hasWorkspace = sessionStorage.getItem("alreadyHaveWorkspace");
 
   const { data: orderData, isLoading } = useOrderById(Number(id));
   if (isLoading) {
@@ -38,228 +45,25 @@ export default function FinishOrderInfo() {
         isVivoClient: orderDetails.isVivoClient || orderDetails.is_vivo_client,
         acceptContact:
           orderDetails.acceptContact || orderDetails.accept_contact,
-      }
-    : null;
-
-  const companyInfo = orderDetails
-    ? {
-        domainName:
-          orderDetails.domainName ||
-          orderDetails.domain_name ||
-          orderDetails.company_domain,
+        company_name: orderDetails.company_name || orderDetails.company_name,
+        cpf: orderDetails.cpf || orderDetails.cpf,
+        second_manager_phone:
+          orderDetails.second_manager_phone ||
+          orderDetails.second_manager_phone,
+        domain: orderDetails.domain_name,
         alreadyHaveWorkspace:
           orderDetails.alreadyHaveWorkspace ||
           orderDetails.already_have_workspace,
-        acceptTerms: orderDetails.acceptTerms || orderDetails.accept_terms,
       }
     : null;
-
-  interface Plan {
-    id: string;
-    planName: string;
-    price: string;
-    users: number;
-    type: string;
-  }
-
-  const getTotalPrice = () => {
-    return confirmedPlans.reduce((total: number, plan: Plan) => {
-      return total + parseFloat(plan.price.replace(",", ".")) * plan.users;
-    }, 0);
-  };
-
-  const getTotalUsers = () => {
-    return confirmedPlans.reduce(
-      (total: number, plan: Plan) => total + plan.users,
-      0
-    );
-  };
-  // Informações do Comprador
-  const infoComprador = (
-    <div className="flex flex-col items-start rounded-[26px] w-full p-4 gap-8 ">
-      <div className="flex flex-col bg-white text-neutral-800 gap-2 w-full  rounded-lg min-h-[120px] p-4">
-        {/* CNPJ e Nome do Gestor */}
-        <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
-          <p>
-            <strong>Nome do Gestor:</strong> {basicInfo?.manager_name || "-"}
-          </p>{" "}
-          <p>
-            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
-          </p>
-        </div>
-
-        {/* Mobile: CNPJ e Nome do Gestor em coluna */}
-        <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
-          <p>
-            <strong>Nome do Gestor:</strong> {basicInfo?.manager_name || "-"}
-          </p>{" "}
-          <p>
-            <strong>CNPJ:</strong> {basicInfo?.cnpj || "-"}
-          </p>
-        </div>
-
-        {/* Email e Telefone */}
-        <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
-          <p>
-            <strong>Cliente Vivo:</strong>{" "}
-            {basicInfo?.isVivoClient ? "Sim" : "Não"}
-          </p>
-          <p>
-            <strong>Email:</strong> {basicInfo?.email || "-"}
-          </p>
-        </div>
-
-        {/* Mobile: Email e Cliente Vivo em coluna */}
-        <div className="flex flex-col gap-2 md:hidden text-[14px] w-full text-neutral-700">
-          <p>
-            <strong>Cliente Vivo:</strong>{" "}
-            {basicInfo?.isVivoClient ? "Sim" : "Não"}
-          </p>{" "}
-          <p>
-            <strong>Email:</strong> {basicInfo?.email || "-"}
-          </p>
-        </div>
-        {/* Email e Telefone */}
-        <div className="hidden md:grid grid-cols-2 gap-28 text-[14px] w-full text-neutral-700">
-          <p>
-            <strong>Já possui Workspace:</strong>{" "}
-            {companyInfo?.alreadyHaveWorkspace ? "Sim" : "Não"}
-          </p>{" "}
-          <p>
-            <strong>Domínio da Empresa:</strong>{" "}
-            {companyInfo?.domainName || "-"}
-          </p>
-        </div>
-
-        {/* Mobile: Email e Cliente Vivo em coluna */}
-        <div className="flex flex-col gap-2 md:hidden text-[14px]  text-neutral-700">
-          <p>
-            <strong>Já possui Workspace:</strong>{" "}
-            {companyInfo?.alreadyHaveWorkspace ? "Sim" : "Não"}
-          </p>{" "}
-          <p>
-            <strong>Domínio da Empresa:</strong>{" "}
-            {companyInfo?.domainName || "-"}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-
-  // Resumo do Pedido
-  const resumoPedido = (
-    <div className="flex flex-col bg-white items-start rounded-[26px] w-full pr-10 p-4 gap-8">
-      <div className="flex m-3 flex-col w-full gap-4">
-        <div className="px-2">
-          <p className="text-[15px]">Resumo Google Workspace</p>
-        </div>
-
-        <div className="flex w-full justify-between px-2">
-          <p className="text-[14px] text-[#666666]">Quantidade de Planos</p>
-          <p className="text-end">{confirmedPlans.length}</p>
-        </div>
-        <hr className="border-t border-neutral-300 mb-2 w-full" />
-
-        <div className="flex w-full justify-between px-2">
-          <p className="text-[14px] text-[#666666]">Total de Usuários</p>
-          <p className="text-end">{getTotalUsers()}</p>
-        </div>
-        <hr className="border-t border-neutral-300  w-full" />
-      </div>
-
-      <div className="flex flex-col w-full items-start mx-3 gap-2">
-        <div className="flex w-full justify-between text-[16px] font-bold">
-          <p className="text-[#666666]">Valor Total Mensal</p>
-          <p className="text-end text-[#660099]">R$ {getTotalPrice()},00/mês</p>
-        </div>
-      </div>
-    </div>
-  );
 
   const items: CollapseProps["items"] = [
     {
       key: "1",
-      label: <p className="text-[15px]">Detalhes dos Planos</p>,
-      children: <OrderTable confirmedPlans={confirmedPlans} />,
-    },
-    {
-      key: "2",
-      label: <p className="text-[15px]">Informações do Comprador</p>,
-      children: infoComprador,
-    },
-
-    {
-      key: "3",
-      label: <p className="text-[15px]">Resumo do Pedido</p>,
-      children: resumoPedido,
-    },
-  ];
-
-  return (
-    <div className="min-h-[100vh] flex flex-col flex-1 px-8 pt-8 pb-4 bg-[#f1f1f1]">
-      <div className="flex flex-col gap-4 lg:flex-row items-center justify-between mb-8">
-        <div className="flex items-center gap-4 ">
-          <img
-            src="/Vivo-Empresas.png"
-            className="h-5 md:h-8 hover:cursor-pointer"
-            alt="Vivo Empresas"
-          />
-
-          <div className="h-4 md:h-6 border-l border-gray-400"></div>
-
-          <a
-            href="https://www.goldempresas.com.br/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/Gold-Logo.png"
-              className="h-5 md:h-10"
-              alt="Gold Empresas"
-            />
-          </a>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex flex-col gap-1 items-center">
-            <div className="w-6 h-6 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[12px] font-semibold">
-              <Check size={16} />
-            </div>
-            <span className="text-[12px] text-[#660099] font-medium">
-              Produto
-            </span>
-          </div>
-          <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
-          {hasWorkspace !== "true" && (
-            <>
-              <div className="flex flex-col gap-1 items-center">
-                <div className="w-6 h-6 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[12px] font-semibold">
-                  <Check size={16} />
-                </div>
-                <span className="text-[12px] text-[#660099] font-medium">
-                  Dados
-                </span>
-              </div>
-              <div className="w-8 h-px bg-[#660099] mt-[-12px]"></div>
-            </>
-          )}
-
-          <div className="flex flex-col gap-1 items-center">
-            <div className="w-6 h-6 bg-[#660099] border-1 border-[#660099] text-white rounded-full flex items-center justify-center text-[12px] font-semibold">
-              <Check size={16} />
-            </div>
-            <span className="text-[12px] text-[#660099] font-medium">
-              Confirmação
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col min-h-[617px]">
-        <div className="flex w-full justify-between mb-2">
-          <h1 className="flex items-center justify-center text-[18px] md:text-[20px] lg:text-[20px] font-semibold">
-            Pedido Nº {orderDetails?.id || "-"}
-          </h1>
-          <div className="">
+      label: (
+        <div className="flex justify-between ">
+          <p className="text-[15px] min-w-[140px]">Detalhes dos Planos</p>
+          <div className="flex w-full justify-end">
             <ConfigProvider
               theme={{
                 components: {
@@ -272,53 +76,108 @@ export default function FinishOrderInfo() {
                 },
               }}
             >
-              <Button type="default" variant="solid" disabled>
+              <Button
+                type="default"
+                variant="solid"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  generatePDF(orderData?.data);
+                }}
+              >
                 Gerar PDF
               </Button>
             </ConfigProvider>
           </div>
         </div>
+      ),
+      children: <OrderTable confirmedPlans={confirmedPlans} />,
+    },
+    {
+      key: "2",
+      label: <p className="text-[15px]">Informações do Comprador</p>,
+      children: <InfoComprador basicInfo={basicInfo} />,
+    },
+  ];
 
-        <div className="flex flex-col items-center justify-center mt-4 gap-4 mb-6">
-          <div className="flex gap-2 items-start justify-center w-full max-w-[900px]">
-            <div className="text-[36px] md:text-[64px] lg:text-[64px] flex text-[#660099] mr-2">
-              <MailOutlined />
+  return (
+    <div className="min-h-[100vh] ">
+      <Header />
+
+      <div className="flex gap-4  items-center  mb-8 flex-col px-6 pt-4 pb-4 ">
+        {/* Main Content */}
+        <div className="flex flex-col min-h-[617px]">
+          {/* Top Section: Title and Alert */}
+          <div className="flex flex-col lg:flex-row w-full gap-1 mb-1">
+            <div className="flex flex-col gap-2 py-2 pb-4  lg:w-4/6">
+              <div className="flex items-center gap-2">
+                <div className="text-[#660099] ">
+                  <CheckCircle2 size={36} />
+                </div>
+                <div>
+                  <h2
+                    style={{ margin: 0 }}
+                    className="text-[20px] flex  items-center gap-2  text-[#222] "
+                  >
+                    Seu pedido está quase concluído!
+                  </h2>
+                  <p style={{ margin: 0 }} className="text-[15px] text-[#222]">
+                    Em breve, você receberá um SMS para realizar a biometria e
+                    dar continuidade ao seu pedido.
+                  </p>
+                </div>
+              </div>
+
+              {/* Próximos Passos */}
+              <div className="flex flex-col gap-4 bg-white rounded-[26px] w-full p-4 ">
+                <h3 className="text-[15px]">PRÓXIMOS PASSOS</h3>
+
+                <div className="flex flex-col gap-2 text-[14px]">
+                  <div className="flex items-start gap-2">
+                    <span className="font-bold min-w-[120px] flex gap-2 items-start text-[#660099]">
+                      <MessageSquareMore /> Fique atento:
+                    </span>
+                    <span>
+                      Você receberá um <span className="font-bold">SMS</span>{" "}
+                      com as instruções para fazer sua biometria e finalizar
+                      esta etapa.
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="font-bold text-[#660099]">
+                      <MessageCircle />
+                    </span>
+                    <span>
+                      Se for necessário confirmar seus dados, vamos entrar em
+                      contato pelo Whatsapp{" "}
+                      <span className="font-bold">(11) 3386-2721</span>.
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col text-[13px] md:text-[16px] lg:text-[16px]">
-              <p>
-                <span className="font-bold">1.</span> Em breve você receberá um
-                e-mail da VIVO através do remetente{" "}
-                <span className="font-bold">noreply@vivo.com.br</span> para dar
-                o <span className="font-bold">aceite digital.</span>
-              </p>
-              <p>
-                <span className="text-red-700 font-bold">Importante:</span> Caso
-                não encontre o e-mail em sua caixa de entrada, lembre-se de
-                verificar o{" "}
-                <span className="font-bold">spam ou lixo eletrônico</span>.
+
+            {/* Alert Box */}
+            <div className="flex flex-2 lg:w-2/6 gap-4 flex-col justify-center items-center bg-[#fffbe6] border border-[#ffe58f] rounded-[16px] p-6 mb-4 md:mb-2 py-4 min-h-[140px] shadow-sm">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-[#faad14] ">
+                  <AlertTriangle size={28} />
+                </span>
+                <span className="text-[#660099] font-bold text-[16px]">
+                  FIQUE ATENTO:
+                </span>
+              </div>
+
+              <p className="text-[14px]">
+                A Vivo nunca entra em contato solicitando dados bancários ou de
+                cartão de crédito. Para sua segurança, nunca forneça estes
+                dados.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-2 w-full max-w-[900px]">
-            <div className="text-[36px] md:text-[64px] lg:text-[64px] text-[#660099] flex mr-2">
-              <SignatureOutlined />
-            </div>
-            <div className="text-[13px] md:text-[16px] lg:text-[16px]">
-              <p>
-                <span className="font-bold">2.</span> Uma vez validado, o pedido
-                tramitará e as licenças estarão disponíveis para utilização. Um
-                consultor técnico estará em contato para auxiliá-lo em qualquer
-                dúvida que possa surgir. Caso o seu processo seja de migração,
-                fique tranquilo: nada na sua conta será alterado. Apenas
-                vincularemos a cobrança a Vivo, deixado de utilizá-la com o
-                fornecedor atual.
-              </p>
-            </div>
-          </div>
+          {/* Collapse for Detalhes dos Planos and Informações do Comprador */}
+          <Collapse items={items} ghost defaultActiveKey={["1"]} />
         </div>
-
-        <Collapse items={items} ghost defaultActiveKey={["1"]} />
       </div>
     </div>
   );

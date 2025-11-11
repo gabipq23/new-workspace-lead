@@ -37,9 +37,9 @@ export default function AddOldPlan({
 
   // Variáveis auxiliares para valores dos planos
   const mensalMap = { Starter: "49,00", Standard: "98,00", Plus: "154,00" };
-  const anualMap = { Starter: "32,72", Standard: "81,80", Plus: "128,40" };
+  const anualMap = { Starter: "32,70", Standard: "81,80", Plus: "128,40" };
   const mensalNumMap = { Starter: "49.00", Standard: "98.00", Plus: "154.00" };
-  const anualNumMap = { Starter: "32.72", Standard: "81.80", Plus: "128.40" };
+  const anualNumMap = { Starter: "32.70", Standard: "81.80", Plus: "128.40" };
   const planKey = (currentPlanInput.planName || "") as
     | "Starter"
     | "Standard"
@@ -57,8 +57,8 @@ export default function AddOldPlan({
     <>
       {hasWorkspace === "true" && (
         <>
-          <h2>{hasWorkspace === "true" && "Planos Atuais"}</h2>
-          <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4">
+          {/* <h2>{hasWorkspace === "true" && "Planos Atuais"}</h2> */}
+          <h3 className="flex  items-center gap-2 text-[14px] text-gray-800 mb-4 ">
             Qual plano você possui atualmente e deseja migrar ?
             <Tooltip title="Você pode escolher 1 ou mais planos.">
               <span className="text-gray-500 cursor-pointer">
@@ -149,15 +149,16 @@ export default function AddOldPlan({
               <label className="block text-[12px] text-gray-600 mb-2">
                 Plano{" "}
                 {confirmedPlans.filter((plan) => plan.newPlan === false)
-                  .length + 1}{" "}
-                <span className="text-red-500">*</span>
+                  .length + 1}
+                {confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && <span className="text-red-500">*</span>}
               </label>
               <Select
                 size="middle"
                 value={currentPlanInput?.planName || undefined}
                 onChange={(value) => {
                   const priceMap = {
-                    Starter: { mensal: "49,00", anual: "32,72" },
+                    Starter: { mensal: "49,00", anual: "32,70" },
                     Standard: { mensal: "98,00", anual: "81,80" },
                     Plus: { mensal: "154,00", anual: "128,40" },
                   };
@@ -174,13 +175,18 @@ export default function AddOldPlan({
                 <Option value="Standard">Business Standard</Option>
                 <Option value="Plus">Business Plus</Option>
               </Select>
-              {hasTriedSubmit && !currentPlanInput?.planName && (
-                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-              )}
+              {hasTriedSubmit &&
+                !currentPlanInput?.planName &&
+                confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
             </div>
             <div className="w-[120px]">
               <label className="block text-[12px] text-gray-600 mb-2">
-                Quant. de Usuários <span className="text-red-500">*</span>
+                Quant. de Usuários
+                {confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && <span className="text-red-500">*</span>}
               </label>
               <div className="flex items-center">
                 <Button
@@ -226,15 +232,20 @@ export default function AddOldPlan({
                   +
                 </Button>
               </div>
-              {hasTriedSubmit && currentPlanInput.users < 1 && (
-                <p className="text-red-500 text-xs mt-1">
-                  Selecione pelo menos 1 usuário
-                </p>
-              )}
+              {hasTriedSubmit &&
+                currentPlanInput.users < 1 &&
+                confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && (
+                  <p className="text-red-500 text-xs mt-1">
+                    Selecione pelo menos 1 usuário
+                  </p>
+                )}
             </div>
             <div className="w-[100px]">
               <label className="block text-[12px] text-gray-600 mb-2">
-                Modalidade <span className="text-red-500">*</span>
+                Modalidade
+                {confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && <span className="text-red-500">*</span>}
               </label>
               <Select
                 size="middle"
@@ -244,7 +255,7 @@ export default function AddOldPlan({
 
                   if (currentPlanInput?.planName) {
                     const priceMap = {
-                      Starter: { mensal: "49,00", anual: "32,72" },
+                      Starter: { mensal: "49,00", anual: "32,70" },
                       Standard: { mensal: "98,00", anual: "81,80" },
                       Plus: { mensal: "154,00", anual: "128,40" },
                     };
@@ -269,9 +280,12 @@ export default function AddOldPlan({
                 <Option value="mensal">Mensal</Option>
                 <Option value="anual">Anual</Option>
               </Select>
-              {hasTriedSubmit && !currentPlanInput.type && (
-                <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-              )}
+              {hasTriedSubmit &&
+                !currentPlanInput.type &&
+                confirmedPlans.filter((plan) => plan.newPlan === false)
+                  .length === 0 && (
+                  <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                )}
             </div>
             <div className="w-[260px]">
               <label className="block text-[12px] text-gray-600 mb-2">
@@ -334,7 +348,6 @@ export default function AddOldPlan({
               footer={null}
               centered
               width={700}
-              bodyStyle={{ padding: 32, borderRadius: 24, background: "#fff" }}
               style={{ borderRadius: 24 }}
             >
               <div className="text-center">
@@ -347,7 +360,7 @@ export default function AddOldPlan({
                   <span className="font-semibold text-base">
                     Simulação de economia
                   </span>
-                  <div className="flex mt-2 border border-gray-300 rounded-lg overflow-hidden text-lg">
+                  <div className=" hidden md:flex mt-2 border border-gray-300 rounded-lg overflow-hidden text-lg">
                     <div className="flex-1 p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
                       <div className="font-bold">Usuários</div>
                       <div>{users}</div>
@@ -360,11 +373,35 @@ export default function AddOldPlan({
                       <div className="font-bold">Plano Anual</div>
                       <div>R${formatPrice(anualValue, users)}/ mês</div>
                       <span
-                        className="absolute bottom-15 left-37 bg-green-600 text-white rounded-md px-2 py-0.5 text-sm font-bold"
+                        className="absolute bottom-15 left-40 bg-green-600 text-white rounded-md px-2 py-0.5 text-sm font-bold"
                         style={{ fontSize: 13 }}
                       >
                         -33%
                       </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:hidden mt-2 border border-gray-300 rounded-lg overflow-hidden text-lg">
+                    <div className=" p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
+                      <div className="font-bold">Usuários</div>
+                      <div>{users}</div>
+                    </div>
+                    <hr className="border-t border-gray-300" />
+                    <div className=" p-3 px-6 border-r border-gray-300 bg-gray-50 text-center">
+                      <div className="font-bold">Plano Mensal</div>
+                      <div>R${formatPrice(mensalValue, users)}/ mês</div>
+                    </div>
+                    <hr className="border-t border-gray-300" />
+                    <div className="p-3 px-6 bg-gray-50 text-center relative">
+                      <div className="font-bold ">
+                        Plano Anual{" "}
+                        <span
+                          className="  bg-green-600 text-white rounded-md px-2 py-0.5 text-sm font-bold"
+                          style={{ fontSize: 13 }}
+                        >
+                          -33%
+                        </span>
+                      </div>
+                      <div>R${formatPrice(anualValue, users)}/ mês</div>
                     </div>
                   </div>
                 </div>
@@ -381,7 +418,7 @@ export default function AddOldPlan({
                 <div className="text-lg font-medium mb-4">
                   Aproveitar o desconto e mudar para o plano anual?
                 </div>
-                <div className="flex justify-center gap-6">
+                <div className="flex flex-col md:flex-row justify-center gap-6">
                   <ConfigProvider
                     theme={{
                       token: {

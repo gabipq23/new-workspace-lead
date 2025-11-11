@@ -184,3 +184,8 @@ textarea {
     border-radius: 6px;
   }
 }
+body.ant-modal-open {
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  width: 100% !important;
+}

@@ -297,7 +297,7 @@ export default function ThirdStep() {
                 </div>
 
                 <div className="fixed bottom-0 left-0 right-0 md:right-86 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
-                  <div className="flex justify-end max-w-7xl mx-auto">
+                  <div className="flex justify-center lg:justify-end  lg:max-w-7xl lg:mx-auto">
                     <ConfigProvider
                       theme={{
                         token: {
@@ -309,7 +309,7 @@ export default function ThirdStep() {
                         type="primary"
                         style={{
                           borderRadius: 20,
-                          width: 200,
+
                           height: 44,
                           fontSize: "20px",
                         }}
@@ -317,7 +317,7 @@ export default function ThirdStep() {
                         onClick={handleSubmit}
                         loading={isUpdateOrderFetching}
                         disabled={isUpdateOrderFetching}
-                        className="self-end"
+                        className="self-end w-full md:max-w-[600px] lg:max-w-[200px]"
                       >
                         {isUpdateOrderFetching
                           ? "Finalizando..."

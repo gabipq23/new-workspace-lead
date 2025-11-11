@@ -459,7 +459,7 @@ export default function CompanyInfo() {
               </div>
 
               <div className="fixed bottom-0 left-0 right-0 md:right-86 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
-                <div className="flex justify-end max-w-7xl mx-auto">
+                <div className="flex justify-center lg:justify-end  lg:max-w-7xl lg:mx-auto">
                   <ConfigProvider
                     theme={{
                       token: {
@@ -469,17 +469,17 @@ export default function CompanyInfo() {
                   >
                     <Button
                       type="primary"
-                      size="large"
                       style={{
                         borderRadius: 20,
-                        width: 140,
+
                         height: 44,
                         fontSize: "20px",
                       }}
+                      size="large"
+                      className="self-end w-full md:max-w-[600px] lg:max-w-[200px]"
                       onClick={handleSubmit}
                       loading={isUpdateOrderFetching}
                       disabled={isUpdateOrderFetching}
-                      className=" self-end"
                     >
                       {isUpdateOrderFetching ? "Avançando..." : "Avançar"}
                     </Button>

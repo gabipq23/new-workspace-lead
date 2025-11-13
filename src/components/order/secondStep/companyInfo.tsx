@@ -198,45 +198,74 @@ export default function CompanyInfo() {
                   </div>
                 </div>
 
-                <div className="flex flex-col mb-4">
-                  <h1 className="text-[20px] font-normal text-[#660099]">
-                    Vamos completar seu pedido!
-                  </h1>
-                  <p style={{ margin: 0 }} className="text-[12px]">
-                    Mais alguns passos para você aproveitar os serviços da Vivo
-                    na sua Empresa.
-                  </p>
-                </div>
+                <div className="bg-white pl-6 p-3 rounded-2xl">
+                  <div className="flex flex-col mb-4">
+                    <h1 className="text-[20px] font-normal text-[#660099]">
+                      Vamos completar seu pedido!
+                    </h1>
+                    <p style={{ margin: 0 }} className="text-[12px]">
+                      Mais alguns passos para você aproveitar os serviços da
+                      Vivo na sua Empresa.
+                    </p>
+                  </div>
 
-                {/* 1. Dados da Empresa */}
-                <div className="mb-8">
-                  <h2
-                    style={{
-                      margin: 0,
-                      padding: 0,
-                      fontWeight: "bold",
-                      marginBottom: 4,
-                    }}
-                    className="  text-neutral-700 "
-                  >
-                    1. Dados da Empresa
-                  </h2>
-                  <div className="flex  gap-4 flex-wrap">
-                    <div className=" max-w-[200px] w-full">
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        CNPJ <span className="text-red-500">*</span>
-                      </label>
-                      <CNPJInput
-                        name="cnpj"
-                        format="##.###.###/####-##"
-                        value={cnpj}
-                        onValueChange={(values) =>
-                          updateSecondStepData({ cnpj: values.value })
-                        }
-                        autoComplete="on"
-                      />
-                      {hasTriedSubmit &&
-                        cnpj.replace(/\D/g, "").length !== 14 && (
+                  {/* 1. Dados da Empresa */}
+                  <div className="mb-8">
+                    <h2
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                        fontWeight: "bold",
+                        marginBottom: 4,
+                      }}
+                      className="  text-neutral-700 "
+                    >
+                      1. Dados da Empresa
+                    </h2>
+                    <div className="flex  gap-4 flex-wrap">
+                      <div className=" max-w-[200px] w-full">
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          CNPJ <span className="text-red-500">*</span>
+                        </label>
+                        <CNPJInput
+                          name="cnpj"
+                          format="##.###.###/####-##"
+                          value={cnpj}
+                          onValueChange={(values) =>
+                            updateSecondStepData({ cnpj: values.value })
+                          }
+                          autoComplete="on"
+                        />
+                        {hasTriedSubmit &&
+                          cnpj.replace(/\D/g, "").length !== 14 && (
+                            <p
+                              style={{ margin: 0, marginTop: 4 }}
+                              className="text-red-500 text-xs mt-1"
+                            >
+                              Campo obrigatório
+                            </p>
+                          )}
+                      </div>
+
+                      <div className=" max-w-[200px] w-full">
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          Razão Social
+                          <span className="text-red-500">*</span>{" "}
+                        </label>
+
+                        <Input
+                          name="company_name"
+                          autoComplete="on"
+                          value={company_name}
+                          onChange={(e) =>
+                            updateSecondStepData({
+                              company_name: e.target.value,
+                            })
+                          }
+                          size="middle"
+                          placeholder="Razão Social"
+                        />
+                        {hasTriedSubmit && company_name.trim() === "" && (
                           <p
                             style={{ margin: 0, marginTop: 4 }}
                             className="text-red-500 text-xs mt-1"
@@ -244,121 +273,72 @@ export default function CompanyInfo() {
                             Campo obrigatório
                           </p>
                         )}
-                    </div>
+                      </div>
 
-                    <div className=" max-w-[200px] w-full">
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        Razão Social
-                        <span className="text-red-500">*</span>{" "}
-                      </label>
+                      <div className=" max-w-[200px] w-full">
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          Domínio
+                          <span className="text-red-500">*</span>{" "}
+                          <Tooltip title="Um domínio é o que aparece depois de 'www'. Você o usuará para configurar endereços de e-mail, como info@example.com. Ajudaremos você a confirmar que o domínio pertence à empresa mais tarde.">
+                            <span className="text-gray-500 cursor-pointer">
+                              <CircleAlert size={14} />
+                            </span>
+                          </Tooltip>
+                        </label>
 
-                      <Input
-                        name="company_name"
-                        autoComplete="on"
-                        value={company_name}
-                        onChange={(e) =>
-                          updateSecondStepData({ company_name: e.target.value })
-                        }
-                        size="middle"
-                        placeholder="Razão Social"
-                      />
-                      {hasTriedSubmit && company_name.trim() === "" && (
-                        <p
-                          style={{ margin: 0, marginTop: 4 }}
-                          className="text-red-500 text-xs mt-1"
-                        >
-                          Campo obrigatório
-                        </p>
-                      )}
-                    </div>
-
-                    <div className=" max-w-[200px] w-full">
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        Domínio
-                        <span className="text-red-500">*</span>{" "}
-                        <Tooltip title="Um domínio é o que aparece depois de 'www'. Você o usuará para configurar endereços de e-mail, como info@example.com. Ajudaremos você a confirmar que o domínio pertence à empresa mais tarde.">
-                          <span className="text-gray-500 cursor-pointer">
-                            <CircleAlert size={14} />
-                          </span>
-                        </Tooltip>
-                      </label>
-
-                      <Input
-                        name="domain_name"
-                        autoComplete="on"
-                        value={domainName}
-                        onChange={(e) =>
-                          updateSecondStepData({ domainName: e.target.value })
-                        }
-                        size="middle"
-                        placeholder="dominio.com.br"
-                      />
-                      {hasTriedSubmit && domainName.trim() === "" && (
-                        <p
-                          style={{ margin: 0, marginTop: 4 }}
-                          className="text-red-500 text-xs mt-1"
-                        >
-                          Campo obrigatório
-                        </p>
-                      )}
+                        <Input
+                          name="domain_name"
+                          autoComplete="on"
+                          value={domainName}
+                          onChange={(e) =>
+                            updateSecondStepData({ domainName: e.target.value })
+                          }
+                          size="middle"
+                          placeholder="dominio.com.br"
+                        />
+                        {hasTriedSubmit && domainName.trim() === "" && (
+                          <p
+                            style={{ margin: 0, marginTop: 4 }}
+                            className="text-red-500 text-xs mt-1"
+                          >
+                            Campo obrigatório
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* 2. Dados do Gestor */}
-                <div className="mb-8">
-                  <h2
-                    style={{
-                      margin: 0,
-                      padding: 0,
-                      fontWeight: "bold",
-                      marginBottom: 4,
-                    }}
-                    className="  text-neutral-700 "
-                  >
-                    2. Dados do Gestor
-                  </h2>
-                  <div className="flex  gap-4 flex-wrap">
-                    <div className=" max-w-[200px] w-full">
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        Nome Completo <span className="text-red-500">*</span>
-                      </label>
-                      <Input
-                        name="managerName"
-                        autoComplete="on"
-                        value={managerName}
-                        onChange={(e) =>
-                          updateSecondStepData({ manager_name: e.target.value })
-                        }
-                        size="middle"
-                        placeholder="Nome completo"
-                      />
-                      {hasTriedSubmit && managerName.trim() === "" && (
-                        <p
-                          style={{ margin: 0, marginTop: 4 }}
-                          className="text-red-500 text-xs mt-1"
-                        >
-                          Campo obrigatório
-                        </p>
-                      )}
-                    </div>
-
-                    <div className=" max-w-[200px] w-full">
-                      <label className="flex items-center gap-1 text-[14px] text-gray-600 mb-2">
-                        E-mail <span className="text-red-500">*</span>
-                      </label>
-                      <Input
-                        name="email"
-                        autoComplete="on"
-                        value={email}
-                        onChange={(e) =>
-                          updateSecondStepData({ email: e.target.value })
-                        }
-                        size="middle"
-                        placeholder="Informe seu e-mail"
-                      />{" "}
-                      {hasTriedSubmit &&
-                        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
+                  {/* 2. Dados do Gestor */}
+                  <div className="mb-8">
+                    <h2
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                        fontWeight: "bold",
+                        marginBottom: 4,
+                      }}
+                      className="  text-neutral-700 "
+                    >
+                      2. Dados do Gestor
+                    </h2>
+                    <div className="flex  gap-4 flex-wrap">
+                      <div className=" max-w-[200px] w-full">
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          Nome Completo <span className="text-red-500">*</span>
+                        </label>
+                        <Input
+                          name="managerName"
+                          autoComplete="on"
+                          value={managerName}
+                          onChange={(e) =>
+                            updateSecondStepData({
+                              manager_name: e.target.value,
+                            })
+                          }
+                          size="middle"
+                          placeholder="Nome completo"
+                        />
+                        {hasTriedSubmit && managerName.trim() === "" && (
                           <p
                             style={{ margin: 0, marginTop: 4 }}
                             className="text-red-500 text-xs mt-1"
@@ -366,100 +346,126 @@ export default function CompanyInfo() {
                             Campo obrigatório
                           </p>
                         )}
-                      <p
-                        style={{ margin: 0, marginTop: 8 }}
-                        className="text-[11px] text-gray-500"
-                      >
-                        Sua assinatura digital será enviada nesse e-mail.
-                      </p>
-                    </div>
+                      </div>
 
-                    <div className=" max-w-[200px] w-full">
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        Celular <span className="text-red-500">*</span>
-                      </label>
+                      <div className=" max-w-[200px] w-full">
+                        <label className="flex items-center gap-1 text-[14px] text-gray-600 mb-2">
+                          E-mail <span className="text-red-500">*</span>
+                        </label>
+                        <Input
+                          name="email"
+                          autoComplete="on"
+                          value={email}
+                          onChange={(e) =>
+                            updateSecondStepData({ email: e.target.value })
+                          }
+                          size="middle"
+                          placeholder="Informe seu e-mail"
+                        />{" "}
+                        {hasTriedSubmit &&
+                          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (
+                            <p
+                              style={{ margin: 0, marginTop: 4 }}
+                              className="text-red-500 text-xs mt-1"
+                            >
+                              Campo obrigatório
+                            </p>
+                          )}
+                        <p
+                          style={{ margin: 0, marginTop: 8 }}
+                          className="text-[11px] text-gray-500"
+                        >
+                          Sua assinatura digital será enviada nesse e-mail.
+                        </p>
+                      </div>
 
-                      <PhoneInput
-                        name="manager_phone"
-                        autoComplete="on"
-                        format="(##) #####-####"
-                        value={managerPhone}
-                        onValueChange={(values) =>
-                          updateSecondStepData({ managerPhone: values.value })
-                        }
-                      />
-                      {hasTriedSubmit &&
-                        managerPhone.replace(/\D/g, "").length !== 11 && (
+                      <div className=" max-w-[200px] w-full">
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          Celular <span className="text-red-500">*</span>
+                        </label>
+
+                        <PhoneInput
+                          name="manager_phone"
+                          autoComplete="on"
+                          format="(##) #####-####"
+                          value={managerPhone}
+                          onValueChange={(values) =>
+                            updateSecondStepData({ managerPhone: values.value })
+                          }
+                        />
+                        {hasTriedSubmit &&
+                          managerPhone.replace(/\D/g, "").length !== 11 && (
+                            <p
+                              style={{ margin: 0, marginTop: 4 }}
+                              className="text-red-500 text-xs "
+                            >
+                              Campo obrigatório
+                            </p>
+                          )}
+                      </div>
+                      <div className=" max-w-[200px] w-full">
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          CPF do representante legal{" "}
+                          <span className="text-red-500">*</span>{" "}
+                          <Tooltip title="CPF do administrador que possui responsabilidade integral sobre todos os atos da empresa.">
+                            <span className="text-gray-500 cursor-pointer">
+                              <CircleAlert size={14} />
+                            </span>
+                          </Tooltip>
+                        </label>
+
+                        <CPFInput
+                          name="cpf"
+                          autoComplete="on"
+                          format="###.###.###-##"
+                          value={cpf}
+                          onValueChange={(values) =>
+                            updateSecondStepData({ cpf: values.value })
+                          }
+                        />
+
+                        {hasTriedSubmit && cpf.trim() === "" && (
                           <p
                             style={{ margin: 0, marginTop: 4 }}
-                            className="text-red-500 text-xs "
+                            className="text-red-500 text-xs mt-1"
                           >
                             Campo obrigatório
                           </p>
                         )}
-                    </div>
-                    <div className=" max-w-[200px] w-full">
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        CPF do representante legal{" "}
-                        <span className="text-red-500">*</span>{" "}
-                        <Tooltip title="CPF do administrador que possui responsabilidade integral sobre todos os atos da empresa.">
-                          <span className="text-gray-500 cursor-pointer">
-                            <CircleAlert size={14} />
-                          </span>
-                        </Tooltip>
-                      </label>
 
-                      <CPFInput
-                        name="cpf"
-                        autoComplete="on"
-                        format="###.###.###-##"
-                        value={cpf}
-                        onValueChange={(values) =>
-                          updateSecondStepData({ cpf: values.value })
-                        }
-                      />
-
-                      {hasTriedSubmit && cpf.trim() === "" && (
-                        <p
-                          style={{ margin: 0, marginTop: 4 }}
-                          className="text-red-500 text-xs mt-1"
+                        <ConfigProvider
+                          theme={{
+                            token: {
+                              colorPrimary: "#660099",
+                            },
+                          }}
                         >
-                          Campo obrigatório
-                        </p>
-                      )}
-
-                      <ConfigProvider
-                        theme={{
-                          token: {
-                            colorPrimary: "#660099",
-                          },
-                        }}
-                      >
-                        <div className="flex  items-start justify-start self-start gap-1 mt-2">
-                          <Checkbox
-                            checked={i_have_authorization}
-                            onChange={(e) =>
-                              updateSecondStepData({
-                                i_have_authorization: e.target.checked,
-                              })
-                            }
-                          />
-                          <p
-                            style={{ margin: 0, marginTop: 4 }}
-                            className="text-[11px] text-gray-500"
-                          >
-                            Tenho autorização legal para contratar em nome da
-                            empresa.
-                          </p>{" "}
-                        </div>
-                      </ConfigProvider>
+                          <div className="flex  items-start justify-start self-start gap-1 mt-2">
+                            <Checkbox
+                              checked={i_have_authorization}
+                              onChange={(e) =>
+                                updateSecondStepData({
+                                  i_have_authorization: e.target.checked,
+                                })
+                              }
+                            />
+                            <p
+                              style={{ margin: 0, marginTop: 4 }}
+                              className="text-[11px] text-gray-500"
+                            >
+                              Tenho autorização legal para contratar em nome da
+                              empresa.
+                            </p>{" "}
+                          </div>
+                        </ConfigProvider>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="fixed bottom-0 left-0 right-0 md:right-86 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
-                <div className="flex justify-center lg:justify-end  lg:max-w-7xl lg:mx-auto">
+              <div className="fixed bottom-0 left-0 right-0 pr-8 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+                <div className="flex justify-center lg:justify-end  lg:mx-auto">
                   <ConfigProvider
                     theme={{
                       token: {

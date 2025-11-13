@@ -61,7 +61,7 @@ export default function FirstStep() {
         </div>
       ) : (
         <>
-          <div className="flex flex-col md:flex-row min-h-[100vh] overflow-y-auto scrollbar-thin">
+          <div className="flex flex-col mb-20 md:flex-row min-h-[100vh] overflow-y-auto scrollbar-thin">
             {/* mobile */}
             <div className="md:hidden flex">
               <OrderResumeMobile

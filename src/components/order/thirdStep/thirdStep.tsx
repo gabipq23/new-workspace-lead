@@ -141,10 +141,10 @@ export default function ThirdStep() {
                 />
               </div>
 
-              <div className="flex flex-col flex-1 px-8 pt-8 pb-4 justify-between bg-[#f7f7f7] ">
-                <div className="mb-10">
+              <div className="flex flex-col flex-1 px-8 pt-6 pb-4 justify-between bg-[#f7f7f7] ">
+                <div className="mb-12">
                   <div
-                    className="flex items-center justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
+                    className="flex items-center mb-2 justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
                     style={{ minWidth: 0 }}
                   >
                     <div className="flex flex-col gap-1 items-center min-w-0">
@@ -176,128 +176,130 @@ export default function ThirdStep() {
                     </div>
                   </div>
 
-                  {/* Confirmação via SMS */}
-                  <div className="flex flex-col mb-4 mt-4">
-                    <h1 className="text-[20px] font-normal text-[#660099]">
-                      Confirmação via SMS
-                    </h1>
-                    <p style={{ margin: 0 }} className="text-[14px]">
-                      <strong className="text-red-500">IMPORTANTE:</strong> O
-                      SMS para realização da biometria será enviado ao número
-                      informado abaixo
-                    </p>
-                  </div>
-
-                  <div className="flex  gap-4 flex-wrap">
-                    <div className="min-w-[140px] max-w-[180px] ">
-                      {" "}
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        Telefone Principal{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <PhoneInput
-                        format="(##) #####-####"
-                        value={managerPhone}
-                        onValueChange={(values) =>
-                          updateThirdStepData({ managerPhone: values.value })
-                        }
-                        placeholder="Digite o telefone principal"
-                      />
-                      {hasTriedSubmit &&
-                        managerPhone.replace(/\D/g, "").length !== 11 && (
-                          <p className="text-red-500 text-xs mt-1">
-                            Campo obrigatório
-                          </p>
-                        )}
-                    </div>
-                    <div className="min-w-[260px] max-w-[260px]  w-full">
-                      <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
-                        Segundo número de contato (Opcional)
-                      </label>
-                      <PhoneInput
-                        name="second_manager_phone"
-                        autoComplete="on"
-                        format="(##) #####-####"
-                        value={second_manager_phone}
-                        onValueChange={(values) =>
-                          updateThirdStepData({
-                            second_manager_phone: values.value,
-                          })
-                        }
-                        placeholder="Digite o segundo número de contato"
-                      />
-                      <p
-                        style={{ margin: 0, marginTop: 8 }}
-                        className="text-[11px] text-gray-500"
-                      >
-                        Se desejar, adicione um segundo número de contato para
-                        garantir o recebimento da mensagem.
+                  <div className="bg-white pl-6  p-3 rounded-2xl">
+                    {/* Confirmação via SMS */}
+                    <div className="flex flex-col mb-4 mt-4">
+                      <h1 className="text-[20px] font-normal text-[#660099]">
+                        Confirmação via SMS
+                      </h1>
+                      <p style={{ margin: 0 }} className="text-[14px]">
+                        <strong className="text-red-500">IMPORTANTE:</strong> O
+                        SMS para realização da biometria será enviado ao número
+                        informado abaixo
                       </p>
                     </div>
-                  </div>
 
-                  <div className="flex flex-col items-start gap-3 mb-20 md:mb-10 mt-4">
-                    <ConfigProvider
-                      theme={{
-                        token: {
-                          colorPrimary: "#660099",
-                        },
-                      }}
-                    >
-                      <div className="flex items-start justify-start  self-start gap-2">
-                        <Checkbox
-                          checked={acceptContact}
-                          onChange={(e) =>
+                    <div className="flex  gap-4 flex-wrap">
+                      <div className="min-w-[140px] max-w-[180px] ">
+                        {" "}
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          Telefone Principal{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <PhoneInput
+                          format="(##) #####-####"
+                          value={managerPhone}
+                          onValueChange={(values) =>
+                            updateThirdStepData({ managerPhone: values.value })
+                          }
+                          placeholder="Digite o telefone principal"
+                        />
+                        {hasTriedSubmit &&
+                          managerPhone.replace(/\D/g, "").length !== 11 && (
+                            <p className="text-red-500 text-xs mt-1">
+                              Campo obrigatório
+                            </p>
+                          )}
+                      </div>
+                      <div className="min-w-[260px] max-w-[260px]  w-full">
+                        <label className="flex items-center gap-1  text-[14px] text-gray-600 mb-2">
+                          Segundo número de contato (Opcional)
+                        </label>
+                        <PhoneInput
+                          name="second_manager_phone"
+                          autoComplete="on"
+                          format="(##) #####-####"
+                          value={second_manager_phone}
+                          onValueChange={(values) =>
                             updateThirdStepData({
-                              acceptContact: e.target.checked,
+                              second_manager_phone: values.value,
                             })
                           }
+                          placeholder="Digite o segundo número de contato"
                         />
                         <p
-                          style={{ margin: 0 }}
-                          className="text-[14px] text-gray-500"
+                          style={{ margin: 0, marginTop: 8 }}
+                          className="text-[11px] text-gray-500"
                         >
-                          Autorizo ser contatado pelo telefone e e-mail
-                          preenchidos, para receber informações sobre o meu
-                          pedido.
+                          Se desejar, adicione um segundo número de contato para
+                          garantir o recebimento da mensagem.
                         </p>
                       </div>
-                      <div className="flex items-start justify-start self-start gap-0.5">
-                        <Checkbox
-                          checked={acceptTerms}
-                          onChange={(e) =>
-                            updateThirdStepData({
-                              acceptTerms: e.target.checked,
-                            })
-                          }
-                        />
-                        <p
-                          style={{ margin: 0 }}
-                          className="text-[14px] text-gray-500"
-                        >
-                          <span className="text-red-500">*</span> Aceito e
-                          concordo com os{" "}
-                          <button
-                            style={{ color: "#660099" }}
-                            className="underline  cursor-pointer"
-                            onClick={() => setIsModalOpen(true)}
+                    </div>
+
+                    <div className="flex flex-col items-start gap-3 mb-20 md:mb-10 mt-4">
+                      <ConfigProvider
+                        theme={{
+                          token: {
+                            colorPrimary: "#660099",
+                          },
+                        }}
+                      >
+                        <div className="flex items-start justify-start  self-start gap-2">
+                          <Checkbox
+                            checked={acceptContact}
+                            onChange={(e) =>
+                              updateThirdStepData({
+                                acceptContact: e.target.checked,
+                              })
+                            }
+                          />
+                          <p
+                            style={{ margin: 0 }}
+                            className="text-[14px] text-gray-500"
                           >
-                            termos e contratos
-                          </button>
-                          .
-                        </p>
-                        {hasTriedSubmit && !acceptTerms && (
-                          <p className="text-red-500 text-xs mt-1">
-                            Você deve aceitar os termos para continuar
+                            Autorizo ser contatado pelo telefone e e-mail
+                            preenchidos, para receber informações sobre o meu
+                            pedido.
                           </p>
-                        )}
-                      </div>
-                    </ConfigProvider>
+                        </div>
+                        <div className="flex items-start justify-start self-start gap-0.5">
+                          <Checkbox
+                            checked={acceptTerms}
+                            onChange={(e) =>
+                              updateThirdStepData({
+                                acceptTerms: e.target.checked,
+                              })
+                            }
+                          />
+                          <p
+                            style={{ margin: 0 }}
+                            className="text-[14px] text-gray-500"
+                          >
+                            <span className="text-red-500">*</span> Aceito e
+                            concordo com os{" "}
+                            <button
+                              style={{ color: "#660099" }}
+                              className="underline  cursor-pointer"
+                              onClick={() => setIsModalOpen(true)}
+                            >
+                              termos e contratos
+                            </button>
+                            .
+                          </p>
+                          {hasTriedSubmit && !acceptTerms && (
+                            <p className="text-red-500 text-xs mt-1">
+                              Você deve aceitar os termos para continuar
+                            </p>
+                          )}
+                        </div>
+                      </ConfigProvider>
+                    </div>
                   </div>
                 </div>
 
-                <div className="fixed bottom-0 left-0 right-0 md:right-86 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
-                  <div className="flex justify-center lg:justify-end  lg:max-w-7xl lg:mx-auto">
+                <div className="fixed bottom-0 left-0 right-0  bg-white border-t border-gray-200 p-4 pr-8 shadow-lg z-50">
+                  <div className="flex justify-center lg:justify-end   lg:mx-auto">
                     <ConfigProvider
                       theme={{
                         token: {

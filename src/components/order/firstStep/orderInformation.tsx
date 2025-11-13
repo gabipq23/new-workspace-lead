@@ -92,8 +92,8 @@ export default function OrderInformation() {
   }
   return (
     <>
-      <div className="flex flex-col flex-1 pb-4 pt-2 justify-between bg-[#f7f7f7] h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin">
-        <div className="mb-10">
+      <div className="flex flex-col flex-1 px-8 pb-4 pt-2 justify-between bg-[#f7f7f7] h-[calc(100vh-200px)] mb-20 overflow-y-auto scrollbar-thin">
+        <div className="mb-12">
           <div
             className="flex items-center px-8 mb-2 justify-center gap-2 w-full max-w-[520px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto"
             style={{ minWidth: 0 }}
@@ -125,63 +125,62 @@ export default function OrderInformation() {
             </div>
           </div>
 
-          <h1
-            style={{ paddingInline: 32 }}
-            className="text-[20px] px-8 font-normal text-[#660099]"
-          >
-            Olá! Vamos iniciar o seu pedido{" "}
-            {hasWorkspace === "true" ? "de migração" : ""} online :)
-          </h1>
+          <div className="bg-white p-3  rounded-2xl">
+            <h1
+              style={{ paddingInline: 16 }}
+              className="text-[20px] px-8 font-normal text-[#660099]"
+            >
+              Olá! Vamos iniciar o seu pedido{" "}
+              {hasWorkspace === "true" ? "de migração" : ""} online :)
+            </h1>
 
-          <div className="bg-orange-100 mx-8 border border-orange-100 rounded-lg p-2  flex items-center">
-            <span className="text-orange-600 text-[12px] mr-2">🎁</span>
-            <span className="text-orange-600 text-[12px]">
-              <strong>Aproveite agora!</strong> Clientes Móvel Vivo Empresas
-              ganham +2GB na contratação de Google Workspace
-            </span>
-          </div>
+            <div className="bg-orange-100 mx-4 border border-orange-100 rounded-lg p-2  flex items-center">
+              <span className="text-orange-600 text-[12px] mr-2">🎁</span>
+              <span className="text-orange-600 text-[12px]">
+                <strong>Aproveite agora!</strong> Clientes Móvel Vivo Empresas
+                ganham +2GB na contratação de Google Workspace
+              </span>
+            </div>
 
-          <div
-            style={{ margin: 0, padding: 0, marginInline: 16 }}
-            className="mb-8 "
-          >
-            {hasWorkspace === "true" ? (
-              <>
-                {" "}
-                <Collapse
-                  size="large"
-                  items={collapseItems}
-                  ghost
-                  activeKey={activeCollapseKeys}
-                  onChange={(keys) => {
-                    if (Array.isArray(keys)) {
-                      setActiveCollapseKeys(keys as string[]);
-                    } else if (typeof keys === "string") {
-                      setActiveCollapseKeys([keys]);
-                    }
-                  }}
-                />
-              </>
-            ) : (
-              <div className="px-4 pt-4">
-                <AddNewPlan
-                  hasWorkspace={alreadyHaveWorkspace ? "true" : "false"}
-                  confirmedPlans={confirmedPlans}
-                  newPlanInput={newPlanInput}
-                  updateNewPlanInput={updateNewPlanInput}
-                  handleNewUserDecrease={handleNewUserDecrease}
-                  handleNewUserIncrease={handleNewUserIncrease}
-                  addNewPlan={addNewPlan}
-                  removePlan={removePlan}
-                  hasTriedSubmit={hasTriedSubmit}
-                />
-              </div>
-            )}
+            <div style={{ margin: 0, padding: 0 }} className="mb-8 ">
+              {hasWorkspace === "true" ? (
+                <>
+                  {" "}
+                  <Collapse
+                    size="large"
+                    items={collapseItems}
+                    ghost
+                    activeKey={activeCollapseKeys}
+                    onChange={(keys) => {
+                      if (Array.isArray(keys)) {
+                        setActiveCollapseKeys(keys as string[]);
+                      } else if (typeof keys === "string") {
+                        setActiveCollapseKeys([keys]);
+                      }
+                    }}
+                  />
+                </>
+              ) : (
+                <div className="px-4 pt-4">
+                  <AddNewPlan
+                    hasWorkspace={alreadyHaveWorkspace ? "true" : "false"}
+                    confirmedPlans={confirmedPlans}
+                    newPlanInput={newPlanInput}
+                    updateNewPlanInput={updateNewPlanInput}
+                    handleNewUserDecrease={handleNewUserDecrease}
+                    handleNewUserIncrease={handleNewUserIncrease}
+                    addNewPlan={addNewPlan}
+                    removePlan={removePlan}
+                    hasTriedSubmit={hasTriedSubmit}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 md:right-86 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
-          <div className="flex justify-center lg:justify-end  lg:max-w-7xl lg:mx-auto">
+        <div className="fixed bottom-0 left-0 pr-8 right-0 bg-white border-t border-gray-200 p-4  shadow-lg z-50">
+          <div className="flex justify-center lg:justify-end  lg:mx-auto">
             <ConfigProvider
               theme={{
                 token: {

@@ -178,7 +178,7 @@ export default function FinishOrderInfo() {
             </div>
 
             {/* Alert Box para lg+ */}
-            <div className="hidden lg:flex flex-col justify-center items-center bg-[#fffbe6] border border-[#ffe58f] rounded-[16px] p-6 mb-4 md:mb-2 py-4 min-h-[140px] shadow-sm w-full lg:max-w-[32%] h-[230px]">
+            <div className="hidden lg:flex flex-col gap-2 justify-center items-center bg-[#fffbe6] border border-[#ffe58f] rounded-[16px] p-6 mb-4 md:mb-2 py-4 min-h-[140px] shadow-sm w-full lg:max-w-[32%] h-[230px]">
               <div className="flex items-center justify-center gap-2">
                 <span className="text-[#faad14] ">
                   <AlertTriangle size={28} />

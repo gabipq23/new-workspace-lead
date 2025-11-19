@@ -27,13 +27,6 @@ const getBase64FromImageUrl = (url: string): Promise<string> => {
   });
 };
 
-const formatCurrency = (value: number): string => {
-  return value.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-};
-
 const formatCNPJ = (cnpj: string): string => {
   if (!cnpj) return "-";
   return cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
@@ -94,27 +87,44 @@ export const generatePDF = async (workspace: OrderData) => {
       },
 
       // Planos Contratados
-      { text: "Planos Google Workspace Contratados", style: "sectionHeader" },
+      { text: "Planos Contratados", style: "sectionHeader" },
       {
         table: {
           headerRows: 1,
-          widths: ["*", 60, 50, 70],
+          widths: ["*", 70, 70, 70, 80],
           body: [
             [
               { text: "Plano", style: "tableHeader" },
-              { text: "Tipo", style: "tableHeader" },
               { text: "Usuários", style: "tableHeader" },
+              { text: "Modalidade", style: "tableHeader" },
+              { text: "Valor Unitário", style: "tableHeader" },
+
               { text: "Valor Total", style: "tableHeader" },
             ],
             ...(workspace.plans && workspace.plans.length > 0
               ? workspace.plans.map((plan) => [
-                  { text: plan.planName || "-", style: "tableBody" },
-                  { text: plan.type || "-", style: "tableBody" },
+                  {
+                    text: "Business " + plan.planName || "-",
+                    style: "tableBody",
+                  },
+
                   { text: plan.users?.toString() || "0", style: "tableBody" },
                   {
-                    text: formatCurrency(
-                      parseFloat(plan.price || "0") * (plan.users || 0)
-                    ),
+                    text: plan.type === "mensal" ? "Mensal" : "Anual",
+                    style: "tableBody",
+                  },
+                  {
+                    text: Number(plan.price.replace(",", "."))
+                      .toFixed(2)
+                      .replace(".", ","),
+                    style: "tableBody",
+                  },
+                  {
+                    text: (
+                      Number(plan.price.replace(",", ".")) * (plan?.users ?? 0)
+                    )
+                      .toFixed(2)
+                      .replace(".", ","),
                     style: "tableBody",
                   },
                 ])
@@ -186,7 +196,7 @@ export const generatePDF = async (workspace: OrderData) => {
         columns: [
           { text: "Valor Total Mensal", style: "content" },
           {
-            text: formatCurrency(valorTotalMensal),
+            text: `R$ ${valorTotalMensal.toFixed(2).replace(".", ",")}`,
             style: "content",
             alignment: "right",
           },

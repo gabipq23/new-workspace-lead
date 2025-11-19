@@ -4,6 +4,7 @@ import { PlanCard } from "../firstStep/planCard";
 export default function OrderResumeDesktop({
   confirmedPlans,
   getTotalPrice,
+  orderData,
 }: any) {
   return (
     <>
@@ -26,12 +27,14 @@ export default function OrderResumeDesktop({
               Google Workspace
             </h3>
 
-            {confirmedPlans?.map((plan: Plan, index: number) => (
-              <PlanCard key={plan?.id} plan={plan} index={index + 1} />
-            ))}
+            {(orderData?.data?.plans || confirmedPlans)?.map(
+              (plan: Plan, index: number) => (
+                <PlanCard key={plan?.id} plan={plan} index={index + 1} />
+              )
+            )}
 
             {/* Resumo Total */}
-            {confirmedPlans?.length > 0 && (
+            {(orderData?.data?.plans || confirmedPlans)?.length > 0 && (
               <div className="p-3 bg-gray-50 rounded-b-lg">
                 <div className="flex justify-between items-center">
                   <span className="text-[12px] font-bold text-gray-700">

@@ -104,7 +104,7 @@ function SubHeader() {
           }}
           className="text-gray-600 hover:text-[#660099] py-2 px-4 block"
         >
-          Aplicativos Inclusos
+          Aplicativos
         </a>
       ),
     },
@@ -229,7 +229,7 @@ function SubHeader() {
             }}
             className="hover:text-[#660099]"
           >
-            Aplicativos inclusos
+            Aplicativos
           </a>
           <a
             href="#duvidas"

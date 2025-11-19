@@ -28,7 +28,9 @@ export default function CompanyInfo() {
   const [showServices, setShowServices] = useState(false);
 
   const getTotalPrice = () => {
-    const confirmedPlansTotal = confirmedPlans.reduce((total, plan) => {
+    const confirmedPlansTotal = (
+      orderData?.data?.plans || confirmedPlans
+    ).reduce((total: any, plan: any) => {
       const numericPrice = parseFloat(plan.price.replace(",", "."));
       return total + numericPrice * plan.users;
     }, 0);
@@ -36,7 +38,10 @@ export default function CompanyInfo() {
   };
 
   const getTotalUsers = () => {
-    return confirmedPlans.reduce((total, plan) => total + plan.users, 0);
+    return (orderData?.data?.plans || confirmedPlans)?.reduce(
+      (total: any, plan: any) => total + plan.users,
+      0
+    );
   };
 
   const { orderId } = useParams<{ orderId: string }>();
@@ -53,7 +58,7 @@ export default function CompanyInfo() {
     const hasValidManagerName = managerName.trim() !== "";
     const hasValidManagerPhone = managerPhone.replace(/\D/g, "").length === 11;
     const hasValidSecondPhone = managerPhone.replace(/\D/g, "").length === 11;
-    const hasAuthorization = i_have_authorization === true;
+    // const hasAuthorization = i_have_authorization === true;
     const hasValidCpf = cpf.replace(/\D/g, "").length === 11;
 
     return (
@@ -63,8 +68,8 @@ export default function CompanyInfo() {
       hasValidManagerName &&
       hasValidManagerPhone &&
       hasValidCpf &&
-      hasValidSecondPhone &&
-      hasAuthorization
+      hasValidSecondPhone
+      // hasAuthorization
     );
   };
 
@@ -160,6 +165,7 @@ export default function CompanyInfo() {
                 getTotalPrice={getTotalPrice}
                 setShowServices={setShowServices}
                 showServices={showServices}
+                orderData={orderData}
               />
             </div>
 
@@ -499,6 +505,7 @@ export default function CompanyInfo() {
               <OrderResumeDesktop
                 confirmedPlans={confirmedPlans}
                 getTotalPrice={getTotalPrice}
+                orderData={orderData}
               />
             </div>
           </div>

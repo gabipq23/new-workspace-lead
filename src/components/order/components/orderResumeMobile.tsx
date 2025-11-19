@@ -9,6 +9,7 @@ export default function OrderResumeMobile({
   getTotalPrice,
   setShowServices,
   showServices,
+  orderData,
 }: any) {
   return (
     <>
@@ -32,8 +33,10 @@ export default function OrderResumeMobile({
               style={{ fontWeight: "bold" }}
               className="text-[#ff7f17] text-[13px]"
             >
-              {confirmedPlans.length > 0
-                ? `${confirmedPlans.length} plano(s)`
+              {(orderData?.data?.plans || confirmedPlans)?.length > 0
+                ? `${
+                    (orderData?.data?.plans || confirmedPlans)?.length
+                  } plano(s)`
                 : "Nenhum plano"}
             </div>
           </div>
@@ -58,7 +61,7 @@ export default function OrderResumeMobile({
           </div>
         </div>
 
-        {confirmedPlans.length > 0 && (
+        {(orderData?.data?.plans || confirmedPlans).length > 0 && (
           <div className="text-center bg-purple-100">
             <ConfigProvider
               theme={{
@@ -89,38 +92,41 @@ export default function OrderResumeMobile({
           </div>
         )}
 
-        {showServices && confirmedPlans.length > 0 && (
-          <div className="p-4 bg-purple-100">
-            <h4
-              style={{ fontWeight: "bold" }}
-              className="text-[#660099] font-medium mb-3 text-[12px]"
-            >
-              Planos selecionados
-            </h4>
+        {showServices &&
+          (orderData?.data?.plans || confirmedPlans)?.length > 0 && (
+            <div className="p-4 bg-purple-100">
+              <h4
+                style={{ fontWeight: "bold" }}
+                className="text-[#660099] font-medium mb-3 text-[12px]"
+              >
+                Planos selecionados
+              </h4>
 
-            {confirmedPlans.map((plan: Plan, index: number) => (
-              <div key={plan.id} className="mb-3 p-3 bg-white rounded-md">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-[#660099] font-bold text-[11px]">
-                    Plano {index + 1}: Business {plan.planName}
-                  </span>
-                  <span className="text-[#660099] font-bold text-[11px]">
-                    {plan.users} usuário(s)
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 text-[10px] capitalize">
-                    Modalidade: {plan.type}
-                  </span>
-                  <span className="text-[#ff7f17] font-bold text-[11px]">
-                    R$ {formatPrice(plan.price, plan.users)}/
-                    {plan.type === "anual" ? "mês" : "mês"}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              {(orderData?.data?.plans || confirmedPlans)?.map(
+                (plan: Plan, index: number) => (
+                  <div key={plan.id} className="mb-3 p-3 bg-white rounded-md">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[#660099] font-bold text-[11px]">
+                        Plano {index + 1}: Business {plan.planName}
+                      </span>
+                      <span className="text-[#660099] font-bold text-[11px]">
+                        {plan.users} usuário(s)
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 text-[10px] capitalize">
+                        Modalidade: {plan.type}
+                      </span>
+                      <span className="text-[#ff7f17] font-bold text-[11px]">
+                        R$ {formatPrice(plan.price, plan.users)}/
+                        {plan.type === "anual" ? "mês" : "mês"}
+                      </span>
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          )}
       </div>
     </>
   );

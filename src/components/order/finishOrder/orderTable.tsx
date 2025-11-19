@@ -68,11 +68,11 @@ export default function OrderTable({
           <hr className="border-t border-neutral-300 mx-2 mb-4" />
           {/* Total row */}
           <div className="flex items-center py-2 text-[15px]  text-neutral-900">
-            <p className="w-76 text-center ">Total</p>
-            <p className="w-32 text-center ">{getTotalUsers()}</p>
+            <p className="w-64 text-center ">Total</p>
+            <p className="w-28 text-center ">{getTotalUsers()}</p>
+            <p className="w-28 text-center "></p>
             <p className="w-32 text-center "></p>
-            <p className="w-40 text-center "></p>
-            <p className="w-40 text-center ">R$ {getTotalPrice()},00/mês</p>
+            <p className="w-40 text-center ">R$ {getTotalPrice()}/mês</p>
           </div>
         </div>
 

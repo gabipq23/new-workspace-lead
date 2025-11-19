@@ -1,11 +1,13 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 import { useOrderControler } from "../../../controller/controller";
 import type { Plan } from "../../../interfaces/order";
 import { useOrderStore } from "../../../context/context";
 
 export function useOrderInformation() {
+  const navigate = useNavigate();
+  const { createOrder, isCreatingOrderLoading } = useOrderControler();
+
   const {
     confirmedPlans,
     addCurrentPlanToConfirmed,
@@ -30,8 +32,6 @@ export function useOrderInformation() {
   });
 
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
-  const navigate = useNavigate();
-  const { createOrder, isCreatingOrderLoading } = useOrderControler();
 
   const isFormValid = () => {
     const hasAtLeastOnePlan = confirmedPlans.length > 0;

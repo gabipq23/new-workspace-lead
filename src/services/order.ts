@@ -1,4 +1,4 @@
-import { api } from "../configs/api";
+import { api, apiConsultCnpj } from "../configs/api";
 import type { OrderData } from "../interfaces/order";
 
 export class GetWorkspacePlanService {
@@ -18,6 +18,11 @@ export class GetWorkspacePlanService {
 
   async getOrderById(id: number | number) {
     const response = await api.get(`/workspace/pedidos/${id}`);
+    return response.data;
+  }
+
+  async getCnpjInfo(cnpj: string) {
+    const response = await apiConsultCnpj.get(`/estabelecimentos/${cnpj}`);
     return response.data;
   }
 }

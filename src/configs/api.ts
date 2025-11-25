@@ -6,3 +6,10 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export const apiConsultCnpj = axios.create({
+  baseURL: "https://cnpj-api.bigdates.com.br/api/v1",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});

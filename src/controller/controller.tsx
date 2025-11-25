@@ -28,11 +28,11 @@ export function useOrderControler() {
     {
       mutationFn: async ({ id, data }: { id: number; data: any }) =>
         orderService.updateOrder(id, data),
-      onMutate: async () =>
-        await queryClient.cancelQueries({ queryKey: ["order"] }),
-      onSuccess: () => {
+      onMutate: async ({ id }) =>
+        await queryClient.cancelQueries({ queryKey: ["order", id] }),
+      onSuccess: (response, { id }) => {
         toast.success("Pedido alterado com sucesso!");
-        queryClient.invalidateQueries({ queryKey: ["order"] });
+        queryClient.setQueryData(["order", id], response);
       },
       onError: (error) => {
         toast.error("Houve um erro ao alterar o pedido. Tente novamente");
@@ -49,11 +49,11 @@ export function useOrderControler() {
       id: number;
       data: { status: string };
     }) => orderService.changeOrderStatus(id, data),
-    onMutate: async () =>
-      await queryClient.cancelQueries({ queryKey: ["order"] }),
-    onSuccess: () => {
+    onMutate: async ({ id }) =>
+      await queryClient.cancelQueries({ queryKey: ["order", id] }),
+    onSuccess: (response, { id }) => {
       toast.success("Status do pedido alterado com sucesso!");
-      queryClient.invalidateQueries({ queryKey: ["order"] });
+      queryClient.setQueryData(["order", id], response);
     },
     onError: (error) => {
       toast.error("Houve um erro ao alterar o status do pedido.");
@@ -82,5 +82,22 @@ export function useOrderById(orderId: number) {
 
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+  });
+}
+
+export function useConsultByCnpj(cnpj: string) {
+  const orderService = new GetWorkspacePlanService();
+
+  return useQuery({
+    queryKey: ["cnpj", cnpj],
+    queryFn: () => {
+      return orderService.getCnpjInfo(cnpj);
+    },
+    enabled: !!cnpj && cnpj.length === 14,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   });
 }

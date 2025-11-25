@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Input, ConfigProvider, Tooltip, Checkbox } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { Check, CircleAlert } from "lucide-react";
 import { useOrderStore } from "../../../context/context";
 import {
+  useConsultByCnpj,
   useOrderById,
   useOrderControler,
 } from "../../../controller/controller";
@@ -15,17 +16,40 @@ import { CNPJInput, CPFInput, PhoneInput } from "../../../utils/input";
 export default function CompanyInfo() {
   const { secondStepData, updateSecondStepData, confirmedPlans } =
     useOrderStore();
+
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
   const company_name = secondStepData.company_name || "";
   const cpf = secondStepData.cpf || "";
-  const cnpj = secondStepData.cnpj || "";
+  // const cnpj = secondStepData.cnpj || "";
+
   const email = secondStepData.email || "";
   const managerName = secondStepData.manager_name || "";
   const managerPhone = secondStepData.managerPhone || "";
   const domainName = secondStepData.domainName || "";
   const i_have_authorization = secondStepData.i_have_authorization || false;
   const [showServices, setShowServices] = useState(false);
+  const [cnpj, setCnpj] = useState(secondStepData.cnpj || "");
+  const cnpjDigits = cnpj.replace(/\D/g, "");
+  const { data: cnpjData, isLoading: isCnpjLoading } = useConsultByCnpj(
+    cnpjDigits.length === 14 ? cnpjDigits : ""
+  );
+
+  useEffect(() => {
+    if (
+      cnpjDigits.length === 14 &&
+      cnpjData?.data?.nome_fantasia &&
+      cnpjData.data.nome_fantasia.trim() !== ""
+    ) {
+      updateSecondStepData({
+        company_name: cnpjData.data.nome_fantasia,
+      });
+    } else if (cnpjDigits.length < 14 && cnpjDigits.length > 0) {
+      updateSecondStepData({
+        company_name: "",
+      });
+    }
+  }, [cnpjDigits, cnpjData?.data?.nome_fantasia, updateSecondStepData]);
 
   const getTotalPrice = () => {
     const confirmedPlansTotal = (
@@ -237,9 +261,10 @@ export default function CompanyInfo() {
                           name="cnpj"
                           format="##.###.###/####-##"
                           value={cnpj}
-                          onValueChange={(values) =>
-                            updateSecondStepData({ cnpj: values.value })
-                          }
+                          onValueChange={(values) => {
+                            setCnpj(values.value);
+                            updateSecondStepData({ cnpj: values.value });
+                          }}
                           autoComplete="on"
                         />
                         {hasTriedSubmit &&
@@ -269,7 +294,10 @@ export default function CompanyInfo() {
                             })
                           }
                           size="middle"
-                          placeholder="Razão Social"
+                          placeholder={
+                            isCnpjLoading ? "Carregando..." : "Razão Social"
+                          }
+                          disabled={isCnpjLoading}
                         />
                         {hasTriedSubmit && company_name.trim() === "" && (
                           <p
